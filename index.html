@@ -1,0 +1,2436 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FitTrack Pro - Body Recomposition</title>
+    <meta name="theme-color" content="#6366f1">
+    <link rel="manifest" href="data:application/json;base64,eyJuYW1lIjoiRml0VHJhY2sgUHJvIiwic2hvcnRfbmFtZSI6IkZpdFRyYWNrIiwic3RhcnRfdXJsIjoiLi8iLCJkaXNwbGF5Ijoic3RhbmRhbG9uZSIsImJhY2tncm91bmRfY29sb3IiOiIjMTExMzI3IiwidGhlbWVfY29sb3IiOiIjNjM2NmYxIiwiaWNvbnMiOlt7InNyYyI6ImRhdGE6aW1hZ2Uvc3ZnK3htbDtiYXNlNjQsUEhOMlp5QjNhV1IwYUQwaU1USTRSU0JvWldsbmFIUTlJakV5T0VVaUlIWnBaWGRDYjNnOUlqQWdNQ0F4TWpnZ01USTFJQ0I0Yld4dWN6MGlhSFIwY0RvdkwzZDNkeTUzTXk1dmNtY3ZNakF3TUM5emRtY2lQZ284WjJGeWJHVnVkQ0JwWkQwaWNHOXlkR0ZzTFdkeVlXUnBaVzUwSWlCemRISXZhMlU5SWlNNE5qTTJObVl4SWlCemRISXZhMlV0WkdGemFHRnljbUY1UFNJeE1EWWdNVFl5SURJMU9TQnlQVmhCSWlBdlBnbzhaRFZtYzFCaGRHZ3hhRDBpTkRRaUlHbGtQU0ppSWlCemRtZEtUMmx1UFNJelp6WXhJaUI0UFNJeFptTmtJblE5SWpFdU5VTXRMalVnTUNBdExqVWdNaTQxSUMxdU5qTXVOaUJETURSek1qQXVNaTB1TmpBMU9UWXVOQzFxTUNBeU9TNDBNVGd1TWpRaUx6NDRkWE5sWkNCb2NtVm1QU0lqWWlJZ1kyaHliVjkzUFNJMU1TNHhNU0l2UGp3dmMzWm5Qand2Wkc5amRtVnVWa1Z1U1VSaVVsRllSaUk9Iiwic2l6ZXMiOiIxOTJ4MTkyIiwidHlwZSI6ImltYWdlL3N2Zyt4bWwifV19">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            color: #fff;
+        }
+
+        .container {
+            max-width: 400px;
+            margin: 0 auto;
+            background: rgba(17, 25, 40, 0.75);
+            backdrop-filter: blur(16px);
+            border-radius: 16px;
+            border: 1px solid rgba(255, 255, 255, 0.125);
+            min-height: 100vh;
+            overflow: hidden;
+        }
+
+        .header {
+            background: linear-gradient(135deg, #6366f1 0%, #8b5cf6 100%);
+            padding: 20px;
+            text-align: center;
+            position: relative;
+        }
+
+        .header h1 {
+            font-size: 24px;
+            font-weight: 700;
+            margin-bottom: 8px;
+        }
+
+        .header p {
+            opacity: 0.8;
+            font-size: 14px;
+        }
+
+        .nav {
+            display: flex;
+            background: rgba(0, 0, 0, 0.3);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+            overflow-x: auto;
+        }
+
+        .nav-item {
+            flex: 1;
+            padding: 12px 6px;
+            text-align: center;
+            background: none;
+            border: none;
+            color: rgba(255, 255, 255, 0.6);
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-size: 11px;
+            font-weight: 500;
+            white-space: nowrap;
+            min-width: 60px;
+        }
+
+        .nav-item.active {
+            color: #6366f1;
+            background: rgba(99, 102, 241, 0.1);
+            border-bottom: 2px solid #6366f1;
+        }
+
+        .content {
+            padding: 20px;
+            height: calc(100vh - 140px);
+            overflow-y: auto;
+        }
+
+        .section {
+            display: none;
+        }
+
+        .section.active {
+            display: block;
+        }
+
+        .card {
+            background: rgba(255, 255, 255, 0.08);
+            border-radius: 12px;
+            padding: 20px;
+            margin-bottom: 16px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(8px);
+        }
+
+        .card h3 {
+            margin-bottom: 16px;
+            color: #6366f1;
+            font-size: 18px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .input-group {
+            margin-bottom: 16px;
+        }
+
+        .input-group label {
+            display: block;
+            margin-bottom: 8px;
+            color: rgba(255, 255, 255, 0.8);
+            font-size: 14px;
+            font-weight: 500;
+        }
+
+        .input-group input, .input-group select, .input-group textarea {
+            width: 100%;
+            padding: 12px;
+            background: rgba(255, 255, 255, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: 8px;
+            color: #fff;
+            font-size: 16px;
+        }
+
+        .input-group input::placeholder {
+            color: rgba(255, 255, 255, 0.5);
+        }
+
+        .btn {
+            background: linear-gradient(135deg, #6366f1 0%, #8b5cf6 100%);
+            color: white;
+            border: none;
+            padding: 12px 24px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: 600;
+            width: 100%;
+            margin-top: 8px;
+            transition: transform 0.2s ease;
+        }
+
+        .btn:hover {
+            transform: translateY(-1px);
+        }
+
+        .btn-small {
+            padding: 8px 16px;
+            font-size: 12px;
+            width: auto;
+            margin: 4px 4px 4px 0;
+        }
+
+        .btn-secondary {
+            background: rgba(255, 255, 255, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+
+        .btn-danger {
+            background: linear-gradient(135deg, #ef4444 0%, #dc2626 100%);
+        }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 12px;
+            margin-bottom: 20px;
+        }
+
+        .stat-card {
+            background: rgba(255, 255, 255, 0.05);
+            padding: 16px;
+            border-radius: 8px;
+            text-align: center;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .stat-value {
+            font-size: 24px;
+            font-weight: 700;
+            color: #6366f1;
+            margin-bottom: 4px;
+        }
+
+        .stat-label {
+            font-size: 12px;
+            opacity: 0.7;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .exercise-item {
+            background: rgba(255, 255, 255, 0.05);
+            padding: 12px;
+            border-radius: 8px;
+            margin-bottom: 8px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            cursor: pointer;
+            transition: background 0.2s ease;
+        }
+
+        .exercise-item:hover {
+            background: rgba(255, 255, 255, 0.1);
+        }
+
+        .exercise-item.selected {
+            background: rgba(99, 102, 241, 0.2);
+            border: 1px solid rgba(99, 102, 241, 0.4);
+        }
+
+        .exercise-details {
+            flex: 1;
+        }
+
+        .exercise-name {
+            font-weight: 600;
+            margin-bottom: 4px;
+        }
+
+        .exercise-muscle {
+            font-size: 12px;
+            opacity: 0.7;
+        }
+
+        .workout-item, .plan-item {
+            background: rgba(255, 255, 255, 0.05);
+            padding: 16px;
+            border-radius: 8px;
+            margin-bottom: 12px;
+            border-left: 4px solid #6366f1;
+        }
+
+        .workout-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            margin-bottom: 8px;
+        }
+
+        .workout-name {
+            font-weight: 600;
+            font-size: 16px;
+        }
+
+        .workout-exercises {
+            font-size: 14px;
+            opacity: 0.8;
+            margin-top: 8px;
+        }
+
+        .schedule-grid {
+            display: grid;
+            grid-template-columns: repeat(7, 1fr);
+            gap: 8px;
+            margin-bottom: 16px;
+        }
+
+        .day-card {
+            background: rgba(255, 255, 255, 0.05);
+            padding: 8px;
+            border-radius: 6px;
+            text-align: center;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+
+        .day-card.selected {
+            background: rgba(99, 102, 241, 0.2);
+            border-color: #6366f1;
+        }
+
+        .day-name {
+            font-size: 10px;
+            opacity: 0.7;
+            margin-bottom: 4px;
+        }
+
+        .day-workout {
+            font-size: 8px;
+            font-weight: 600;
+        }
+
+        .modal {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.8);
+            z-index: 1000;
+            display: none;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+        }
+
+        .modal.active {
+            display: flex;
+        }
+
+        .modal-content {
+            background: rgba(17, 25, 40, 0.95);
+            backdrop-filter: blur(16px);
+            border-radius: 12px;
+            padding: 24px;
+            max-width: 90%;
+            max-height: 90%;
+            overflow-y: auto;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .close-btn {
+            float: right;
+            font-size: 24px;
+            cursor: pointer;
+            color: rgba(255, 255, 255, 0.6);
+        }
+
+        .exercise-grid {
+            max-height: 400px;
+            overflow-y: auto;
+        }
+
+        .set-inputs {
+            display: grid;
+            grid-template-columns: 1fr 1fr 1fr;
+            gap: 8px;
+            margin-top: 8px;
+        }
+
+        .set-inputs input {
+            padding: 8px;
+            font-size: 14px;
+        }
+
+        .empty-state {
+            text-align: center;
+            padding: 40px 20px;
+            opacity: 0.6;
+        }
+
+        .empty-state h4 {
+            margin-bottom: 8px;
+            color: #6366f1;
+        }
+
+        .filter-tabs {
+            display: flex;
+            gap: 8px;
+            margin-bottom: 16px;
+            overflow-x: auto;
+        }
+
+        .filter-tab {
+            padding: 8px 16px;
+            background: rgba(255, 255, 255, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 12px;
+            white-space: nowrap;
+            transition: all 0.2s ease;
+        }
+
+        .filter-tab.active {
+            background: rgba(99, 102, 241, 0.3);
+            border-color: #6366f1;
+        }
+
+        .progress-bar {
+            background: rgba(255, 255, 255, 0.1);
+            height: 8px;
+            border-radius: 4px;
+            overflow: hidden;
+            margin: 8px 0;
+        }
+
+        .progress-fill {
+            background: linear-gradient(90deg, #6366f1, #8b5cf6);
+            height: 100%;
+            transition: width 0.3s ease;
+        }
+
+        .achievement-item {
+            background: rgba(255, 255, 255, 0.05);
+            padding: 16px;
+            border-radius: 8px;
+            margin-bottom: 12px;
+            display: flex;
+            align-items: center;
+            gap: 16px;
+            border-left: 4px solid rgba(255, 255, 255, 0.2);
+            transition: all 0.3s ease;
+        }
+
+        .achievement-item.unlocked {
+            background: rgba(99, 102, 241, 0.1);
+            border-left-color: #6366f1;
+            box-shadow: 0 0 20px rgba(99, 102, 241, 0.2);
+        }
+
+        .achievement-icon {
+            font-size: 32px;
+            min-width: 48px;
+            text-align: center;
+            opacity: 0.3;
+            transition: opacity 0.3s ease;
+        }
+
+        .achievement-item.unlocked .achievement-icon {
+            opacity: 1;
+        }
+
+        .achievement-info {
+            flex: 1;
+        }
+
+        .achievement-name {
+            font-weight: 600;
+            margin-bottom: 4px;
+            color: rgba(255, 255, 255, 0.6);
+        }
+
+        .achievement-item.unlocked .achievement-name {
+            color: #6366f1;
+        }
+
+        .achievement-description {
+            font-size: 14px;
+            opacity: 0.7;
+        }
+
+        .achievement-date {
+            font-size: 12px;
+            opacity: 0.5;
+            margin-top: 4px;
+        }
+
+        .reminder-card {
+            background: linear-gradient(135deg, rgba(16, 185, 129, 0.2) 0%, rgba(5, 150, 105, 0.2) 100%);
+            border: 1px solid rgba(16, 185, 129, 0.3);
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+            0% { box-shadow: 0 0 0 0 rgba(16, 185, 129, 0.4); }
+            70% { box-shadow: 0 0 0 10px rgba(16, 185, 129, 0); }
+            100% { box-shadow: 0 0 0 0 rgba(16, 185, 129, 0); }
+        }
+
+        .new-achievement-card {
+            background: linear-gradient(135deg, rgba(255, 215, 0, 0.2) 0%, rgba(255, 193, 7, 0.2) 100%);
+            border: 1px solid rgba(255, 215, 0, 0.4);
+            animation: glow 1.5s ease-in-out infinite alternate;
+        }
+
+        @keyframes glow {
+            from { box-shadow: 0 0 20px rgba(255, 215, 0, 0.2); }
+            to { box-shadow: 0 0 30px rgba(255, 215, 0, 0.4); }
+        }
+
+        .chart-container {
+            min-height: 200px;
+            position: relative;
+            background: rgba(255, 255, 255, 0.02);
+            border-radius: 8px;
+            padding: 16px;
+            margin-top: 8px;
+        }
+
+        .chart-svg {
+            width: 100%;
+            height: 180px;
+            overflow: visible;
+        }
+
+        .chart-line {
+            fill: none;
+            stroke-width: 2;
+        }
+
+        .data-line {
+            stroke: #6366f1;
+        }
+
+        .goal-line {
+            stroke: #10b981;
+            stroke-dasharray: 5,5;
+            opacity: 0.8;
+        }
+
+        .chart-dot {
+            r: 3;
+            fill: #6366f1;
+        }
+
+        .chart-dot.above-goal {
+            fill: #10b981;
+        }
+
+        .chart-dot.below-goal {
+            fill: #ef4444;
+        }
+
+        .chart-axis {
+            stroke: rgba(255, 255, 255, 0.2);
+            stroke-width: 1;
+        }
+
+        .chart-text {
+            fill: rgba(255, 255, 255, 0.6);
+            font-size: 10px;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+        }
+
+        .chart-legend {
+            display: flex;
+            gap: 16px;
+            margin-bottom: 8px;
+            font-size: 12px;
+        }
+
+        .legend-item {
+            display: flex;
+            align-items: center;
+            gap: 4px;
+        }
+
+        .legend-line {
+            width: 16px;
+            height: 2px;
+        }
+
+        .legend-data {
+            background: #6366f1;
+        }
+
+        .legend-goal {
+            background: #10b981;
+            opacity: 0.8;
+        }
+
+        .goal-progress-item {
+            background: rgba(255, 255, 255, 0.05);
+            padding: 16px;
+            border-radius: 8px;
+            margin-bottom: 12px;
+            border-left: 4px solid rgba(255, 255, 255, 0.2);
+        }
+
+        .goal-progress-item.achieved {
+            border-left-color: #10b981;
+            background: rgba(16, 185, 129, 0.1);
+        }
+
+        .goal-progress-item.close {
+            border-left-color: #f59e0b;
+            background: rgba(245, 158, 11, 0.1);
+        }
+
+        .goal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 8px;
+        }
+
+        .goal-name {
+            font-weight: 600;
+        }
+
+        .goal-status {
+            font-size: 12px;
+            padding: 4px 8px;
+            border-radius: 4px;
+            font-weight: 500;
+        }
+
+        .goal-status.achieved {
+            background: #10b981;
+            color: white;
+        }
+
+        .goal-status.close {
+            background: #f59e0b;
+            color: white;
+        }
+
+        .goal-status.needs-work {
+            background: #6b7280;
+            color: white;
+        }
+
+        @media (max-width: 480px) {
+            .container {
+                border-radius: 0;
+                min-height: 100vh;
+            // Goal-related achievements
+            {
+                id: 'goal_setter',
+                name: 'Goal Setter',
+                description: 'Set your first daily goals',
+                icon: '🎯',
+                category: 'consistency',
+                check: () => goals.steps > 0 || goals.water > 0 || goals.calories > 0 || goals.weight > 0
+            }
+        ];
+            {
+                id: 'steps_goal_hit',
+                name: 'Step Goal Crusher',
+                description: 'Hit your daily steps goal',
+                icon: '🚀',
+                category: 'consistency',
+                check: () => {
+                    if (!goals.steps) return false;
+                    return nutrition.some(n => n.steps >= goals.steps);
+                }
+            },
+            {
+                id: 'water_goal_hit',
+                name: 'Hydration Master',
+                description: 'Hit your daily water goal',
+                icon: '🏆',
+                category: 'consistency',
+                check: () => {
+                    if (!goals.water) return false;
+                    return nutrition.some(n => n.water >= goals.water);
+                }
+            },
+            {
+                id: 'perfect_day',
+                name: 'Perfect Day',
+                description: 'Hit all your daily goals in one day',
+                icon: '✨',
+                category: 'consistency',
+                check: () => {
+                    if (!goals.steps || !goals.water || !goals.calories) return false;
+                    return nutrition.some(n => 
+                        n.steps >= goals.steps && 
+                        n.water >= goals.water && 
+                        n.calories >= goals.calories
+                    );
+                }
+            },
+            
+            .stats-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .nav {
+                font-size: 10px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>FitTrack Pro</h1>
+            <p>Advanced Body Recomposition Tracking</p>
+        </div>
+
+        <div class="nav">
+            <button class="nav-item" onclick="showSection('dashboard')">Dashboard</button>
+            <button class="nav-item" onclick="showSection('exercises')">Exercises</button>
+            <button class="nav-item" onclick="showSection('workouts')">Workouts</button>
+            <button class="nav-item" onclick="showSection('plans')">Plans</button>
+            <button class="nav-item" onclick="showSection('schedule')">Schedule</button>
+            <button class="nav-item" onclick="showSection('goals')">Goals</button>
+            <button class="nav-item" onclick="showSection('achievements')">Achievements</button>
+            <button class="nav-item" onclick="showSection('nutrition')">Nutrition</button>
+            <button class="nav-item" onclick="showSection('measurements')">Progress</button>
+        </div>
+
+        <div class="content">
+            <!-- Dashboard Section -->
+            <div id="dashboard" class="section active">
+                <div class="stats-grid">
+                    <div class="stat-card">
+                        <div class="stat-value" id="totalWorkouts">0</div>
+                        <div class="stat-label">Workouts</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-value" id="avgSteps">0</div>
+                        <div class="stat-label">Avg Steps</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-value" id="currentWeight">0</div>
+                        <div class="stat-label">Weight (kg)</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-value" id="weightChange">0</div>
+                        <div class="stat-label">Weight Change</div>
+                    </div>
+                </div>
+
+                <div class="card">
+                    <h3>📅 Today's Workout</h3>
+                    <div id="todaysWorkout">
+                        <div class="empty-state">
+                            <h4>No workout scheduled</h4>
+                            <p>Create a plan and schedule to see today's workout here</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="card">
+                    <h3>📊 Weekly Progress</h3>
+                    <div>
+                        <label>Workouts This Week</label>
+                        <div class="progress-bar">
+                            <div class="progress-fill" id="workoutProgress" style="width: 0%"></div>
+                        </div>
+                        <span id="workoutProgressText">0 / 4 workouts</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Exercise Library Section -->
+            <div id="exercises" class="section">
+                <div class="card">
+                    <h3>💪 Exercise Library</h3>
+                    <div class="filter-tabs">
+                        <div class="filter-tab active" onclick="filterExercises('all')">All</div>
+                        <div class="filter-tab" onclick="filterExercises('chest')">Chest</div>
+                        <div class="filter-tab" onclick="filterExercises('back')">Back</div>
+                        <div class="filter-tab" onclick="filterExercises('shoulders')">Shoulders</div>
+                        <div class="filter-tab" onclick="filterExercises('arms')">Arms</div>
+                        <div class="filter-tab" onclick="filterExercises('legs')">Legs</div>
+                        <div class="filter-tab" onclick="filterExercises('core')">Core</div>
+                        <div class="filter-tab" onclick="filterExercises('cardio')">Cardio</div>
+                    </div>
+                    <div id="exerciseLibrary"></div>
+                </div>
+            </div>
+
+            <!-- Workouts Section -->
+            <div id="workouts" class="section">
+                <div class="card">
+                    <h3>🏋️ Create Workout</h3>
+                    <div class="input-group">
+                        <label>Workout Name</label>
+                        <input type="text" id="workoutName" placeholder="Upper Body Strength">
+                    </div>
+                    <div class="input-group">
+                        <label>Selected Exercises</label>
+                        <div id="selectedExercises">
+                            <p style="opacity: 0.6; font-size: 14px;">No exercises selected</p>
+                        </div>
+                    </div>
+                    <button class="btn btn-secondary" onclick="openExerciseSelector()">Add Exercises</button>
+                    <button class="btn" onclick="saveWorkout()">Save Workout</button>
+                </div>
+
+                <div class="card">
+                    <h3>📝 My Workouts</h3>
+                    <div id="workoutsList">
+                        <div class="empty-state">
+                            <h4>No workouts created</h4>
+                            <p>Create your first workout above!</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Plans Section -->
+            <div id="plans" class="section">
+                <div class="card">
+                    <h3>📋 Create Plan</h3>
+                    <div class="input-group">
+                        <label>Plan Name</label>
+                        <input type="text" id="planName" placeholder="6-Week Upper/Lower Split">
+                    </div>
+                    <div class="input-group">
+                        <label>Description</label>
+                        <textarea id="planDescription" placeholder="Body recomposition focused program..." rows="2"></textarea>
+                    </div>
+                    <div class="input-group">
+                        <label>Duration (weeks)</label>
+                        <input type="number" id="planDuration" placeholder="6" min="1" max="52">
+                    </div>
+                    <button class="btn" onclick="savePlan()">Create Plan</button>
+                </div>
+
+                <div class="card">
+                    <h3>📚 My Plans</h3>
+                    <div id="plansList">
+                        <div class="empty-state">
+                            <h4>No plans created</h4>
+                            <p>Create your first training plan above!</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Goals Section -->
+            <div id="goals" class="section">
+                <div class="card">
+                    <h3>🎯 Set Your Goals</h3>
+                    <div class="input-group">
+                        <label>Daily Steps Goal</label>
+                        <input type="number" id="stepsGoal" placeholder="10000" min="1000" step="500">
+                    </div>
+                    <div class="input-group">
+                        <label>Daily Water Goal (Liters)</label>
+                        <input type="number" id="waterGoal" placeholder="2.5" min="1" step="0.1">
+                    </div>
+                    <div class="input-group">
+                        <label>Daily Calories Goal</label>
+                        <input type="number" id="caloriesGoal" placeholder="2000" min="1200" step="50">
+                    </div>
+                    <div class="input-group">
+                        <label>Target Weight (kg)</label>
+                        <input type="number" id="weightGoal" placeholder="70" min="40" step="0.5">
+                    </div>
+                    <button class="btn" onclick="saveGoals()">Save Goals</button>
+                </div>
+
+                <div class="card">
+                    <h3>📊 Daily Goals Progress</h3>
+                    <div id="dailyGoalsProgress">
+                        <div class="empty-state">
+                            <h4>Set goals above to see your progress</h4>
+                            <p>Track how you're doing against your daily targets</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="card">
+                    <h3>📈 Steps Chart (Last 14 Days)</h3>
+                    <div id="stepsChart" class="chart-container">
+                        <div class="empty-state">
+                            <h4>No steps data yet</h4>
+                            <p>Start tracking to see your progress chart</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="card">
+                    <h3>💧 Water Chart (Last 14 Days)</h3>
+                    <div id="waterChart" class="chart-container">
+                        <div class="empty-state">
+                            <h4>No water data yet</h4>
+                            <p>Start tracking to see your hydration chart</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="card">
+                    <h3>🔥 Calories Chart (Last 14 Days)</h3>
+                    <div id="caloriesChart" class="chart-container">
+                        <div class="empty-state">
+                            <h4>No calories data yet</h4>
+                            <p>Start tracking to see your nutrition chart</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="card">
+                    <h3>⚖️ Weight Progress Chart</h3>
+                    <div id="weightChart" class="chart-container">
+                        <div class="empty-state">
+                            <h4>No weight data yet</h4>
+                            <p>Take measurements to see your weight trend</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Achievements Section -->
+            <div id="achievements" class="section">
+                <div class="card">
+                    <h3>🏆 Your Achievements</h3>
+                    <div id="achievementStats" class="stats-grid">
+                        <div class="stat-card">
+                            <div class="stat-value" id="totalAchievements">0</div>
+                            <div class="stat-label">Unlocked</div>
+                        </div>
+                        <div class="stat-card">
+                            <div class="stat-value" id="achievementProgress">0%</div>
+                            <div class="stat-label">Progress</div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="card">
+                    <h3>🌟 Workout Achievements</h3>
+                    <div id="workoutAchievements"></div>
+                </div>
+
+                <div class="card">
+                    <h3>📊 Progress Achievements</h3>
+                    <div id="progressAchievements"></div>
+                </div>
+
+                <div class="card">
+                    <h3>🔥 Consistency Achievements</h3>
+                    <div id="consistencyAchievements"></div>
+                </div>
+            </div>
+
+            <!-- Schedule Section -->
+            <div id="schedule" class="section">
+                <div class="card">
+                    <h3>📅 Weekly Schedule</h3>
+                    <div class="input-group">
+                        <label>Select Plan to Schedule</label>
+                        <select id="planToSchedule">
+                            <option value="">Select a plan...</option>
+                        </select>
+                    </div>
+                    <div class="input-group">
+                        <label>Start Date</label>
+                        <input type="date" id="scheduleStartDate">
+                    </div>
+                    <div id="weeklySchedule"></div>
+                    <button class="btn" onclick="saveSchedule()">Save Schedule</button>
+                </div>
+
+                <div class="card">
+                    <h3>📆 Current Schedule</h3>
+                    <div id="currentSchedule">
+                        <div class="empty-state">
+                            <h4>No active schedule</h4>
+                            <p>Create and schedule a plan above!</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Nutrition Section -->
+            <div id="nutrition" class="section">
+                <div class="card">
+                    <h3>🍎 Daily Tracking</h3>
+                    <div class="input-group">
+                        <label>Date</label>
+                        <input type="date" id="nutritionDate">
+                    </div>
+                    <div class="stats-grid">
+                        <div class="input-group">
+                            <label>Calories</label>
+                            <input type="number" id="calories" placeholder="2000" min="0" step="50">
+                        </div>
+                        <div class="input-group">
+                            <label>Protein (g)</label>
+                            <input type="number" id="protein" placeholder="150" min="0" step="5">
+                        </div>
+                        <div class="input-group">
+                            <label>Water (L)</label>
+                            <input type="number" id="water" placeholder="2.5" min="0" step="0.1">
+                        </div>
+                        <div class="input-group">
+                            <label>Steps</label>
+                            <input type="number" id="dailySteps" placeholder="8000" min="0" step="100">
+                        </div>
+                    </div>
+                    <button class="btn" onclick="saveNutrition()">Save Daily Data</button>
+                </div>
+
+                <div class="card">
+                    <h3>📊 Daily Tracking History</h3>
+                    <div id="dailyTrackingHistory">
+                        <div class="empty-state">
+                            <h4>No daily data yet</h4>
+                            <p>Start tracking your daily metrics above!</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Measurements Section -->
+            <div id="measurements" class="section">
+                <div class="card">
+                    <h3>📏 Body Measurements</h3>
+                    <div class="input-group">
+                        <label>Date</label>
+                        <input type="date" id="measurementDate">
+                    </div>
+                    <div class="stats-grid">
+                        <div class="input-group">
+                            <label>Weight (kg)</label>
+                            <input type="number" id="weight" placeholder="70.5" step="0.1">
+                        </div>
+                        <div class="input-group">
+                            <label>Body Fat %</label>
+                            <input type="number" id="bodyFat" placeholder="15" step="0.1">
+                        </div>
+                        <div class="input-group">
+                            <label>Muscle Mass (kg)</label>
+                            <input type="number" id="muscleMass" placeholder="60" step="0.1">
+                        </div>
+                        <div class="input-group">
+                            <label>Waist (cm)</label>
+                            <input type="number" id="waist" placeholder="80" step="0.5">
+                        </div>
+                    </div>
+                    <button class="btn" onclick="saveMeasurements()">Save Measurements</button>
+                </div>
+
+                <div class="card">
+                    <h3>📈 Weight Progress</h3>
+                    <div id="weightProgress">
+                        <div class="empty-state">
+                            <h4>No weight data yet</h4>
+                            <p>Start tracking to see your progress!</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="card">
+                    <h3>📊 All Measurements</h3>
+                    <div id="progressHistory">
+                        <div class="empty-state">
+                            <h4>No measurements yet</h4>
+                            <p>Take your first measurements above!</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Exercise Selection Modal -->
+    <div id="exerciseModal" class="modal">
+        <div class="modal-content">
+            <span class="close-btn" onclick="closeExerciseSelector()">&times;</span>
+            <h3>Select Exercises</h3>
+            <div class="filter-tabs" style="margin-bottom: 16px;">
+                <div class="filter-tab active" onclick="filterModalExercises('all')">All</div>
+                <div class="filter-tab" onclick="filterModalExercises('chest')">Chest</div>
+                <div class="filter-tab" onclick="filterModalExercises('back')">Back</div>
+                <div class="filter-tab" onclick="filterModalExercises('shoulders')">Shoulders</div>
+                <div class="filter-tab" onclick="filterModalExercises('arms')">Arms</div>
+                <div class="filter-tab" onclick="filterModalExercises('legs')">Legs</div>
+                <div class="filter-tab" onclick="filterModalExercises('core')">Core</div>
+            </div>
+            <div id="modalExerciseGrid" class="exercise-grid"></div>
+            <button class="btn" onclick="confirmExerciseSelection()">Add Selected Exercises</button>
+        </div>
+    </div>
+
+    <script>
+        // Data storage
+        let exercises = [];
+        let workouts = JSON.parse(window.localStorage?.getItem('fittrack-workouts') || '[]') || [];
+        let plans = JSON.parse(window.localStorage?.getItem('fittrack-plans') || '[]') || [];
+        let schedule = JSON.parse(window.localStorage?.getItem('fittrack-schedule') || '{}') || {};
+        let nutrition = JSON.parse(window.localStorage?.getItem('fittrack-nutrition') || '[]') || [];
+        let measurements = JSON.parse(window.localStorage?.getItem('fittrack-measurements') || '[]') || [];
+        let achievements = JSON.parse(window.localStorage?.getItem('fittrack-achievements') || '[]') || [];
+        let workoutCompletions = JSON.parse(window.localStorage?.getItem('fittrack-completions') || '[]') || [];
+        let goals = JSON.parse(window.localStorage?.getItem('fittrack-goals') || '{}') || {};
+        let selectedExercises = [];
+        let currentFilter = 'all';
+
+        // Achievement definitions
+        const achievementDefinitions = [
+            // Workout Achievements
+            {
+                id: 'first_workout',
+                name: 'Getting Started',
+                description: 'Complete your first workout',
+                icon: '🎯',
+                category: 'workout',
+                check: () => workoutCompletions.length >= 1
+            },
+            {
+                id: 'workout_5',
+                name: 'Momentum Builder',
+                description: 'Complete 5 workouts',
+                icon: '💪',
+                category: 'workout',
+                check: () => workoutCompletions.length >= 5
+            },
+            {
+                id: 'workout_10',
+                name: 'Dedicated',
+                description: 'Complete 10 workouts',
+                icon: '🔥',
+                category: 'workout',
+                check: () => workoutCompletions.length >= 10
+            },
+            {
+                id: 'workout_25',
+                name: 'Fitness Enthusiast',
+                description: 'Complete 25 workouts',
+                icon: '⭐',
+                category: 'workout',
+                check: () => workoutCompletions.length >= 25
+            },
+            {
+                id: 'workout_50',
+                name: 'Iron Will',
+                description: 'Complete 50 workouts',
+                icon: '🏆',
+                category: 'workout',
+                check: () => workoutCompletions.length >= 50
+            },
+            
+            // Progress Achievements
+            {
+                id: 'first_measurement',
+                name: 'Baseline Set',
+                description: 'Take your first body measurements',
+                icon: '📏',
+                category: 'progress',
+                check: () => measurements.length >= 1
+            },
+            {
+                id: 'weight_tracked',
+                name: 'Scale Master',
+                description: 'Track weight for 5 different days',
+                icon: '⚖️',
+                category: 'progress',
+                check: () => measurements.length >= 5
+            },
+            {
+                id: 'body_recomp',
+                name: 'Body Recomposition',
+                description: 'Track both weight and body fat percentage',
+                icon: '📊',
+                category: 'progress',
+                check: () => measurements.some(m => m.weight > 0 && m.bodyFat > 0)
+            },
+            {
+                id: 'progress_month',
+                name: 'Monthly Tracker',
+                description: 'Track progress for 30 days',
+                icon: '📅',
+                category: 'progress',
+                check: () => {
+                    if (measurements.length === 0) return false;
+                    const firstDate = new Date(Math.min(...measurements.map(m => new Date(m.date))));
+                    const daysDiff = (new Date() - firstDate) / (1000 * 60 * 60 * 24);
+                    return daysDiff >= 30;
+                }
+            },
+            
+            // Consistency Achievements
+            {
+                id: 'daily_logger',
+                name: 'Daily Logger',
+                description: 'Track nutrition for 7 consecutive days',
+                icon: '🍎',
+                category: 'consistency',
+                check: () => {
+                    if (nutrition.length < 7) return false;
+                    const sorted = nutrition.sort((a, b) => new Date(b.date) - new Date(a.date));
+                    for (let i = 0; i < 7; i++) {
+                        const expectedDate = new Date();
+                        expectedDate.setDate(expectedDate.getDate() - i);
+                        const dateStr = expectedDate.toISOString().split('T')[0];
+                        if (!sorted.find(n => n.date === dateStr)) return false;
+                    }
+                    return true;
+                }
+            },
+            {
+                id: 'step_crusher',
+                name: 'Step Crusher',
+                description: 'Hit 10,000+ steps in a day',
+                icon: '👟',
+                category: 'consistency',
+                check: () => nutrition.some(n => n.steps >= 10000)
+            },
+            {
+                id: 'hydration_hero',
+                name: 'Hydration Hero',
+                description: 'Drink 3+ liters of water in a day',
+                icon: '💧',
+                category: 'consistency',
+                check: () => nutrition.some(n => n.water >= 3.0)
+            },
+            {
+                id: 'protein_power',
+                name: 'Protein Power',
+                description: 'Hit 150g+ protein in a day',
+                icon: '🥩',
+                category: 'consistency',
+                check: () => nutrition.some(n => n.protein >= 150)
+            },
+            {
+                id: 'workout_streak_7',
+                name: 'Weekly Warrior',
+                description: 'Complete workouts 7 days in a row',
+                icon: '🔥',
+                category: 'consistency',
+                check: () => {
+                    if (workoutCompletions.length < 7) return false;
+                    const sorted = workoutCompletions.sort((a, b) => new Date(b.date) - new Date(a.date));
+                    for (let i = 0; i < 7; i++) {
+                        const expectedDate = new Date();
+                        expectedDate.setDate(expectedDate.getDate() - i);
+                        const dateStr = expectedDate.toISOString().split('T')[0];
+                        if (!sorted.find(w => w.date === dateStr)) return false;
+                    }
+                    return true;
+                }
+            }
+        ];
+
+        // Exercise database
+        const exerciseDatabase = [
+            // Chest
+            {id: 1, name: 'Bench Press', muscle: 'chest', equipment: 'barbell'},
+            {id: 2, name: 'Incline Bench Press', muscle: 'chest', equipment: 'barbell'},
+            {id: 3, name: 'Dumbbell Bench Press', muscle: 'chest', equipment: 'dumbbell'},
+            {id: 4, name: 'Push-ups', muscle: 'chest', equipment: 'bodyweight'},
+            {id: 5, name: 'Dips', muscle: 'chest', equipment: 'bodyweight'},
+            {id: 6, name: 'Chest Flyes', muscle: 'chest', equipment: 'dumbbell'},
+            
+            // Back
+            {id: 7, name: 'Deadlift', muscle: 'back', equipment: 'barbell'},
+            {id: 8, name: 'Pull-ups', muscle: 'back', equipment: 'bodyweight'},
+            {id: 9, name: 'Bent Over Row', muscle: 'back', equipment: 'barbell'},
+            {id: 10, name: 'Lat Pulldown', muscle: 'back', equipment: 'cable'},
+            {id: 11, name: 'T-Bar Row', muscle: 'back', equipment: 'barbell'},
+            {id: 12, name: 'Face Pulls', muscle: 'back', equipment: 'cable'},
+            
+            // Legs
+            {id: 13, name: 'Squats', muscle: 'legs', equipment: 'barbell'},
+            {id: 14, name: 'Leg Press', muscle: 'legs', equipment: 'machine'},
+            {id: 15, name: 'Lunges', muscle: 'legs', equipment: 'dumbbell'},
+            {id: 16, name: 'Romanian Deadlift', muscle: 'legs', equipment: 'barbell'},
+            {id: 17, name: 'Leg Curls', muscle: 'legs', equipment: 'machine'},
+            {id: 18, name: 'Calf Raises', muscle: 'legs', equipment: 'machine'},
+            
+            // Shoulders
+            {id: 19, name: 'Overhead Press', muscle: 'shoulders', equipment: 'barbell'},
+            {id: 20, name: 'Dumbbell Shoulder Press', muscle: 'shoulders', equipment: 'dumbbell'},
+            {id: 21, name: 'Lateral Raises', muscle: 'shoulders', equipment: 'dumbbell'},
+            {id: 22, name: 'Rear Delt Flyes', muscle: 'shoulders', equipment: 'dumbbell'},
+            
+            // Arms
+            {id: 23, name: 'Bicep Curls', muscle: 'arms', equipment: 'dumbbell'},
+            {id: 24, name: 'Hammer Curls', muscle: 'arms', equipment: 'dumbbell'},
+            {id: 25, name: 'Tricep Extensions', muscle: 'arms', equipment: 'dumbbell'},
+            {id: 26, name: 'Close Grip Bench Press', muscle: 'arms', equipment: 'barbell'},
+            
+            // Core
+            {id: 27, name: 'Plank', muscle: 'core', equipment: 'bodyweight'},
+            {id: 28, name: 'Russian Twists', muscle: 'core', equipment: 'bodyweight'},
+            {id: 29, name: 'Dead Bug', muscle: 'core', equipment: 'bodyweight'},
+            {id: 30, name: 'Mountain Climbers', muscle: 'core', equipment: 'bodyweight'},
+            
+            // Cardio
+            {id: 31, name: 'Treadmill', muscle: 'cardio', equipment: 'machine'},
+            {id: 32, name: 'Rowing Machine', muscle: 'cardio', equipment: 'machine'},
+            {id: 33, name: 'Stationary Bike', muscle: 'cardio', equipment: 'machine'},
+            {id: 34, name: 'Burpees', muscle: 'cardio', equipment: 'bodyweight'},
+            {id: 35, name: 'Jump Rope', muscle: 'cardio', equipment: 'equipment'}
+        ];
+
+        // Initialize app
+        document.addEventListener('DOMContentLoaded', function() {
+            const today = new Date().toISOString().split('T')[0];
+            document.getElementById('nutritionDate').value = today;
+            document.getElementById('measurementDate').value = today;
+            document.getElementById('scheduleStartDate').value = today;
+            
+            exercises = exerciseDatabase;
+            loadData();
+            loadGoals();
+            updateAllDisplays();
+        });
+
+        // Navigation
+        function showSection(sectionName) {
+            document.querySelectorAll('.section').forEach(section => {
+                section.classList.remove('active');
+            });
+            
+            document.querySelectorAll('.nav-item').forEach(item => {
+                item.classList.remove('active');
+            });
+            
+            document.getElementById(sectionName).classList.add('active');
+            event.target.classList.add('active');
+        }
+
+        // Exercise Library Functions
+        function displayExerciseLibrary() {
+            const container = document.getElementById('exerciseLibrary');
+            const filteredExercises = currentFilter === 'all' ? 
+                exercises : exercises.filter(ex => ex.muscle === currentFilter);
+            
+            container.innerHTML = filteredExercises.map(exercise => `
+                <div class="exercise-item">
+                    <div class="exercise-details">
+                        <div class="exercise-name">${exercise.name}</div>
+                        <div class="exercise-muscle">${exercise.muscle} • ${exercise.equipment}</div>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        function filterExercises(muscle) {
+            currentFilter = muscle;
+            document.querySelectorAll('.filter-tab').forEach(tab => tab.classList.remove('active'));
+            event.target.classList.add('active');
+            displayExerciseLibrary();
+        }
+
+        // Exercise Selection Modal
+        function openExerciseSelector() {
+            document.getElementById('exerciseModal').classList.add('active');
+            displayModalExercises();
+        }
+
+        function closeExerciseSelector() {
+            document.getElementById('exerciseModal').classList.remove('active');
+        }
+
+        function displayModalExercises() {
+            const container = document.getElementById('modalExerciseGrid');
+            const filteredExercises = currentFilter === 'all' ? 
+                exercises : exercises.filter(ex => ex.muscle === currentFilter);
+            
+            container.innerHTML = filteredExercises.map(exercise => `
+                <div class="exercise-item ${selectedExercises.find(e => e.id === exercise.id) ? 'selected' : ''}" 
+                     onclick="toggleExerciseSelection(${exercise.id})">
+                    <div class="exercise-details">
+                        <div class="exercise-name">${exercise.name}</div>
+                        <div class="exercise-muscle">${exercise.muscle} • ${exercise.equipment}</div>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        function filterModalExercises(muscle) {
+            currentFilter = muscle;
+            document.querySelectorAll('.filter-tab').forEach(tab => tab.classList.remove('active'));
+            event.target.classList.add('active');
+            displayModalExercises();
+        }
+
+        function toggleExerciseSelection(exerciseId) {
+            const exercise = exercises.find(e => e.id === exerciseId);
+            const existingIndex = selectedExercises.findIndex(e => e.id === exerciseId);
+            
+            if (existingIndex >= 0) {
+                selectedExercises.splice(existingIndex, 1);
+            } else {
+                selectedExercises.push({
+                    ...exercise,
+                    sets: 3,
+                    reps: 10,
+                    weight: 0
+                });
+            }
+            
+            displayModalExercises();
+            updateSelectedExercisesDisplay();
+        }
+
+        function confirmExerciseSelection() {
+            closeExerciseSelector();
+            updateSelectedExercisesDisplay();
+        }
+
+        function updateSelectedExercisesDisplay() {
+            const container = document.getElementById('selectedExercises');
+            
+            if (selectedExercises.length === 0) {
+                container.innerHTML = '<p style="opacity: 0.6; font-size: 14px;">No exercises selected</p>';
+                return;
+            }
+            
+            container.innerHTML = selectedExercises.map((exercise, index) => `
+                <div class="exercise-item">
+                    <div class="exercise-details">
+                        <div class="exercise-name">${exercise.name}</div>
+                        <div class="set-inputs">
+                            <input type="number" placeholder="Sets" value="${exercise.sets}" 
+                                   onchange="updateExerciseParam(${index}, 'sets', this.value)">
+                            <input type="number" placeholder="Reps" value="${exercise.reps}"
+                                   onchange="updateExerciseParam(${index}, 'reps', this.value)">
+                            <input type="number" placeholder="Weight" value="${exercise.weight}"
+                                   onchange="updateExerciseParam(${index}, 'weight', this.value)">
+                        </div>
+                    </div>
+                    <button class="btn btn-danger btn-small" onclick="removeSelectedExercise(${index})">×</button>
+                </div>
+            `).join('');
+        }
+
+        function updateExerciseParam(index, param, value) {
+            selectedExercises[index][param] = parseFloat(value) || 0;
+        }
+
+        function removeSelectedExercise(index) {
+            selectedExercises.splice(index, 1);
+            updateSelectedExercisesDisplay();
+        }
+
+        // Workout Management
+        function saveWorkout() {
+            const name = document.getElementById('workoutName').value;
+            
+            if (!name || selectedExercises.length === 0) {
+                alert('Please enter a workout name and select exercises');
+                return;
+            }
+            
+            const workout = {
+                id: Date.now(),
+                name: name,
+                exercises: [...selectedExercises],
+                created: new Date().toISOString()
+            };
+            
+            workouts.push(workout);
+            saveData();
+            
+            // Clear form
+            document.getElementById('workoutName').value = '';
+            selectedExercises = [];
+            updateSelectedExercisesDisplay();
+            updateWorkoutsList();
+            updateDashboard();
+            
+            alert('Workout saved successfully!');
+        }
+
+        function deleteWorkout(id) {
+            if (confirm('Delete this workout?')) {
+                workouts = workouts.filter(w => w.id !== id);
+                saveData();
+                updateWorkoutsList();
+                updateDashboard();
+            }
+        }
+
+        function updateWorkoutsList() {
+            const container = document.getElementById('workoutsList');
+            
+            if (workouts.length === 0) {
+                container.innerHTML = `
+                    <div class="empty-state">
+                        <h4>No workouts created</h4>
+                        <p>Create your first workout above!</p>
+                    </div>
+                `;
+                return;
+            }
+            
+            container.innerHTML = workouts.map(workout => `
+                <div class="workout-item">
+                    <div class="workout-header">
+                        <div class="workout-name">${workout.name}</div>
+                        <button class="btn btn-danger btn-small" onclick="deleteWorkout(${workout.id})">Delete</button>
+                    </div>
+                    <div class="workout-exercises">
+                        ${workout.exercises.map(ex => 
+                            `${ex.name}: ${ex.sets}x${ex.reps}${ex.weight > 0 ? ' @' + ex.weight + 'kg' : ''}`
+                        ).join(' • ')}
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        // Plan Management
+        function savePlan() {
+            const name = document.getElementById('planName').value;
+            const description = document.getElementById('planDescription').value;
+            const duration = parseInt(document.getElementById('planDuration').value);
+            
+            if (!name || !duration) {
+                alert('Please enter plan name and duration');
+                return;
+            }
+            
+            const plan = {
+                id: Date.now(),
+                name: name,
+                description: description,
+                duration: duration,
+                workouts: {},
+                created: new Date().toISOString()
+            };
+            
+            plans.push(plan);
+            saveData();
+            
+            // Clear form
+            document.getElementById('planName').value = '';
+            document.getElementById('planDescription').value = '';
+            document.getElementById('planDuration').value = '';
+            
+            updatePlansList();
+            updatePlanSelector();
+            updateDashboard();
+            
+            alert('Plan created successfully!');
+        }
+
+        function deletePlan(id) {
+            if (confirm('Delete this plan?')) {
+                plans = plans.filter(p => p.id !== id);
+                saveData();
+                updatePlansList();
+                updatePlanSelector();
+                updateDashboard();
+            }
+        }
+
+        function updatePlansList() {
+            const container = document.getElementById('plansList');
+            
+            if (plans.length === 0) {
+                container.innerHTML = `
+                    <div class="empty-state">
+                        <h4>No plans created</h4>
+                        <p>Create your first training plan above!</p>
+                    </div>
+                `;
+                return;
+            }
+            
+            container.innerHTML = plans.map(plan => `
+                <div class="plan-item">
+                    <div class="workout-header">
+                        <div>
+                            <div class="workout-name">${plan.name}</div>
+                            <div class="workout-exercises">${plan.description}</div>
+                            <div class="workout-exercises">${plan.duration} weeks</div>
+                        </div>
+                        <button class="btn btn-danger btn-small" onclick="deletePlan(${plan.id})">Delete</button>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        function updatePlanSelector() {
+            const selector = document.getElementById('planToSchedule');
+            selector.innerHTML = '<option value="">Select a plan...</option>' + 
+                plans.map(plan => `<option value="${plan.id}">${plan.name}</option>`).join('');
+        }
+
+        // Schedule Management
+        function generateWeeklySchedule() {
+            const planId = document.getElementById('planToSchedule').value;
+            if (!planId) return;
+            
+            const container = document.getElementById('weeklySchedule');
+            const days = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'];
+            
+            container.innerHTML = `
+                <label>Assign Workouts to Days</label>
+                <div class="schedule-grid">
+                    ${days.map(day => `
+                        <div class="day-card" onclick="selectDayForWorkout('${day}')">
+                            <div class="day-name">${day}</div>
+                            <select id="workout-${day}" style="width: 100%; font-size: 10px; padding: 4px;">
+                                <option value="">Rest</option>
+                                ${workouts.map(w => `<option value="${w.id}">${w.name}</option>`).join('')}
+                            </select>
+                        </div>
+                    `).join('')}
+                </div>
+            `;
+        }
+
+        function saveSchedule() {
+            const planId = document.getElementById('planToSchedule').value;
+            const startDate = document.getElementById('scheduleStartDate').value;
+            
+            if (!planId || !startDate) {
+                alert('Please select a plan and start date');
+                return;
+            }
+            
+            const plan = plans.find(p => p.id === parseInt(planId));
+            const days = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'];
+            const weekSchedule = {};
+            
+            days.forEach(day => {
+                const workoutId = document.getElementById(`workout-${day}`)?.value;
+                if (workoutId) {
+                    weekSchedule[day] = parseInt(workoutId);
+                }
+            });
+            
+            schedule = {
+                planId: parseInt(planId),
+                planName: plan.name,
+                startDate: startDate,
+                duration: plan.duration,
+                weekSchedule: weekSchedule
+            };
+            
+            saveData();
+            updateCurrentSchedule();
+            updateTodaysWorkout();
+            
+            alert('Schedule saved successfully!');
+        }
+
+        function updateCurrentSchedule() {
+            const container = document.getElementById('currentSchedule');
+            
+            if (!schedule.planName) {
+                container.innerHTML = `
+                    <div class="empty-state">
+                        <h4>No active schedule</h4>
+                        <p>Create and schedule a plan above!</p>
+                    </div>
+                `;
+                return;
+            }
+            
+            const days = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'];
+            container.innerHTML = `
+                <div class="workout-item">
+                    <div class="workout-name">${schedule.planName}</div>
+                    <div class="workout-exercises">Started: ${new Date(schedule.startDate).toLocaleDateString()}</div>
+                    <div class="workout-exercises">${schedule.duration} weeks</div>
+                </div>
+                <div class="schedule-grid">
+                    ${days.map(day => {
+                        const workoutId = schedule.weekSchedule[day];
+                        const workout = workoutId ? workouts.find(w => w.id === workoutId) : null;
+                        return `
+                            <div class="day-card">
+                                <div class="day-name">${day}</div>
+                                <div class="day-workout">${workout ? workout.name : 'Rest'}</div>
+                            </div>
+                        `;
+                    }).join('')}
+                </div>
+            `;
+        }
+
+        function updateTodaysWorkout() {
+            const container = document.getElementById('todaysWorkout');
+            
+            if (!schedule.planName) {
+                container.innerHTML = `
+                    <div class="empty-state">
+                        <h4>No workout scheduled</h4>
+                        <p>Create a plan and schedule to see today's workout here</p>
+                    </div>
+                `;
+                return;
+            }
+            
+            const today = new Date();
+            const dayNames = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
+            const todayName = dayNames[today.getDay()];
+            const todayShort = todayName === 'Sun' ? 'Sun' : todayName;
+            
+            const workoutId = schedule.weekSchedule[todayShort];
+            const workout = workoutId ? workouts.find(w => w.id === workoutId) : null;
+            
+            if (!workout) {
+                container.innerHTML = `
+                    <div class="empty-state">
+                        <h4>Rest Day</h4>
+                        <p>No workout scheduled for today</p>
+                    </div>
+                `;
+                return;
+            }
+            
+            container.innerHTML = `
+                <div class="workout-item">
+                    <div class="workout-name">${workout.name}</div>
+                    <div class="workout-exercises">
+                        ${workout.exercises.map(ex => 
+                            `${ex.name}: ${ex.sets}x${ex.reps}${ex.weight > 0 ? ' @' + ex.weight + 'kg' : ''}`
+                        ).join('<br>')}
+                    </div>
+                    <button class="btn btn-small" onclick="logWorkoutCompletion()">Mark as Completed</button>
+                </div>
+            `;
+        }
+
+        function logWorkoutCompletion() {
+            const today = new Date().toISOString().split('T')[0];
+            
+            // Don't log duplicate completions for the same day
+            if (workoutCompletions.find(w => w.date === today)) {
+                alert('Workout already marked as completed for today!');
+                return;
+            }
+            
+            const todayName = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'][new Date().getDay()];
+            const todayShort = todayName === 'Sun' ? 'Sun' : todayName;
+            const workoutId = schedule.weekSchedule?.[todayShort];
+            const workout = workoutId ? workouts.find(w => w.id === workoutId) : null;
+            
+            workoutCompletions.push({
+                id: Date.now(),
+                date: today,
+                workoutId: workoutId,
+                workoutName: workout?.name || 'Workout'
+            });
+            
+            saveData();
+            checkAchievements();
+            updateDashboard();
+            showWorkoutReminder(); // Refresh reminder
+            
+            alert('🎉 Workout completed! Great job!');
+        }
+
+        // Achievement System
+        function checkAchievements() {
+            let newAchievements = [];
+            
+            achievementDefinitions.forEach(def => {
+                // Check if already unlocked
+                if (achievements.find(a => a.id === def.id)) return;
+                
+                // Check if conditions are met
+                if (def.check()) {
+                    const achievement = {
+                        ...def,
+                        unlockedDate: new Date().toISOString(),
+                        isNew: true
+                    };
+                    achievements.push(achievement);
+                    newAchievements.push(achievement);
+                }
+            });
+            
+            if (newAchievements.length > 0) {
+                saveData();
+                showNewAchievements(newAchievements);
+                updateAchievementsDisplay();
+            }
+        }
+
+        function showNewAchievements(newAchievements) {
+            const card = document.getElementById('recentAchievementCard');
+            const content = document.getElementById('recentAchievement');
+            
+            if (newAchievements.length === 1) {
+                const achievement = newAchievements[0];
+                content.innerHTML = `
+                    <div class="achievement-item unlocked">
+                        <div class="achievement-icon">${achievement.icon}</div>
+                        <div class="achievement-info">
+                            <div class="achievement-name">${achievement.name}</div>
+                            <div class="achievement-description">${achievement.description}</div>
+                        </div>
+                    </div>
+                `;
+            } else {
+                content.innerHTML = `
+                    <div class="workout-item">
+                        <div class="workout-name">🎉 ${newAchievements.length} New Achievements!</div>
+                        <div class="workout-exercises">
+                            ${newAchievements.map(a => `${a.icon} ${a.name}`).join(' • ')}
+                        </div>
+                    </div>
+                `;
+            }
+            
+            card.classList.add('new-achievement-card');
+            card.style.display = 'block';
+            
+            // Auto-hide after 10 seconds
+            setTimeout(() => {
+                card.style.display = 'none';
+                card.classList.remove('new-achievement-card');
+                // Mark achievements as no longer new
+                achievements.forEach(a => a.isNew = false);
+                saveData();
+            }, 10000);
+        }
+
+        function updateAchievementsDisplay() {
+            // Update stats
+            const unlockedCount = achievements.length;
+            const totalCount = achievementDefinitions.length;
+            const progressPercent = Math.round((unlockedCount / totalCount) * 100);
+            
+            document.getElementById('totalAchievements').textContent = `${unlockedCount}/${totalCount}`;
+            document.getElementById('achievementProgress').textContent = `${progressPercent}%`;
+            
+            // Update achievement lists by category
+            updateAchievementCategory('workout', 'workoutAchievements');
+            updateAchievementCategory('progress', 'progressAchievements');
+            updateAchievementCategory('consistency', 'consistencyAchievements');
+        }
+
+        function updateAchievementCategory(category, containerId) {
+            const container = document.getElementById(containerId);
+            const categoryAchievements = achievementDefinitions.filter(def => def.category === category);
+            
+            container.innerHTML = categoryAchievements.map(def => {
+                const unlocked = achievements.find(a => a.id === def.id);
+                const unlockedClass = unlocked ? 'unlocked' : '';
+                const unlockedDate = unlocked ? 
+                    `<div class="achievement-date">Unlocked: ${new Date(unlocked.unlockedDate).toLocaleDateString()}</div>` : '';
+                
+                return `
+                    <div class="achievement-item ${unlockedClass}">
+                        <div class="achievement-icon">${def.icon}</div>
+                        <div class="achievement-info">
+                            <div class="achievement-name">${def.name}</div>
+                            <div class="achievement-description">${def.description}</div>
+                            ${unlockedDate}
+                        </div>
+                    </div>
+                `;
+            }).join('');
+        }
+
+        // Goals Management
+        function saveGoals() {
+            goals = {
+                steps: parseInt(document.getElementById('stepsGoal').value) || 0,
+                water: parseFloat(document.getElementById('waterGoal').value) || 0,
+                calories: parseInt(document.getElementById('caloriesGoal').value) || 0,
+                weight: parseFloat(document.getElementById('weightGoal').value) || 0
+            };
+            
+            saveData();
+            checkAchievements(); // Check for goal-related achievements
+            updateGoalsDisplay();
+            updateChartsDisplay();
+            updateDashboard();
+            
+            alert('Goals saved successfully!');
+        }
+
+        function loadGoals() {
+            if (goals.steps) document.getElementById('stepsGoal').value = goals.steps;
+            if (goals.water) document.getElementById('waterGoal').value = goals.water;
+            if (goals.calories) document.getElementById('caloriesGoal').value = goals.calories;
+            if (goals.weight) document.getElementById('weightGoal').value = goals.weight;
+        }
+
+        function updateGoalsDisplay() {
+            const container = document.getElementById('dailyGoalsProgress');
+            
+            if (!goals.steps && !goals.water && !goals.calories && !goals.weight) {
+                container.innerHTML = `
+                    <div class="empty-state">
+                        <h4>Set goals above to see your progress</h4>
+                        <p>Track how you're doing against your daily targets</p>
+                    </div>
+                `;
+                return;
+            }
+
+            const today = new Date().toISOString().split('T')[0];
+            const todayData = nutrition.find(n => n.date === today) || {};
+            const todayWeight = measurements.find(m => m.date === today);
+
+            let progressItems = [];
+
+            if (goals.steps) {
+                const current = todayData.steps || 0;
+                const progress = Math.min((current / goals.steps) * 100, 100);
+                const status = current >= goals.steps ? 'achieved' : 
+                             current >= goals.steps * 0.8 ? 'close' : 'needs-work';
+                const statusText = current >= goals.steps ? 'Achieved!' : 
+                                 current >= goals.steps * 0.8 ? 'Close!' : 'Keep going!';
+                
+                progressItems.push(`
+                    <div class="goal-progress-item ${status}">
+                        <div class="goal-header">
+                            <div class="goal-name">👟 Steps: ${current.toLocaleString()} / ${goals.steps.toLocaleString()}</div>
+                            <div class="goal-status ${status}">${statusText}</div>
+                        </div>
+                        <div class="progress-bar">
+                            <div class="progress-fill" style="width: ${progress}%"></div>
+                        </div>
+                    </div>
+                `);
+            }
+
+            if (goals.water) {
+                const current = todayData.water || 0;
+                const progress = Math.min((current / goals.water) * 100, 100);
+                const status = current >= goals.water ? 'achieved' : 
+                             current >= goals.water * 0.8 ? 'close' : 'needs-work';
+                const statusText = current >= goals.water ? 'Achieved!' : 
+                                 current >= goals.water * 0.8 ? 'Close!' : 'Keep going!';
+                
+                progressItems.push(`
+                    <div class="goal-progress-item ${status}">
+                        <div class="goal-header">
+                            <div class="goal-name">💧 Water: ${current}L / ${goals.water}L</div>
+                            <div class="goal-status ${status}">${statusText}</div>
+                        </div>
+                        <div class="progress-bar">
+                            <div class="progress-fill" style="width: ${progress}%"></div>
+                        </div>
+                    </div>
+                `);
+            }
+
+            if (goals.calories) {
+                const current = todayData.calories || 0;
+                const progress = Math.min((current / goals.calories) * 100, 100);
+                const status = current >= goals.calories ? 'achieved' : 
+                             current >= goals.calories * 0.8 ? 'close' : 'needs-work';
+                const statusText = current >= goals.calories ? 'Achieved!' : 
+                                 current >= goals.calories * 0.8 ? 'Close!' : 'Keep going!';
+                
+                progressItems.push(`
+                    <div class="goal-progress-item ${status}">
+                        <div class="goal-header">
+                            <div class="goal-name">🔥 Calories: ${current} / ${goals.calories}</div>
+                            <div class="goal-status ${status}">${statusText}</div>
+                        </div>
+                        <div class="progress-bar">
+                            <div class="progress-fill" style="width: ${progress}%"></div>
+                        </div>
+                    </div>
+                `);
+            }
+
+            if (goals.weight && todayWeight) {
+                const current = todayWeight.weight;
+                const diff = Math.abs(current - goals.weight);
+                const status = diff <= 0.5 ? 'achieved' : diff <= 2 ? 'close' : 'needs-work';
+                const statusText = diff <= 0.5 ? 'At goal!' : diff <= 2 ? 'Close!' : 'Keep going!';
+                
+                progressItems.push(`
+                    <div class="goal-progress-item ${status}">
+                        <div class="goal-header">
+                            <div class="goal-name">⚖️ Weight: ${current}kg / ${goals.weight}kg</div>
+                            <div class="goal-status ${status}">${statusText}</div>
+                        </div>
+                        <div style="opacity: 0.7; font-size: 14px;">
+                            ${diff.toFixed(1)}kg ${current > goals.weight ? 'above' : 'below'} target
+                        </div>
+                    </div>
+                `);
+            }
+
+            container.innerHTML = progressItems.join('');
+        }
+
+        // Chart Generation Functions
+        function updateChartsDisplay() {
+            updateStepsChart();
+            updateWaterChart();
+            updateCaloriesChart();
+            updateWeightChart();
+        }
+
+        function updateStepsChart() {
+            const container = document.getElementById('stepsChart');
+            const data = getLast14DaysData('steps');
+            
+            if (data.length === 0) {
+                container.innerHTML = `
+                    <div class="empty-state">
+                        <h4>No steps data yet</h4>
+                        <p>Start tracking to see your progress chart</p>
+                    </div>
+                `;
+                return;
+            }
+
+            container.innerHTML = generateChart(data, goals.steps, 'Steps', '👟');
+        }
+
+        function updateWaterChart() {
+            const container = document.getElementById('waterChart');
+            const data = getLast14DaysData('water');
+            
+            if (data.length === 0) {
+                container.innerHTML = `
+                    <div class="empty-state">
+                        <h4>No water data yet</h4>
+                        <p>Start tracking to see your hydration chart</p>
+                    </div>
+                `;
+                return;
+            }
+
+            container.innerHTML = generateChart(data, goals.water, 'Water (L)', '💧');
+        }
+
+        function updateCaloriesChart() {
+            const container = document.getElementById('caloriesChart');
+            const data = getLast14DaysData('calories');
+            
+            if (data.length === 0) {
+                container.innerHTML = `
+                    <div class="empty-state">
+                        <h4>No calories data yet</h4>
+                        <p>Start tracking to see your nutrition chart</p>
+                    </div>
+                `;
+                return;
+            }
+
+            container.innerHTML = generateChart(data, goals.calories, 'Calories', '🔥');
+        }
+
+        function updateWeightChart() {
+            const container = document.getElementById('weightChart');
+            
+            if (measurements.length === 0) {
+                container.innerHTML = `
+                    <div class="empty-state">
+                        <h4>No weight data yet</h4>
+                        <p>Take measurements to see your weight trend</p>
+                    </div>
+                `;
+                return;
+            }
+
+            const sortedMeasurements = [...measurements].sort((a, b) => new Date(a.date) - new Date(b.date));
+            const data = sortedMeasurements.map(m => ({
+                date: m.date,
+                value: m.weight
+            }));
+
+            container.innerHTML = generateChart(data, goals.weight, 'Weight (kg)', '⚖️', true);
+        }
+
+        function getLast14DaysData(field) {
+            const data = [];
+            for (let i = 13; i >= 0; i--) {
+                const date = new Date();
+                date.setDate(date.getDate() - i);
+                const dateStr = date.toISOString().split('T')[0];
+                
+                const dayData = nutrition.find(n => n.date === dateStr);
+                data.push({
+                    date: dateStr,
+                    value: dayData ? (dayData[field] || 0) : 0
+                });
+            }
+            return data;
+        }
+
+        function generateChart(data, goal, label, icon, isWeight = false) {
+            if (data.length === 0) return '';
+
+            const width = 320;
+            const height = 140;
+            const margin = { top: 20, right: 20, bottom: 30, left: 40 };
+            const chartWidth = width - margin.left - margin.right;
+            const chartHeight = height - margin.top - margin.bottom;
+
+            const maxValue = Math.max(...data.map(d => d.value), goal || 0);
+            const minValue = isWeight ? Math.min(...data.map(d => d.value)) * 0.98 : 0;
+            const range = maxValue - minValue;
+
+            const xScale = (i) => (i / (data.length - 1)) * chartWidth;
+            const yScale = (value) => chartHeight - ((value - minValue) / range) * chartHeight;
+
+            // Generate path for data line
+            const pathData = data.map((d, i) => `${i === 0 ? 'M' : 'L'} ${xScale(i)} ${yScale(d.value)}`).join(' ');
+            
+            // Generate goal line
+            const goalY = goal ? yScale(goal) : null;
+
+            let legend = `
+                <div class="chart-legend">
+                    <div class="legend-item">
+                        <div class="legend-line legend-data"></div>
+                        <span>Actual</span>
+                    </div>
+                    ${goal ? `
+                        <div class="legend-item">
+                            <div class="legend-line legend-goal"></div>
+                            <span>Goal (${goal})</span>
+                        </div>
+                    ` : ''}
+                </div>
+            `;
+
+            return `
+                ${legend}
+                <svg class="chart-svg" viewBox="0 0 ${width} ${height}">
+                    <!-- Grid lines -->
+                    ${Array.from({length: 5}, (_, i) => {
+                        const y = margin.top + (i * chartHeight / 4);
+                        const value = maxValue - (i * range / 4);
+                        return `
+                            <line x1="${margin.left}" y1="${y}" x2="${width - margin.right}" y2="${y}" class="chart-axis"/>
+                            <text x="${margin.left - 5}" y="${y + 3}" class="chart-text" text-anchor="end">${Math.round(value)}</text>
+                        `;
+                    }).join('')}
+                    
+                    <!-- Goal line -->
+                    ${goal && goalY ? `
+                        <line x1="${margin.left}" y1="${margin.top + goalY}" x2="${width - margin.right}" y2="${margin.top + goalY}" class="goal-line"/>
+                    ` : ''}
+                    
+                    <!-- Data line -->
+                    <path d="M ${margin.left} ${margin.top + yScale(data[0].value)} ${pathData.replace(/M|L/g, '').split(' ').map((coord, i) => 
+                        i % 2 === 0 ? `L ${margin.left + parseFloat(coord)}` : `${margin.top + parseFloat(coord)}`
+                    ).join(' ')}" class="chart-line data-line"/>
+                    
+                    <!-- Data points -->
+                    ${data.map((d, i) => `
+                        <circle cx="${margin.left + xScale(i)}" cy="${margin.top + yScale(d.value)}" 
+                                class="chart-dot ${goal && d.value >= goal ? 'above-goal' : 'below-goal'}"/>
+                    `).join('')}
+                    
+                    <!-- Date labels -->
+                    ${data.filter((_, i) => i % 3 === 0).map((d, i) => {
+                        const actualIndex = i * 3;
+                        return `
+                            <text x="${margin.left + xScale(actualIndex)}" y="${height - 5}" 
+                                  class="chart-text" text-anchor="middle">
+                                ${new Date(d.date).getDate()}
+                            </text>
+                        `;
+                    }).join('')}
+                </svg>
+            `;
+        }
+        function showWorkoutReminder() {
+            const today = new Date();
+            const dayNames = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
+            const todayName = dayNames[today.getDay()];
+            const todayShort = todayName === 'Sun' ? 'Sun' : todayName;
+            
+            const card = document.getElementById('workoutReminderCard');
+            const content = document.getElementById('workoutReminder');
+            
+            // Check if there's an active schedule
+            if (!schedule.planName) {
+                card.style.display = 'none';
+                return;
+            }
+            
+            // Check if workout is scheduled for today
+            const workoutId = schedule.weekSchedule[todayShort];
+            if (!workoutId) {
+                card.style.display = 'none';
+                return;
+            }
+            
+            // Check if already completed today
+            const todayStr = today.toISOString().split('T')[0];
+            const alreadyCompleted = workoutCompletions.find(w => w.date === todayStr);
+            
+            if (alreadyCompleted) {
+                content.innerHTML = `
+                    <div class="workout-item">
+                        <div class="workout-name">✅ Today's workout completed!</div>
+                        <div class="workout-exercises">Great job finishing "${alreadyCompleted.workoutName}"</div>
+                    </div>
+                `;
+                card.classList.remove('reminder-card');
+            } else {
+                const workout = workouts.find(w => w.id === workoutId);
+                content.innerHTML = `
+                    <div class="workout-item">
+                        <div class="workout-name">⏰ Time to workout!</div>
+                        <div class="workout-exercises">
+                            You have "${workout?.name || 'Workout'}" scheduled for today
+                        </div>
+                        <button class="btn btn-small" onclick="logWorkoutCompletion()" style="margin-top: 8px;">
+                            Mark as Completed
+                        </button>
+                    </div>
+                `;
+                card.classList.add('reminder-card');
+            }
+            
+            card.style.display = 'block';
+        }
+        function saveNutrition() {
+            const nutritionEntry = {
+                id: Date.now(),
+                date: document.getElementById('nutritionDate').value,
+                calories: parseInt(document.getElementById('calories').value) || 0,
+                protein: parseInt(document.getElementById('protein').value) || 0,
+                water: parseFloat(document.getElementById('water').value) || 0,
+                steps: parseInt(document.getElementById('dailySteps').value) || 0
+            };
+
+            if (!nutritionEntry.date) {
+                alert('Please select a date');
+                return;
+            }
+
+            nutrition = nutrition.filter(n => n.date !== nutritionEntry.date);
+            nutrition.unshift(nutritionEntry);
+            
+            saveData();
+            
+            document.getElementById('calories').value = '';
+            document.getElementById('protein').value = '';
+            document.getElementById('water').value = '';
+            document.getElementById('dailySteps').value = '';
+
+            updateDailyTrackingHistory();
+            updateDashboard();
+            alert('Daily data saved!');
+        }
+
+        function updateDailyTrackingHistory() {
+            const container = document.getElementById('dailyTrackingHistory');
+            
+            if (nutrition.length === 0) {
+                container.innerHTML = `
+                    <div class="empty-state">
+                        <h4>No daily data yet</h4>
+                        <p>Start tracking your daily metrics above!</p>
+                    </div>
+                `;
+                return;
+            }
+
+            container.innerHTML = nutrition.map(entry => `
+                <div class="workout-item">
+                    <div class="workout-header">
+                        <div>
+                            <div class="workout-name">${new Date(entry.date).toLocaleDateString()}</div>
+                            <div class="workout-exercises">
+                                🔥 ${entry.calories} cal • 🥩 ${entry.protein}g protein • 💧 ${entry.water}L water • 👟 ${entry.steps.toLocaleString()} steps
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        // Measurements Management
+        function saveMeasurements() {
+            const measurement = {
+                id: Date.now(),
+                date: document.getElementById('measurementDate').value,
+                weight: parseFloat(document.getElementById('weight').value) || 0,
+                bodyFat: parseFloat(document.getElementById('bodyFat').value) || 0,
+                muscleMass: parseFloat(document.getElementById('muscleMass').value) || 0,
+                waist: parseFloat(document.getElementById('waist').value) || 0
+            };
+
+            if (!measurement.date) {
+                alert('Please select a date');
+                return;
+            }
+
+            measurements = measurements.filter(m => m.date !== measurement.date);
+            measurements.unshift(measurement);
+            
+            saveData();
+            checkAchievements(); // Check for measurement-related achievements
+            updateGoalsDisplay(); // Update goals progress for weight
+            updateChartsDisplay(); // Update weight chart
+            
+            document.getElementById('weight').value = '';
+            document.getElementById('bodyFat').value = '';
+            document.getElementById('muscleMass').value = '';
+            document.getElementById('waist').value = '';
+
+            updateProgressHistory();
+            updateWeightProgress();
+            updateDashboard();
+            alert('Measurements saved!');
+        }
+                alert('Please select a date');
+                return;
+            }
+
+            measurements = measurements.filter(m => m.date !== measurement.date);
+            measurements.unshift(measurement);
+            
+            saveData();
+            
+            document.getElementById('weight').value = '';
+            document.getElementById('bodyFat').value = '';
+            document.getElementById('muscleMass').value = '';
+            document.getElementById('waist').value = '';
+
+            updateProgressHistory();
+            updateWeightProgress();
+            updateDashboard();
+            alert('Measurements saved!');
+        }
+
+        function updateWeightProgress() {
+            const container = document.getElementById('weightProgress');
+            
+            if (measurements.length === 0) {
+                container.innerHTML = `
+                    <div class="empty-state">
+                        <h4>No weight data yet</h4>
+                        <p>Start tracking to see your progress!</p>
+                    </div>
+                `;
+                return;
+            }
+
+            // Sort measurements by date
+            const sortedMeasurements = [...measurements].sort((a, b) => new Date(a.date) - new Date(b.date));
+            const latest = sortedMeasurements[sortedMeasurements.length - 1];
+            const earliest = sortedMeasurements[0];
+            const change = latest.weight - earliest.weight;
+            const changeText = change >= 0 ? `+${change.toFixed(1)}kg` : `${change.toFixed(1)}kg`;
+            const changeColor = change >= 0 ? '#10b981' : '#ef4444';
+
+            container.innerHTML = `
+                <div class="stats-grid">
+                    <div class="stat-card">
+                        <div class="stat-value">${latest.weight}</div>
+                        <div class="stat-label">Current Weight</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-value" style="color: ${changeColor}">${changeText}</div>
+                        <div class="stat-label">Total Change</div>
+                    </div>
+                </div>
+                <div class="workout-item">
+                    <div class="workout-exercises">
+                        <strong>Recent Progress:</strong><br>
+                        ${sortedMeasurements.slice(-5).reverse().map(m => 
+                            `${new Date(m.date).toLocaleDateString()}: ${m.weight}kg`
+                        ).join('<br>')}
+                    </div>
+                </div>
+            `;
+        }
+
+        function updateProgressHistory() {
+            const container = document.getElementById('progressHistory');
+            
+            if (measurements.length === 0) {
+                container.innerHTML = `
+                    <div class="empty-state">
+                        <h4>No measurements yet</h4>
+                        <p>Take your first measurements above!</p>
+                    </div>
+                `;
+                return;
+            }
+
+            container.innerHTML = measurements.map(measurement => `
+                <div class="workout-item">
+                    <div class="workout-header">
+                        <div>
+                            <div class="workout-name">${new Date(measurement.date).toLocaleDateString()}</div>
+                            <div class="workout-exercises">
+                                ⚖️ ${measurement.weight}kg • 📊 ${measurement.bodyFat}% BF • 💪 ${measurement.muscleMass}kg muscle • 📏 ${measurement.waist}cm waist
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        // Dashboard Updates
+        function updateDashboard() {
+            document.getElementById('totalWorkouts').textContent = workouts.length;
+            
+            // Average steps
+            const avgSteps = nutrition.length > 0 ? 
+                Math.round(nutrition.reduce((sum, n) => sum + (n.steps || 0), 0) / nutrition.length) : 0;
+            document.getElementById('avgSteps').textContent = avgSteps.toLocaleString();
+            
+            // Current weight and change
+            if (measurements.length > 0) {
+                const sortedMeasurements = [...measurements].sort((a, b) => new Date(a.date) - new Date(b.date));
+                const latest = sortedMeasurements[sortedMeasurements.length - 1];
+                document.getElementById('currentWeight').textContent = latest.weight;
+                
+                if (sortedMeasurements.length > 1) {
+                    const earliest = sortedMeasurements[0];
+                    const change = latest.weight - earliest.weight;
+                    const changeText = change >= 0 ? `+${change.toFixed(1)}` : `${change.toFixed(1)}`;
+                    document.getElementById('weightChange').textContent = changeText;
+                    document.getElementById('weightChange').style.color = change >= 0 ? '#10b981' : '#ef4444';
+                } else {
+                    document.getElementById('weightChange').textContent = '0';
+                }
+            } else {
+                document.getElementById('currentWeight').textContent = '0';
+                document.getElementById('weightChange').textContent = '0';
+            }
+
+            // Update weekly progress (simplified)
+            const progressPercent = Math.min((workouts.length * 10), 100);
+            document.getElementById('workoutProgress').style.width = progressPercent + '%';
+            document.getElementById('workoutProgressText').textContent = 
+                `${workouts.length} workouts created`;
+        }
+
+        // Data Management
+        function saveData() {
+            if (window.localStorage) {
+                window.localStorage.setItem('fittrack-workouts', JSON.stringify(workouts));
+                window.localStorage.setItem('fittrack-plans', JSON.stringify(plans));
+                window.localStorage.setItem('fittrack-schedule', JSON.stringify(schedule));
+                window.localStorage.setItem('fittrack-nutrition', JSON.stringify(nutrition));
+                window.localStorage.setItem('fittrack-measurements', JSON.stringify(measurements));
+                window.localStorage.setItem('fittrack-achievements', JSON.stringify(achievements));
+                window.localStorage.setItem('fittrack-completions', JSON.stringify(workoutCompletions));
+                window.localStorage.setItem('fittrack-goals', JSON.stringify(goals));
+            }
+        }
+
+        function loadData() {
+            // Data already loaded in initialization
+        }
+
+        function updateAllDisplays() {
+            displayExerciseLibrary();
+            updateWorkoutsList();
+            updatePlansList();
+            updatePlanSelector();
+            updateCurrentSchedule();
+            updateTodaysWorkout();
+            updateDailyTrackingHistory();
+            updateProgressHistory();
+            updateWeightProgress();
+            updateAchievementsDisplay();
+            updateGoalsDisplay();
+            updateChartsDisplay();
+            showWorkoutReminder();
+            updateDashboard();
+            checkAchievements(); // Check achievements on app load
+        }
+
+        // Event Listeners
+        document.getElementById('planToSchedule').addEventListener('change', generateWeeklySchedule);
+    </script>
+</body>
+</html>
