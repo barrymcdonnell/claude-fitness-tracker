@@ -1,4 +1,114 @@
-<!DOCTYPE html>
+// Measurements Management
+        function saveMeasurements() {
+            const measurement = {
+                id: Date.now(),
+                date: document.getElementById('measurementDate').value,
+                weight: parseFloat(document.getElementById('weight').value) || 0,
+                bodyFat: parseFloat(document.getElementById('bodyFat').value) || 0,
+                muscleMass: parseFloat(document.getElementById('muscleMass').value) || 0,
+                waist: parseFloat(document.getElementById('waist').value) || 0
+            };
+
+            if (!measurement.date) {
+                alert('Please select a date');
+                return;
+            }
+
+            measurements = measurements.filter(m => m.date !== measurement.date);
+            measurements.unshift(measurement);
+            
+            saveData();
+            checkAchievements(); // Check for measurement-related achievements
+            updateGoalsDisplay(); // Update goals progress for weight
+            updateChartsDisplay(); // Update weight chart
+            
+            document.getElementById('weight').value = '';
+            document.getElementById('bodyFat').value = '';
+            document.getElementById('muscleMass').value = '';
+            document.getElementById('waist').value = '';
+
+            updateProgressHistory();
+            updateWeightProgress();
+            updateDashboard();
+            alert('Measurements saved!');
+        }        // Measurements Management
+        function saveMeasurements() {
+            const measurement = {
+                id: Date.now(),
+                date: document.getElementById('measurementDate').value,
+                weight: parseFloat(document.getElementById('weight').value) || 0,
+                bodyFat: parseFloat(document.getElementById('bodyFat').value) || 0,
+                muscleMass: parseFloat(document.getElementById('muscleMass').value) || 0,
+                waist: parseFloat(document.getElementById('waist').value) || 0
+            // Goal-related achievements
+            {
+                id: 'goal_setter',
+                name: 'Goal Setter',
+                description: 'Set your first daily goals',
+                icon: '🎯',
+                category: 'consistency',
+                check: () => goals.steps > 0 || goals.water > 0 || goals.calories > 0 || goals.weight > 0
+            }
+        ];
+            {
+                id: 'steps_goal_hit',
+                name: 'Step Goal Crusher',
+                description: 'Hit your daily steps goal',
+                icon: '🚀',
+                category: 'consistency',
+                check: () => {
+                    if (!goals.steps) return false;
+                    return nutrition.some(n => n.steps >= goals.steps);
+                }
+            },
+            {
+                id: 'water_goal_hit',
+                name: 'Hydration Master',
+                description: 'Hit your daily water goal',
+                icon: '🏆',
+                category: 'consistency',
+                check: () => {
+                    if (!goals.water) return false;
+                    return nutrition.some(n => n.water >= goals.water);
+                }
+            },
+            {
+                id: 'perfect_day',
+                name: 'Perfect Day',
+                description: 'Hit all your daily goals in one day',
+                icon: '✨',
+                category: 'consistency',
+                check: () => {
+                    if (!goals.steps || !goals.water || !goals.calories) return false;
+                    return nutrition.some(n => 
+                        n.steps >= goals.steps && 
+                        n.water >= goals.water && 
+                        n.calories >= goals.calories
+                    );
+                }
+            },;
+
+            if (!measurement.date) {
+                alert('Please select a date');
+                return;
+            }
+
+            measurements = measurements.filter(m => m.date !== measurement.date);
+            measurements.unshift(measurement);
+            
+            saveData();
+            checkAchievements(); // Check for measurement-related achievements
+            
+            document.getElementById('weight').value = '';
+            document.getElementById('bodyFat').value = '';
+            document.getElementById('muscleMass').value = '';
+            document.getElementById('waist').value = '';
+
+            updateProgressHistory();
+            updateWeightProgress();
+            updateDashboard();
+            alert('Measurements saved!');
+        }<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
@@ -606,53 +716,7 @@
             .container {
                 border-radius: 0;
                 min-height: 100vh;
-            // Goal-related achievements
-            {
-                id: 'goal_setter',
-                name: 'Goal Setter',
-                description: 'Set your first daily goals',
-                icon: '🎯',
-                category: 'consistency',
-                check: () => goals.steps > 0 || goals.water > 0 || goals.calories > 0 || goals.weight > 0
             }
-        ];
-            {
-                id: 'steps_goal_hit',
-                name: 'Step Goal Crusher',
-                description: 'Hit your daily steps goal',
-                icon: '🚀',
-                category: 'consistency',
-                check: () => {
-                    if (!goals.steps) return false;
-                    return nutrition.some(n => n.steps >= goals.steps);
-                }
-            },
-            {
-                id: 'water_goal_hit',
-                name: 'Hydration Master',
-                description: 'Hit your daily water goal',
-                icon: '🏆',
-                category: 'consistency',
-                check: () => {
-                    if (!goals.water) return false;
-                    return nutrition.some(n => n.water >= goals.water);
-                }
-            },
-            {
-                id: 'perfect_day',
-                name: 'Perfect Day',
-                description: 'Hit all your daily goals in one day',
-                icon: '✨',
-                category: 'consistency',
-                check: () => {
-                    if (!goals.steps || !goals.water || !goals.calories) return false;
-                    return nutrition.some(n => 
-                        n.steps >= goals.steps && 
-                        n.water >= goals.water && 
-                        n.calories >= goals.calories
-                    );
-                }
-            },
             
             .stats-grid {
                 grid-template-columns: 1fr;
@@ -672,15 +736,15 @@
         </div>
 
         <div class="nav">
-            <button class="nav-item" onclick="showSection('dashboard')">Dashboard</button>
-            <button class="nav-item" onclick="showSection('exercises')">Exercises</button>
-            <button class="nav-item" onclick="showSection('workouts')">Workouts</button>
-            <button class="nav-item" onclick="showSection('plans')">Plans</button>
-            <button class="nav-item" onclick="showSection('schedule')">Schedule</button>
-            <button class="nav-item" onclick="showSection('goals')">Goals</button>
-            <button class="nav-item" onclick="showSection('achievements')">Achievements</button>
-            <button class="nav-item" onclick="showSection('nutrition')">Nutrition</button>
-            <button class="nav-item" onclick="showSection('measurements')">Progress</button>
+            <button class="nav-item active" onclick="showSection('dashboard', this)">Dashboard</button>
+            <button class="nav-item" onclick="showSection('exercises', this)">Exercises</button>
+            <button class="nav-item" onclick="showSection('workouts', this)">Workouts</button>
+            <button class="nav-item" onclick="showSection('plans', this)">Plans</button>
+            <button class="nav-item" onclick="showSection('schedule', this)">Schedule</button>
+            <button class="nav-item" onclick="showSection('goals', this)">Goals</button>
+            <button class="nav-item" onclick="showSection('achievements', this)">Achievements</button>
+            <button class="nav-item" onclick="showSection('nutrition', this)">Nutrition</button>
+            <button class="nav-item" onclick="showSection('measurements', this)">Progress</button>
         </div>
 
         <div class="content">
@@ -1276,17 +1340,48 @@
         });
 
         // Navigation
-        function showSection(sectionName) {
+        function showSection(sectionName, clickedButton) {
+            // Hide all sections
             document.querySelectorAll('.section').forEach(section => {
                 section.classList.remove('active');
             });
             
+            // Remove active from all nav items
             document.querySelectorAll('.nav-item').forEach(item => {
                 item.classList.remove('active');
             });
             
-            document.getElementById(sectionName).classList.add('active');
-            event.target.classList.add('active');
+            // Show selected section
+            const targetSection = document.getElementById(sectionName);
+            if (targetSection) {
+                targetSection.classList.add('active');
+            }
+            
+            // Add active to clicked nav item
+            if (clickedButton) {
+                clickedButton.classList.add('active');
+            }
+            
+            // Update displays for specific sections that need refresh
+            if (sectionName === 'exercises') {
+                displayExerciseLibrary();
+            } else if (sectionName === 'workouts') {
+                updateWorkoutsList();
+            } else if (sectionName === 'plans') {
+                updatePlansList();
+            } else if (sectionName === 'schedule') {
+                updateCurrentSchedule();
+            } else if (sectionName === 'goals') {
+                updateGoalsDisplay();
+                updateChartsDisplay();
+            } else if (sectionName === 'achievements') {
+                updateAchievementsDisplay();
+            } else if (sectionName === 'nutrition') {
+                updateDailyTrackingHistory();
+            } else if (sectionName === 'measurements') {
+                updateProgressHistory();
+                updateWeightProgress();
+            }
         }
 
         // Exercise Library Functions
@@ -2245,28 +2340,6 @@
             };
 
             if (!measurement.date) {
-                alert('Please select a date');
-                return;
-            }
-
-            measurements = measurements.filter(m => m.date !== measurement.date);
-            measurements.unshift(measurement);
-            
-            saveData();
-            checkAchievements(); // Check for measurement-related achievements
-            updateGoalsDisplay(); // Update goals progress for weight
-            updateChartsDisplay(); // Update weight chart
-            
-            document.getElementById('weight').value = '';
-            document.getElementById('bodyFat').value = '';
-            document.getElementById('muscleMass').value = '';
-            document.getElementById('waist').value = '';
-
-            updateProgressHistory();
-            updateWeightProgress();
-            updateDashboard();
-            alert('Measurements saved!');
-        }
                 alert('Please select a date');
                 return;
             }
