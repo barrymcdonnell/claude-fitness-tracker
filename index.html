@@ -2387,6 +2387,11 @@
             // Data already loaded in initialization
         }
 
+        window.onload = function() {
+            showSection('dashboard', document.querySelector('.nav-item.active'));
+            updateAllDisplays();
+        };
+
         function updateAllDisplays() {
             displayExerciseLibrary();
             updateWorkoutsList();
