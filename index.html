@@ -633,7 +633,7 @@
             <button class="nav-item" onclick="showSection('schedule', this)">Schedule</button>
             <button class="nav-item" onclick="showSection('goals', this)">Goals</button>
             <button class="nav-item" onclick="showSection('achievements', this)">Achievements</button>
-            <button class="nav-item" onclick="showSection('nutrition', this)">Nutrition</button>
+            <button class="nav-item" onclick="showSection('tracking', this)">Tracking</button>
             <button class="nav-item" onclick="showSection('measurements', this)">Progress</button>
         </div>
 
@@ -816,7 +816,7 @@
                     <div id="caloriesChart" class="chart-container">
                         <div class="empty-state">
                             <h4>No calories data yet</h4>
-                            <p>Start tracking to see your nutrition chart</p>
+                            <p>Start tracking to see your tracking chart</p>
                         </div>
                     </div>
                 </div>
@@ -893,13 +893,13 @@
                 </div>
             </div>
 
-            <!-- Nutrition Section -->
-            <div id="nutrition" class="section">
+            <!-- Tracking Section -->
+            <div id="tracking" class="section">
                 <div class="card">
                     <h3>🍎 Daily Tracking</h3>
                     <div class="input-group">
                         <label>Date</label>
-                        <input type="date" id="nutritionDate">
+                        <input type="date" id="trackingDate">
                     </div>
                     <div class="stats-grid">
                         <div class="input-group">
@@ -919,7 +919,7 @@
                             <input type="number" id="dailySteps" placeholder="8000" min="0" step="100">
                         </div>
                     </div>
-                    <button class="btn" onclick="saveNutrition()">Save Daily Data</button>
+                    <button class="btn" onclick="saveTracking()">Save Daily Data</button>
                 </div>
 
                 <div class="card">
@@ -1010,7 +1010,7 @@
         let workouts = JSON.parse(window.localStorage?.getItem('fittrack-workouts') || '[]') || [];
         let plans = JSON.parse(window.localStorage?.getItem('fittrack-plans') || '[]') || [];
         let schedule = JSON.parse(window.localStorage?.getItem('fittrack-schedule') || '{}') || {};
-        let nutrition = JSON.parse(window.localStorage?.getItem('fittrack-nutrition') || '[]') || [];
+        let tracking = JSON.parse(window.localStorage?.getItem('fittrack-tracking') || '[]') || [];
         let measurements = JSON.parse(window.localStorage?.getItem('fittrack-measurements') || '[]') || [];
         let achievements = JSON.parse(window.localStorage?.getItem('fittrack-achievements') || '[]') || [];
         let workoutCompletions = JSON.parse(window.localStorage?.getItem('fittrack-completions') || '[]') || [];
@@ -1109,8 +1109,8 @@
                 icon: '🍎',
                 category: 'consistency',
                 check: () => {
-                    if (nutrition.length < 7) return false;
-                    const sorted = nutrition.sort((a, b) => new Date(b.date) - new Date(a.date));
+                    if (tracking.length < 7) return false;
+                    const sorted = tracking.sort((a, b) => new Date(b.date) - new Date(a.date));
                     for (let i = 0; i < 7; i++) {
                         const expectedDate = new Date();
                         expectedDate.setDate(expectedDate.getDate() - i);
@@ -1126,7 +1126,7 @@
                 description: 'Hit 10,000+ steps in a day',
                 icon: '👟',
                 category: 'consistency',
-                check: () => nutrition.some(n => n.steps >= 10000)
+                check: () => tracking.some(n => n.steps >= 10000)
             },
             {
                 id: 'hydration_hero',
@@ -1134,7 +1134,7 @@
                 description: 'Drink 3+ liters of water in a day',
                 icon: '💧',
                 category: 'consistency',
-                check: () => nutrition.some(n => n.water >= 3.0)
+                check: () => tracking.some(n => n.water >= 3.0)
             },
             {
                 id: 'protein_power',
@@ -1142,7 +1142,7 @@
                 description: 'Hit 150g+ protein in a day',
                 icon: '🥩',
                 category: 'consistency',
-                check: () => nutrition.some(n => n.protein >= 150)
+                check: () => tracking.some(n => n.protein >= 150)
             },
             {
                 id: 'workout_streak_7',
@@ -1219,7 +1219,7 @@
         // Initialize app
         document.addEventListener('DOMContentLoaded', function() {
             const today = new Date().toISOString().split('T')[0];
-            document.getElementById('nutritionDate').value = today;
+            document.getElementById('trackingDate').value = today;
             document.getElementById('measurementDate').value = today;
             document.getElementById('scheduleStartDate').value = today;
             
@@ -1266,8 +1266,8 @@
                 updateChartsDisplay();
             } else if (sectionName === 'achievements') {
                 updateAchievementsDisplay();
-            } else if (sectionName === 'nutrition') {
-                updateDailyTrackingHistory();
+            } else if (sectionName === 'tracking') { 
+                updateDailyTrackingHistory(); 
             } else if (sectionName === 'measurements') {
                 updateProgressHistory();
                 updateWeightProgress();
@@ -1843,7 +1843,7 @@
             }
 
             const today = new Date().toISOString().split('T')[0];
-            const todayData = nutrition.find(n => n.date === today) || {};
+            const todayData = tracking.find(n => n.date === today) || {};
             const todayWeight = measurements.find(m => m.date === today);
 
             let progressItems = [];
@@ -2021,7 +2021,7 @@
                 date.setDate(date.getDate() - i);
                 const dateStr = date.toISOString().split('T')[0];
                 
-                const dayData = nutrition.find(n => n.date === dateStr);
+                const dayData = tracking.find(n => n.date === dateStr);
                 data.push({
                     date: dateStr,
                     value: dayData ? (dayData[field] || 0) : 0
@@ -2161,23 +2161,23 @@
             
             card.style.display = 'block';
         }
-        function saveNutrition() {
-            const nutritionEntry = {
+        function saveTracking() {
+            const trackingEntry = {
                 id: Date.now(),
-                date: document.getElementById('nutritionDate').value,
+                date: document.getElementById('trackingDate').value,
                 calories: parseInt(document.getElementById('calories').value) || 0,
                 protein: parseInt(document.getElementById('protein').value) || 0,
                 water: parseFloat(document.getElementById('water').value) || 0,
                 steps: parseInt(document.getElementById('dailySteps').value) || 0
             };
 
-            if (!nutritionEntry.date) {
+            if (!trackingEntry.date) {
                 alert('Please select a date');
                 return;
             }
 
-            nutrition = nutrition.filter(n => n.date !== nutritionEntry.date);
-            nutrition.unshift(nutritionEntry);
+            tracking = tracking.filter(n => n.date !== trackingEntry.date);
+            tracking.unshift(trackingEntry);
             
             saveData();
             
@@ -2194,7 +2194,7 @@
         function updateDailyTrackingHistory() {
             const container = document.getElementById('dailyTrackingHistory');
             
-            if (nutrition.length === 0) {
+            if (tracking.length === 0) {
                 container.innerHTML = `
                     <div class="empty-state">
                         <h4>No daily data yet</h4>
@@ -2204,7 +2204,7 @@
                 return;
             }
 
-            container.innerHTML = nutrition.map(entry => `
+            container.innerHTML = tracking.map(entry => `
                 <div class="workout-item">
                     <div class="workout-header">
                         <div>
@@ -2325,8 +2325,8 @@
             document.getElementById('totalWorkouts').textContent = workouts.length;
             
             // Average steps
-            const avgSteps = nutrition.length > 0 ? 
-                Math.round(nutrition.reduce((sum, n) => sum + (n.steps || 0), 0) / nutrition.length) : 0;
+            const avgSteps = tracking.length > 0 ? 
+                Math.round(tracking.reduce((sum, n) => sum + (n.steps || 0), 0) / tracking.length) : 0;
             document.getElementById('avgSteps').textContent = avgSteps.toLocaleString();
             
             // Current weight and change
@@ -2362,7 +2362,7 @@
                 window.localStorage.setItem('fittrack-workouts', JSON.stringify(workouts));
                 window.localStorage.setItem('fittrack-plans', JSON.stringify(plans));
                 window.localStorage.setItem('fittrack-schedule', JSON.stringify(schedule));
-                window.localStorage.setItem('fittrack-nutrition', JSON.stringify(nutrition));
+                window.localStorage.setItem('fittrack-tracking', JSON.stringify(tracking));
                 window.localStorage.setItem('fittrack-measurements', JSON.stringify(measurements));
                 window.localStorage.setItem('fittrack-achievements', JSON.stringify(achievements));
                 window.localStorage.setItem('fittrack-completions', JSON.stringify(workoutCompletions));
