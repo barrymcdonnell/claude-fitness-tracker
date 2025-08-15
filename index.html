@@ -1371,7 +1371,7 @@
                 return;
             }
             
-            container.innerHTML = generateChart(data, goal, 'Steps', '👟');
+            generateChart('stepsChart', data, goal);
         }
         
         function updateWaterChart(data, goal) {
@@ -1386,7 +1386,7 @@
                 return;
             }
             
-            container.innerHTML = generateChart(data, goal, 'Water', '💧');
+            generateChart('waterChart', data, goal);
         }
         
         function updateCaloriesChart(data, goal) {
@@ -1401,11 +1401,12 @@
                 return;
             }
             
-            container.innerHTML = generateChart(data, goal, 'Calories', '🔥');
+            generateChart('caloriesChart', data, goal);
         }
         function updateWeightChart() {
             const container = document.getElementById('weightChart');
-            
+            if (!container) return; // Add this check to prevent errors
+        
             if (measurements.length === 0) {
                 container.innerHTML = `
                     <div class="empty-state">
@@ -1417,12 +1418,9 @@
             }
 
             const sortedMeasurements = [...measurements].sort((a, b) => new Date(a.date) - new Date(b.date));
-            const data = sortedMeasurements.map(m => ({
-                date: m.date,
-                value: m.weight
-            }));
-
-            container.innerHTML = generateChart(data, goals.weight, 'Weight (kg)', '⚖️', true);
+            const data = sortedMeasurements.map(m => m.weight); // Correctly gets an array of numbers
+        
+            generateChart('weightChart', data, goals.weight); // Pass the correct parameters
         }
 
         function getLast14DaysData(field) {
@@ -1445,30 +1443,19 @@
         // Charting Functions
         function generateChart(containerId, data, goal) {
             const container = document.getElementById(containerId);
-            if (!data || data.length === 0) {
-                container.innerHTML = `<div class="empty-state">
-                    <h4>No data yet</h4>
-                    <p>Start tracking to see your progress chart</p>
-                </div>`;
-                return;
-            }
-        
             const margin = {top: 20, right: 20, bottom: 30, left: 40};
             const width = container.clientWidth - margin.left - margin.right;
             const height = 200 - margin.top - margin.bottom;
         
-            // Clear previous chart
             container.innerHTML = `<svg class="chart-svg" viewBox="0 0 ${width + margin.left + margin.right} ${height + margin.top + margin.bottom}">
                 <g transform="translate(${margin.left},${margin.top})"></g>
             </svg>`;
             const svg = container.querySelector('g');
         
-            // Calculate dynamic max value
             const dataMax = Math.max(...data.filter(d => !isNaN(d) && d !== null));
             const goalMax = goal ? goal : 0;
-            const yMax = Math.max(dataMax, goalMax) * 1.1; // Add 10% buffer
+            const yMax = Math.max(dataMax, goalMax) * 1.1;
         
-            // Scales
             const xScale = d3.scalePoint()
                 .domain(data.map((d, i) => i))
                 .range([0, width]);
@@ -1477,7 +1464,6 @@
                 .domain([0, yMax])
                 .range([height, 0]);
             
-            // Y-axis ticks
             const numTicks = 5;
             const yTicks = d3.axisLeft(yScale)
                 .ticks(numTicks)
@@ -1491,7 +1477,6 @@
                 .attr('class', 'chart-axis')
                 .call(yTicks);
         
-            // X-axis (simple line at the bottom)
             svg.append('line')
                 .attr('class', 'chart-axis')
                 .attr('x1', 0)
@@ -1499,7 +1484,6 @@
                 .attr('x2', width)
                 .attr('y2', height);
         
-            // Goal Line
             if (goal) {
                 svg.append('path')
                     .datum(data)
@@ -1510,7 +1494,6 @@
                     );
             }
             
-            // Data Line
             const line = d3.line()
                 .x((d, i) => xScale(i))
                 .y(d => yScale(d));
@@ -1520,7 +1503,6 @@
                 .attr('class', 'chart-line data-line')
                 .attr('d', line);
         
-            // Data points
             svg.selectAll('.chart-dot')
                 .data(data)
                 .enter().append('circle')
@@ -1528,20 +1510,6 @@
                 .attr('cx', (d, i) => xScale(i))
                 .attr('cy', d => yScale(d))
                 .attr('r', 4);
-            
-            // Tooltip functionality (optional but recommended)
-            svg.selectAll('.chart-dot')
-                .on('mouseover', (event, d) => {
-                    const tooltip = document.createElement('div');
-                    tooltip.className = 'chart-tooltip';
-                    tooltip.innerHTML = `Value: <b>${d}</b>`;
-                    tooltip.style.left = `${event.clientX + 10}px`;
-                    tooltip.style.top = `${event.clientY - 10}px`;
-                    document.body.appendChild(tooltip);
-                })
-                .on('mouseout', () => {
-                    document.body.querySelectorAll('.chart-tooltip').forEach(el => el.remove());
-                });
         }
         function showWorkoutReminder() {
             const today = new Date();
