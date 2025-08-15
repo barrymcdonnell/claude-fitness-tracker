@@ -2345,9 +2345,10 @@
         function updateDashboard() {
             document.getElementById('totalWorkouts').textContent = workouts.length;
             
-            // Average steps
-            const avgSteps = tracking.length > 0 ? 
-                Math.round(tracking.reduce((sum, n) => sum + (n.steps || 0), 0) / tracking.length) : 0;
+            // Average steps - last 7 days
+            const last7DaysTracking = tracking.slice(-7);
+            const avgSteps = last7DaysTracking.length > 0 ? 
+                Math.round(last7DaysTracking.reduce((sum, n) => sum + (n.steps || 0), 0) / last7DaysTracking.length) : 0;
             document.getElementById('avgSteps').textContent = avgSteps.toLocaleString();
             
             // Current weight and change
