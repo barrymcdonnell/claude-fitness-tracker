@@ -1399,94 +1399,95 @@
 
         
         // Charting Functions
-function generateChart(containerId, data, goal) {
-    const container = document.getElementById(containerId);
-    if (!container) return; // Add this line to prevent errors if the element doesn't exist
-    if (!data || data.length === 0) {
-        container.innerHTML = `<div class="empty-state">
-            <h4>No data yet</h4>
-            <p>Start tracking to see your progress chart</p>
-        </div>`;
-        return;
-    }
-
-    const margin = {top: 20, right: 20, bottom: 30, left: 40};
-    const width = container.clientWidth - margin.left - margin.right;
-    const height = 200 - margin.top - margin.bottom;
-
-    // Clear previous chart
-    container.innerHTML = `<svg class="chart-svg" viewBox="0 0 ${width + margin.left + margin.right} ${height + margin.top + margin.bottom}">
-        <g transform="translate(${margin.left},${margin.top})"></g>
-    </svg>`;
-    const svg = container.querySelector('g');
-
-    // Calculate dynamic max value
-    const dataMax = Math.max(...data.filter(d => !isNaN(d) && d !== null));
-    const goalMax = goal ? goal : 0;
-    const yMax = Math.max(dataMax, goalMax) * 1.1; // Add 10% buffer
-
-    // Scales
-    const xScale = d3.scalePoint()
-        .domain(data.map((d, i) => i))
-        .range([0, width]);
-
-    const yScale = d3.scaleLinear()
-        .domain([0, yMax])
-        .range([height, 0]);
-    
-    // Y-axis ticks
-    const numTicks = 5;
-    const yTicks = d3.axisLeft(yScale)
-        .ticks(numTicks)
-        .tickFormat(d => {
-            const num = Math.round(d);
-            if (num > 1000) return `${num / 1000}k`;
-            return num;
-        });
-
-    svg.append('g')
-        .attr('class', 'chart-axis')
-        .call(yTicks);
-
-    // X-axis (simple line at the bottom)
-    svg.append('line')
-        .attr('class', 'chart-axis')
-        .attr('x1', 0)
-        .attr('y1', height)
-        .attr('x2', width)
-        .attr('y2', height);
-
-    // Goal Line
-    if (goal) {
-        svg.append('path')
-            .datum(data)
-            .attr('class', 'chart-line goal-line')
-            .attr('d', d3.line()
+        function generateChart(containerId, data, goal) {
+            const container = document.getElementById(containerId);
+            if (!container) return;
+            if (!data || data.length === 0) {
+                container.innerHTML = `<div class="empty-state">
+                    <h4>No data yet</h4>
+                    <p>Start tracking to see your progress chart</p>
+                </div>`;
+                return;
+            }
+        
+            const margin = { top: 20, right: 20, bottom: 30, left: 40 };
+            const width = container.clientWidth - margin.left - margin.right;
+            const height = 200 - margin.top - margin.bottom;
+        
+            // Clear previous chart
+            container.innerHTML = '';
+        
+            // Create SVG and g
+            const svg = d3.select(container)
+                .append('svg')
+                .attr('width', width + margin.left + margin.right)
+                .attr('height', height + margin.top + margin.bottom)
+                .append('g')
+                .attr('transform', `translate(${margin.left},${margin.top})`);
+        
+            const dataMax = Math.max(...data.filter(d => !isNaN(d) && d !== null));
+            const goalMax = goal || 0;
+            const yMax = Math.max(dataMax, goalMax) * 1.1;
+        
+            const xScale = d3.scalePoint()
+                .domain(data.map((d, i) => i))
+                .range([0, width]);
+        
+            const yScale = d3.scaleLinear()
+                .domain([0, yMax])
+                .range([height, 0]);
+        
+            const yTicks = d3.axisLeft(yScale)
+                .ticks(5)
+                .tickFormat(d => {
+                    const num = Math.round(d);
+                    return num > 1000 ? `${num / 1000}k` : num;
+                });
+        
+            // Y-axis
+            svg.append('g')
+                .attr('class', 'chart-axis')
+                .call(yTicks);
+        
+            // X-axis line
+            svg.append('line')
+                .attr('class', 'chart-axis')
+                .attr('x1', 0)
+                .attr('y1', height)
+                .attr('x2', width)
+                .attr('y2', height);
+        
+            // Goal Line
+            if (goal) {
+                svg.append('path')
+                    .datum(data)
+                    .attr('class', 'chart-line goal-line')
+                    .attr('d', d3.line()
+                        .x((d, i) => xScale(i))
+                        .y(() => yScale(goal))
+                    );
+            }
+        
+            // Data Line
+            const line = d3.line()
                 .x((d, i) => xScale(i))
-                .y(d => yScale(goal))
-            );
-    }
-    
-    // Data Line
-    const line = d3.line()
-        .x((d, i) => xScale(i))
-        .y(d => yScale(d));
+                .y(d => yScale(d));
+        
+            svg.append('path')
+                .datum(data)
+                .attr('class', 'chart-line data-line')
+                .attr('d', line);
+        
+            // Data points
+            svg.selectAll('.chart-dot')
+                .data(data)
+                .enter().append('circle')
+                .attr('class', d => `chart-dot ${d >= goal ? 'above-goal' : 'below-goal'}`)
+                .attr('cx', (d, i) => xScale(i))
+                .attr('cy', d => yScale(d))
+                .attr('r', 4);
+        }
 
-    svg.append('path')
-        .datum(data)
-        .attr('class', 'chart-line data-line')
-        .attr('d', line);
-
-    // Data points
-    svg.selectAll('.chart-dot')
-        .data(data)
-        .enter().append('circle')
-        .attr('class', d => `chart-dot ${d >= goal ? 'above-goal' : 'below-goal'}`)
-        .attr('cx', (d, i) => xScale(i))
-        .attr('cy', d => yScale(d))
-        .attr('r', 4);
-    
-}
         function showWorkoutReminder() {
             const today = new Date();
             const dayNames = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
