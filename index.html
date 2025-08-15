@@ -1956,63 +1956,71 @@
 
         // Chart Generation Functions
         function updateChartsDisplay() {
-            updateStepsChart();
-            updateWaterChart();
-            updateCaloriesChart();
-            updateWeightChart();
+            // Steps Chart
+            const stepsData = tracking.slice(-14).map(n => n.steps);
+            const stepsGoal = goals.steps;
+            updateStepsChart(stepsData, stepsGoal);
+            
+            // Water Chart
+            const waterData = tracking.slice(-14).map(n => n.water);
+            const waterGoal = goals.water;
+            updateWaterChart(waterData, waterGoal);
+            
+            // Calories Chart
+            const caloriesData = tracking.slice(-14).map(n => n.calories);
+            const caloriesGoal = goals.calories;
+            updateCaloriesChart(caloriesData, caloriesGoal);
+        
+            // Weight Chart
+            const weightData = measurements.slice(-14).map(m => m.weight);
+            const weightGoal = goals.weight;
+            updateWeightChart(weightData, weightGoal);
         }
 
-        function updateStepsChart() {
+        function updateStepsChart(data, goal) {
             const container = document.getElementById('stepsChart');
-            const data = getLast14DaysData('steps');
+            if (!container) return;
             
             if (data.length === 0) {
-                container.innerHTML = `
-                    <div class="empty-state">
-                        <h4>No steps data yet</h4>
-                        <p>Start tracking to see your progress chart</p>
-                    </div>
-                `;
+                container.innerHTML = `<div class="empty-state">
+                                        <h4>No steps data yet</h4>
+                                        <p>Start tracking to see your progress chart</p>
+                                    </div>`;
                 return;
             }
-
-            container.innerHTML = generateChart(data, goals.steps, 'Steps', '👟');
+            
+            container.innerHTML = generateChart(data, goal, 'Steps', '👟');
         }
-
-        function updateWaterChart() {
+        
+        function updateWaterChart(data, goal) {
             const container = document.getElementById('waterChart');
-            const data = getLast14DaysData('water');
+            if (!container) return;
             
             if (data.length === 0) {
-                container.innerHTML = `
-                    <div class="empty-state">
-                        <h4>No water data yet</h4>
-                        <p>Start tracking to see your hydration chart</p>
-                    </div>
-                `;
+                container.innerHTML = `<div class="empty-state">
+                                        <h4>No water data yet</h4>
+                                        <p>Start tracking to see your hydration chart</p>
+                                    </div>`;
                 return;
             }
-
-            container.innerHTML = generateChart(data, goals.water, 'Water (L)', '💧');
+            
+            container.innerHTML = generateChart(data, goal, 'Water', '💧');
         }
-
-        function updateCaloriesChart() {
+        
+        function updateCaloriesChart(data, goal) {
             const container = document.getElementById('caloriesChart');
-            const data = getLast14DaysData('calories');
+            if (!container) return;
             
             if (data.length === 0) {
-                container.innerHTML = `
-                    <div class="empty-state">
-                        <h4>No calories data yet</h4>
-                        <p>Start tracking to see your nutrition chart</p>
-                    </div>
-                `;
+                container.innerHTML = `<div class="empty-state">
+                                        <h4>No calories data yet</h4>
+                                        <p>Start tracking to see your nutrition chart</p>
+                                    </div>`;
                 return;
             }
-
-            container.innerHTML = generateChart(data, goals.calories, 'Calories', '🔥');
+            
+            container.innerHTML = generateChart(data, goal, 'Calories', '🔥');
         }
-
         function updateWeightChart() {
             const container = document.getElementById('weightChart');
             
