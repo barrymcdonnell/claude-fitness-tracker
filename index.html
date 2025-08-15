@@ -2143,27 +2143,33 @@
             const dayNames = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
             const todayName = dayNames[today.getDay()];
             const todayShort = todayName === 'Sun' ? 'Sun' : todayName;
-            
+        
             const card = document.getElementById('workoutReminderCard');
             const content = document.getElementById('workoutReminder');
-            
+        
             // Check if there's an active schedule
             if (!schedule.planName) {
-                card.style.display = 'none';
+                // Only try to hide the card if it exists
+                if (card) {
+                    card.style.display = 'none';
+                }
                 return;
             }
-            
+        
             // Check if workout is scheduled for today
             const workoutId = schedule.weekSchedule[todayShort];
             if (!workoutId) {
-                card.style.display = 'none';
+                // Only try to hide the card if it exists
+                if (card) {
+                    card.style.display = 'none';
+                }
                 return;
             }
-            
+        
             // Check if already completed today
             const todayStr = today.toISOString().split('T')[0];
             const alreadyCompleted = workoutCompletions.find(w => w.date === todayStr);
-            
+        
             if (alreadyCompleted) {
                 content.innerHTML = `
                     <div class="workout-item">
@@ -2171,7 +2177,9 @@
                         <div class="workout-exercises">Great job finishing "${alreadyCompleted.workoutName}"</div>
                     </div>
                 `;
-                card.classList.remove('reminder-card');
+                if (card) {
+                    card.classList.remove('reminder-card');
+                }
             } else {
                 const workout = workouts.find(w => w.id === workoutId);
                 content.innerHTML = `
@@ -2185,10 +2193,15 @@
                         </button>
                     </div>
                 `;
-                card.classList.add('reminder-card');
+                if (card) {
+                    card.classList.add('reminder-card');
+                }
             }
             
-            card.style.display = 'block';
+            // Only try to show the card if it exists
+            if (card) {
+                card.style.display = 'block';
+            }
         }
         function saveTracking() {
             const date = document.getElementById('trackingDate').value;
