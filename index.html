@@ -1361,67 +1361,24 @@
         }
 
         function updateStepsChart(data, goal) {
-            const container = document.getElementById('stepsChart');
-            if (!container) return;
-            
-            if (data.length === 0) {
-                container.innerHTML = `<div class="empty-state">
-                                        <h4>No steps data yet</h4>
-                                        <p>Start tracking to see your progress chart</p>
-                                    </div>`;
-                return;
-            }
-            
             generateChart('stepsChart', data, goal);
         }
         
         function updateWaterChart(data, goal) {
-            const container = document.getElementById('waterChart');
-            if (!container) return;
-            
-            if (data.length === 0) {
-                container.innerHTML = `<div class="empty-state">
-                                        <h4>No water data yet</h4>
-                                        <p>Start tracking to see your hydration chart</p>
-                                    </div>`;
-                return;
-            }
-            
             generateChart('waterChart', data, goal);
         }
         
         function updateCaloriesChart(data, goal) {
-            const container = document.getElementById('caloriesChart');
-            if (!container) return;
-            
-            if (data.length === 0) {
-                container.innerHTML = `<div class="empty-state">
-                                        <h4>No calories data yet</h4>
-                                        <p>Start tracking to see your nutrition chart</p>
-                                    </div>`;
-                return;
-            }
-            
             generateChart('caloriesChart', data, goal);
         }
         function updateWeightChart() {
             const container = document.getElementById('weightChart');
-            if (!container) return; // Add this check to prevent errors
-        
-            if (measurements.length === 0) {
-                container.innerHTML = `
-                    <div class="empty-state">
-                        <h4>No weight data yet</h4>
-                        <p>Take measurements to see your weight trend</p>
-                    </div>
-                `;
-                return;
-            }
-
+            if (!container) return;
+            
             const sortedMeasurements = [...measurements].sort((a, b) => new Date(a.date) - new Date(b.date));
-            const data = sortedMeasurements.map(m => m.weight); // Correctly gets an array of numbers
-        
-            generateChart('weightChart', data, goals.weight); // Pass the correct parameters
+            const data = sortedMeasurements.map(m => m.weight);
+            
+            generateChart('weightChart', data, goals.weight);
         }
 
         function getLast14DaysData(field) {
