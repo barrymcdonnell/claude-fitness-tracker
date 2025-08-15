@@ -1467,11 +1467,11 @@
                     .attr('y1', yScale(goal))
                     .attr('y2', yScale(goal));
             
-                // Add the label at the end of the line
+                // Add the label inside the chart
                 svg.append('text')
-                    .attr('x', width + 5) // just past the chart edge
-                    .attr('y', yScale(goal))
-                    .attr('dy', '0.35em') // vertically center text
+                    .attr('x', width - 5) // 5px padding from right edge
+                    .attr('y', yScale(goal) - 5) // 5px above the line
+                    .attr('text-anchor', 'end') // align text to the right
                     .attr('class', 'goal-label')
                     .text(`Goal: ${goal}`);
             }
