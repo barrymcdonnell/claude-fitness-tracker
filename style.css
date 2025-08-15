@@ -487,9 +487,16 @@
 
         .goal-line {
             stroke: #10b981;
+            stroke-width: 2;
             stroke-dasharray: 5,5;
             opacity: 0.8;
         }
+
+       .goal-label {
+           fill: red;
+           font-size: 12px;
+           font-weight: bold;
+       }
 
         .chart-dot {
             r: 3;
