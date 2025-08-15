@@ -486,17 +486,16 @@
         }
 
         .goal-line {
-            stroke: #10b981;
+            stroke: red;
             stroke-width: 2;
-            stroke-dasharray: 5,5;
-            opacity: 0.8;
+            stroke-dasharray: 4;
         }
-
-       .goal-label {
-           fill: red;
-           font-size: 12px;
-           font-weight: bold;
-       }
+       
+        .goal-label {
+            fill: #f0f0f0; /* off white */
+            font-size: 12px;
+            font-weight: bold;
+        }
 
         .chart-dot {
             r: 3;
