@@ -4,7 +4,8 @@ const urlsToCache = [
   'index.html',
   'manifest.json',
   'style.css',
-  'exercises.js'
+  'exercises.js',
+  'https://d3js.org/d3.v7.min.js'
 ];
 
 self.addEventListener('install', event => {
