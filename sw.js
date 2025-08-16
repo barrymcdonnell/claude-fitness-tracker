@@ -1,10 +1,10 @@
 const CACHE_NAME = 'fittrack-v1';
 const urlsToCache = [
-  '/',
-  'index.html',
-  'manifest.json',
-  'style.css',
-  'exercises.js',
+  '/claude-fitness-tracker/',
+  '/claude-fitness-tracker/index.html',
+  '/claude-fitness-tracker/manifest.json',
+  '/claude-fitness-tracker/style.css',
+  '/claude-fitness-tracker/exercises.js',
   'https://d3js.org/d3.v7.min.js'
 ];
 
