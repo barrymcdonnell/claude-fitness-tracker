@@ -126,6 +126,16 @@
             color: rgba(255, 255, 255, 0.5);
         }
 
+        input::placeholder,
+        textarea::placeholder {
+            opacity: 0.5; /* This value can be adjusted to make the text more or less visible */
+        }
+       
+        /* Optional: Add a transition for a smoother effect when the user starts typing */
+        input, textarea {
+            transition: all 0.2s ease;
+        }
+
         .btn {
             background: linear-gradient(135deg, #6366f1 0%, #8b5cf6 100%);
             color: white;
