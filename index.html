@@ -1649,45 +1649,51 @@
 
         function updateWeightProgress() {
             const container = document.getElementById('weightProgress');
-            
+            if (!container) return;
+        
+            // Fetch fresh data
+            let measurements = JSON.parse(window.localStorage.getItem('fittrack-measurements') || '[]');
+        
             if (measurements.length === 0) {
-                container.innerHTML = `
-                    <div class="empty-state">
-                        <h4>No weight data yet</h4>
-                        <p>Start tracking to see your progress!</p>
-                    </div>
-                `;
+                container.innerHTML = `<p>No weight data yet</p>`;
                 return;
             }
-
-            // Sort measurements by date
-            const sortedMeasurements = [...measurements].sort((a, b) => new Date(a.date) - new Date(b.date));
-            const latest = sortedMeasurements[sortedMeasurements.length - 1];
-            const earliest = sortedMeasurements[0];
-            const change = latest.weight - earliest.weight;
-            const changeText = change >= 0 ? `+${change.toFixed(1)}kg` : `${change.toFixed(1)}kg`;
-            const changeColor = change >= 0 ? '#10b981' : '#ef4444';
-
-            container.innerHTML = `
-                <div class="stats-grid">
-                    <div class="stat-card">
-                        <div class="stat-value">${latest.weight}</div>
-                        <div class="stat-label">Current Weight</div>
-                    </div>
-                    <div class="stat-card">
-                        <div class="stat-value" style="color: ${changeColor}">${changeText}</div>
-                        <div class="stat-label">Total Change</div>
-                    </div>
-                </div>
-                <div class="workout-item">
-                    <div class="workout-exercises">
-                        <strong>Recent Progress:</strong><br>
-                        ${sortedMeasurements.slice(-5).reverse().map(m => 
-                            `${new Date(m.date).toLocaleDateString()}: ${m.weight}kg`
-                        ).join('<br>')}
-                    </div>
-                </div>
-            `;
+        
+            // Sort by date (oldest first)
+            const sorted = [...measurements].sort((a, b) => new Date(a.date) - new Date(b.date));
+        
+            const labels = sorted.map(m => new Date(m.date).toLocaleDateString());
+            const weights = sorted.map(m => m.weight);
+        
+            // Update or create chart
+            if (window.weightChart) {
+                window.weightChart.data.labels = labels;
+                window.weightChart.data.datasets[0].data = weights;
+                window.weightChart.update();
+            } else {
+                const ctx = document.getElementById('weightProgress').getContext('2d');
+                window.weightChart = new Chart(ctx, {
+                    type: 'line',
+                    data: {
+                        labels: labels,
+                        datasets: [{
+                            label: 'Weight (kg)',
+                            data: weights,
+                            borderColor: 'rgba(75, 192, 192, 1)',
+                            backgroundColor: 'rgba(75, 192, 192, 0.2)',
+                            fill: true,
+                            tension: 0.3
+                        }]
+                    },
+                    options: {
+                        scales: {
+                            y: {
+                                beginAtZero: false, // so it can start around 50 kg
+                            }
+                        }
+                    }
+                });
+            }
         }
 
         function deleteMeasurement(id) {
