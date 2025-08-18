@@ -1677,8 +1677,21 @@
             `;
         }
 
+        function deleteMeasurement(id) {
+            if (confirm('Are you sure you want to delete this measurement?')) {
+                const index = measurements.findIndex(m => m.id === id);
+                if (index !== -1) {
+                    measurements.splice(index, 1);
+                    saveData();
+                    updateAllDisplays();
+                    alert('Measurement deleted.');
+                }
+            }
+        }
+        
         function updateProgressHistory() {
             const container = document.getElementById('progressHistory');
+            if (!container) return;
             
             if (measurements.length === 0) {
                 container.innerHTML = `
@@ -1689,8 +1702,11 @@
                 `;
                 return;
             }
-
-            container.innerHTML = measurements.map(measurement => `
+        
+            // Sort measurements by date in descending order (most recent first)
+            const sortedMeasurements = [...measurements].sort((a, b) => new Date(b.date) - new Date(a.date));
+        
+            container.innerHTML = sortedMeasurements.map(measurement => `
                 <div class="workout-item">
                     <div class="workout-header">
                         <div>
@@ -1699,6 +1715,7 @@
                                 ⚖️ ${measurement.weight}kg • 📊 ${measurement.bodyFat}% BF • 💪 ${measurement.muscleMass}kg muscle • 📏 ${measurement.waist}cm waist
                             </div>
                         </div>
+                        <button class="btn btn-small btn-danger" onclick="deleteMeasurement('${measurement.id}')">Delete</button>
                     </div>
                 </div>
             `).join('');
