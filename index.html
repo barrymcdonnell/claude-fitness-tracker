@@ -1604,33 +1604,46 @@
 
         // Measurements Management
         function saveMeasurements() {
+            // Always reload from localStorage first
+            let measurements = JSON.parse(window.localStorage.getItem('fittrack-measurements') || '[]');
+        
             const measurement = {
-                id: Date.now(),
+                id: Date.now(), // unique ID
                 date: document.getElementById('measurementDate').value,
                 weight: parseFloat(document.getElementById('weight').value) || 0,
                 bodyFat: parseFloat(document.getElementById('bodyFat').value) || 0,
                 muscleMass: parseFloat(document.getElementById('muscleMass').value) || 0,
                 waist: parseFloat(document.getElementById('waist').value) || 0
             };
-
+        
             if (!measurement.date) {
                 alert('Please select a date');
                 return;
             }
-
+        
+            // Remove any existing entry with the same date
             measurements = measurements.filter(m => m.date !== measurement.date);
+        
+            // Add the new one at the start
             measurements.unshift(measurement);
-            
-            saveData();
-            
+        
+            // Save to localStorage
+            window.localStorage.setItem('fittrack-measurements', JSON.stringify(measurements));
+        
+            // Update the global variable
+            window.measurements = measurements;
+        
+            // Clear the form
             document.getElementById('weight').value = '';
             document.getElementById('bodyFat').value = '';
             document.getElementById('muscleMass').value = '';
             document.getElementById('waist').value = '';
-
+        
+            // Refresh displays
             updateProgressHistory();
-            updateWeightProgress();
-            updateDashboard();
+            updateWeightProgress?.();
+            updateDashboard?.();
+        
             alert('Measurements saved!');
         }
 
@@ -1679,29 +1692,37 @@
 
         function deleteMeasurement(id) {
             if (confirm('Are you sure you want to delete this measurement?')) {
-                // Get the current measurements from localStorage
+                // Always reload from localStorage
                 let measurements = JSON.parse(window.localStorage.getItem('fittrack-measurements') || '[]');
-                
+        
                 // Find the index of the measurement to delete
-                const index = measurements.findIndex(m => m.id === id);
-                
-                // If it exists, remove it
+                const index = measurements.findIndex(m => String(m.id) === String(id));
+        
                 if (index !== -1) {
                     measurements.splice(index, 1);
-                    
-                    // Save the updated array back to localStorage
+        
+                    // Save updated array
                     window.localStorage.setItem('fittrack-measurements', JSON.stringify(measurements));
-                    
-                    // Refresh the display
-                    updateAllDisplays();
+        
+                    // Update the global variable too (if you have one)
+                    window.measurements = measurements;
+        
+                    // Refresh displays
+                    updateProgressHistory();
+                    updateWeightProgress?.();
+                    updateDashboard?.();
+        
                     alert('Measurement deleted.');
                 }
             }
         }
-        
+
         function updateProgressHistory() {
             const container = document.getElementById('progressHistory');
             if (!container) return;
+        
+            // Always reload fresh data from localStorage
+            let measurements = JSON.parse(window.localStorage.getItem('fittrack-measurements') || '[]');
         
             if (measurements.length === 0) {
                 container.innerHTML = `
@@ -1713,24 +1734,9 @@
                 return;
             }
         
-            // Ensure every measurement has an id (fix for old data)
-            let updated = false;
-            measurements = measurements.map(m => {
-                if (!m.id) {
-                    updated = true;
-                    return { ...m, id: Date.now() + Math.random() }; // assign unique id
-                }
-                return m;
-            });
-        
-            if (updated) {
-                window.localStorage.setItem('fittrack-measurements', JSON.stringify(measurements));
-            }
-        
-            // Sort by date (most recent first)
+            // Sort measurements by date (newest first)
             const sortedMeasurements = [...measurements].sort((a, b) => new Date(b.date) - new Date(a.date));
         
-            // Render the list
             container.innerHTML = sortedMeasurements.map(measurement => `
                 <div class="workout-item">
                     <div class="workout-header">
@@ -1748,8 +1754,10 @@
                     </div>
                 </div>
             `).join('');
+        
+            // Update global state so it’s consistent elsewhere
+            window.measurements = measurements;
         }
-
 
         // Dashboard Updates
         function updateDashboard() {
