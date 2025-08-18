@@ -1702,7 +1702,7 @@
         function updateProgressHistory() {
             const container = document.getElementById('progressHistory');
             if (!container) return;
-            
+        
             if (measurements.length === 0) {
                 container.innerHTML = `
                     <div class="empty-state">
@@ -1713,9 +1713,24 @@
                 return;
             }
         
-            // Sort measurements by date in descending order (most recent first)
+            // Ensure every measurement has an id (fix for old data)
+            let updated = false;
+            measurements = measurements.map(m => {
+                if (!m.id) {
+                    updated = true;
+                    return { ...m, id: Date.now() + Math.random() }; // assign unique id
+                }
+                return m;
+            });
+        
+            if (updated) {
+                window.localStorage.setItem('fittrack-measurements', JSON.stringify(measurements));
+            }
+        
+            // Sort by date (most recent first)
             const sortedMeasurements = [...measurements].sort((a, b) => new Date(b.date) - new Date(a.date));
         
+            // Render the list
             container.innerHTML = sortedMeasurements.map(measurement => `
                 <div class="workout-item">
                     <div class="workout-header">
@@ -1734,6 +1749,7 @@
                 </div>
             `).join('');
         }
+
 
         // Dashboard Updates
         function updateDashboard() {
