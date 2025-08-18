@@ -391,14 +391,32 @@
         }
         
         // Data storage
-        let workouts = JSON.parse(window.localStorage?.getItem('fittrack-workouts') || '[]') || [];
-        let plans = JSON.parse(window.localStorage?.getItem('fittrack-plans') || '[]') || [];
-        let schedule = JSON.parse(window.localStorage?.getItem('fittrack-schedule') || '{}') || {};
-        let tracking = JSON.parse(window.localStorage?.getItem('fittrack-tracking') || '[]') || [];
-        let measurements = JSON.parse(window.localStorage?.getItem('fittrack-measurements') || '[]') || [];
-        let achievements = JSON.parse(window.localStorage?.getItem('fittrack-achievements') || '[]') || [];
-        let workoutCompletions = JSON.parse(window.localStorage?.getItem('fittrack-completions') || '[]') || [];
-        let goals = JSON.parse(window.localStorage?.getItem('fittrack-goals') || '{}') || {};
+        let workouts = JSON.parse(window.localStorage?.getItem('fittrack-workouts') || '[]');
+        if (!Array.isArray(workouts)) workouts = [];
+        
+        let plans = JSON.parse(window.localStorage?.getItem('fittrack-plans') || '[]');
+        if (!Array.isArray(plans)) plans = [];
+        
+        let schedule = JSON.parse(window.localStorage?.getItem('fittrack-schedule') || '{}');
+        if (typeof schedule !== 'object' || schedule === null || Array.isArray(schedule)) {
+            schedule = {};
+        }
+        
+        let tracking = JSON.parse(window.localStorage?.getItem('fittrack-tracking') || '[]');
+        if (!Array.isArray(tracking)) tracking = [];
+        
+        let measurements = JSON.parse(window.localStorage?.getItem('fittrack-measurements') || '[]');
+        if (!Array.isArray(measurements)) measurements = [];
+        
+        let achievements = JSON.parse(window.localStorage?.getItem('fittrack-achievements') || '[]');
+        if (!Array.isArray(achievements)) achievements = [];
+        
+        let workoutCompletions = JSON.parse(window.localStorage?.getItem('fittrack-completions') || '[]');
+        if (!Array.isArray(workoutCompletions)) workoutCompletions = [];
+        
+        let goals = JSON.parse(window.localStorage?.getItem('fittrack-goals') || '[]');
+        if (!Array.isArray(goals)) goals = [];
+
         let selectedExercises = [];
         let currentFilter = 'all';
 
