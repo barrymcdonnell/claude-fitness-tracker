@@ -15,6 +15,7 @@
         <div class="header">
             <h1>FitTrack Pro</h1>
             <p>Advanced Body Recomposition Tracking</p>
+            <p id="todaysDate" class="app-date"></p>
         </div>
 
         <div class="nav">
@@ -569,6 +570,7 @@
         // Initialize app
         document.addEventListener('DOMContentLoaded', function() {
             const today = new Date().toISOString().split('T')[0];
+            document.getElementById('todaysDate').textContent = new Date().toLocaleDateString('en-US', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' });
             document.getElementById('trackingDate').value = today;
             document.getElementById('measurementDate').value = today;
             document.getElementById('scheduleStartDate').value = today;
