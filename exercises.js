@@ -73,14 +73,6 @@ const exercises = [
         "equipment": "Dumbbells"
     },
     {
-        "id": "10",
-        "name": "Leg Extension",
-        "category": "Strength",
-        "primaryMuscle": "Quads",
-        "secondaryMuscles": [],
-        "equipment": "Machine"
-    },
-    {
         "id": "11",
         "name": "Kettlebell Goblet Squat",
         "category": "Strength",
@@ -311,7 +303,7 @@ const exercises = [
         "name": "TRX Low Row",
         "category": "Strength",
         "primaryMuscle": "Back",
-        "secondaryMuscles": ["Biceps", "Shoulders],
+        "secondaryMuscles": ["Biceps", "Shoulders"],
         "equipment": "TRX"
     },
    
