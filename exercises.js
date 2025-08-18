@@ -408,7 +408,7 @@ const exercises = [
         "primaryMuscle": "Cardio",
         "secondaryMuscles": [],
         "equipment": "Bodyweight"
-    }
+    },
     {
         "id": "51",
         "name": "Running 3K",
