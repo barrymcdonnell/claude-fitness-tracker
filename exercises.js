@@ -303,7 +303,7 @@ const exercises = [
         "name": "TRX Single Arm Rows",
         "category": "Strength",
         "primaryMuscle": "Back",
-        "secondaryMuscles": ["Biceps", "Shoulders],
+        "secondaryMuscles": ["Biceps", "Shoulders"],
         "equipment": "TRX"
     },
     {
