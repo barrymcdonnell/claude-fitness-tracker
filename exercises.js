@@ -94,7 +94,7 @@ const exercises = [
         "category": "Strength",
         "primaryMuscle": "Quads",
         "secondaryMuscles": ["Hamstrings", "Legs"],
-        "equipment": ""Dumbbell"
+        "equipment": "Dumbbell"
     },
     {
         "id": "13",
