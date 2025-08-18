@@ -347,7 +347,8 @@
                 <div class="card">
                     <h3>📈 Weight Progress</h3>
                     <div id="weightProgress">
-                        <div class="empty-state">
+                        <canvas id="weightProgressChart"></canvas>
+                        <div class="empty-state" style="display:none;">
                             <h4>No weight data yet</h4>
                             <p>Start tracking to see your progress!</p>
                         </div>
@@ -1649,10 +1650,10 @@
         }
 
         function updateWeightProgress() {
+            const canvas = document.getElementById('weightProgressChart');
             const container = document.getElementById('weightProgress');
-            if (!container) return;
+            if (!canvas || !container) return;
         
-            // Fetch fresh data
             let measurements = JSON.parse(window.localStorage.getItem('fittrack-measurements') || '[]');
         
             if (measurements.length === 0) {
@@ -1660,10 +1661,7 @@
                 return;
             }
         
-            // Sort by date (oldest first)
             const sorted = [...measurements].sort((a, b) => new Date(a.date) - new Date(b.date));
-        
-            // Filter out empty/null/0 weights
             const weightData = sorted.filter(m => m.weight && m.weight > 0);
         
             if (weightData.length === 0) {
@@ -1674,13 +1672,12 @@
             const labels = weightData.map(m => new Date(m.date).toLocaleDateString());
             const weights = weightData.map(m => m.weight);
         
-            // Update or create chart
             if (window.weightChart) {
                 window.weightChart.data.labels = labels;
                 window.weightChart.data.datasets[0].data = weights;
                 window.weightChart.update();
             } else {
-                const ctx = document.getElementById('weightProgress').getContext('2d');
+                const ctx = canvas.getContext('2d');
                 window.weightChart = new Chart(ctx, {
                     type: 'line',
                     data: {
@@ -1697,13 +1694,14 @@
                     options: {
                         scales: {
                             y: {
-                                beginAtZero: false, // so it can start around 50 kg
+                                beginAtZero: false
                             }
                         }
                     }
                 });
             }
         }
+
 
 
         function deleteMeasurement(id) {
