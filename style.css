@@ -262,12 +262,13 @@
        }
 
        .delete-btn {
-         background: none;
-         border: none;
-         color: #e53e3e;
-         font-size: 16px;
-         cursor: pointer;
-         padding: 4px;
+         margin-left: auto; /* pushes it to the right */
+         display: flex;
+         align-items: center;
+         justify-content: center;
+         width: 32px;
+         height: 32px;
+         padding: 0;
        }
        
        .delete-btn:hover {
