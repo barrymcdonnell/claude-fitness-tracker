@@ -702,14 +702,19 @@
         function displayModalExercises() {
             const container = document.getElementById('modalExerciseGrid');
             const filteredExercises = currentFilter === 'all' ? 
-                exercises : exercises.filter(ex => ex.muscle === currentFilter);
+                exercises : exercises.filter(ex => ex.primaryMuscle === currentFilter);
             
             container.innerHTML = filteredExercises.map(exercise => `
                 <div class="exercise-item ${selectedExercises.find(e => e.id === exercise.id) ? 'selected' : ''}" 
-                     onclick="toggleExerciseSelection(${exercise.id})">
+                     onclick="toggleExerciseSelection('${exercise.id}')">
                     <div class="exercise-details">
                         <div class="exercise-name">${exercise.name}</div>
-                        <div class="exercise-muscle">${exercise.muscle} • ${exercise.equipment}</div>
+                        <div class="exercise-muscle">
+                            ${exercise.primaryMuscle}
+                            ${exercise.secondaryMuscles && exercise.secondaryMuscles.length > 0 ? ` + ${exercise.secondaryMuscles.join(', ')}` : ''}
+                            • ${exercise.equipment}
+                        </div>
+
                     </div>
                 </div>
             `).join('');
