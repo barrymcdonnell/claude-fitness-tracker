@@ -661,6 +661,7 @@
                 });
             });
         
+            // Build exercise cards
             exercises.forEach(exercise => {
                 const item = document.createElement('div');
                 item.className = 'exercise-item';
@@ -668,19 +669,24 @@
                 item.dataset.id = exercise.id;
                 item.innerHTML = `
                     <div class="exercise-details">
-                        <div class="exercise-name">${exercise.name}</div>
+                        <div class="exercise-header">
+                            <div class="exercise-name">${exercise.name}</div>
+                            <span class="equipment-badge ${exercise.equipment.toLowerCase().replace(/\s+/g, '-')}">
+                                ${exercise.equipment}
+                            </span>
+                        </div>
                         <div class="exercise-muscle">
                             ${exercise.primaryMuscle}
-                            ${exercise.secondaryMuscles && exercise.secondaryMuscles.length > 0 ? ` + ${exercise.secondaryMuscles.join(', ')}` : ''}
+                            ${exercise.secondaryMuscles && exercise.secondaryMuscles.length > 0 
+                                ? ` + ${exercise.secondaryMuscles.join(', ')}` 
+                                : ''}
                         </div>
-                    </div>
-                    <div class="exercise-equipment">
-                        ${exercise.equipment}
                     </div>
                 `;
                 container.appendChild(item);
             });
         }
+
 
         function filterExercises(muscle) {
             currentFilter = muscle;
