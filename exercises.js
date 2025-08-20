@@ -70,7 +70,7 @@ const exercises = [
         "category": "Strength",
         "primaryMuscle": "Quads",
         "secondaryMuscles": ["Glutes", "Hamstrings"],
-        "equipment": "Dumbbells"
+        "equipment": "Dumbbell"
     },
     {
         "id": "11",
