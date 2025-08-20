@@ -34,7 +34,7 @@ const exercises = [
     },
     {
         "id": "5",
-        "name": "Dumbbll Step Ups",
+        "name": "Dumbbell Step Ups",
         "category": "Strength",
         "primaryMuscle": "Quads",
         "secondaryMuscles": ["Glutes", "Hamstrings"],
