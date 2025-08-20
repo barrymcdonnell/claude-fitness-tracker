@@ -16,6 +16,7 @@
             <h1>FitTrack Pro</h1>
             <p>Advanced Body Recomposition Tracking</p>
             <p id="todaysDate" class="app-date"></p>
+            <div id="greeting" class="greeting"></div>
         </div>
 
         <div class="nav">
@@ -579,6 +580,7 @@
             loadData();
             loadGoals();
             updateAllDisplays();
+            showGreeting();
         });
 
         // Navigation
@@ -1774,6 +1776,33 @@
             document.getElementById('workoutProgressText').textContent = 
                 `${workouts.length} workouts created`;
         }
+
+        // Greeting
+        function showGreeting() {
+            const greetingEl = document.getElementById("greeting");
+            if (!greetingEl) return;
+        
+            const now = new Date();
+            const hour = now.getHours();
+        
+            let greetingText = "Hello";
+            let emoji = "👋";
+        
+            if (hour < 12) {
+                greetingText = "Good morning";
+                emoji = "🌅";
+            } else if (hour < 18) {
+                greetingText = "Good afternoon";
+                emoji = "☀️";
+            } else {
+                greetingText = "Good evening";
+                emoji = "🌙";
+            }
+        
+            greetingEl.innerHTML = `<h2>${emoji} ${greetingText}, Barry!</h2>`;
+        }
+
+        
         // Data Management
         function saveData() {
             if (window.localStorage) {
@@ -1795,6 +1824,7 @@
         window.onload = function() {
             showSection('dashboard', document.querySelector('.nav-item.active'));
             updateAllDisplays();
+            showGreeting();
         };
 
         function updateAllDisplays() {
