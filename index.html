@@ -364,15 +364,7 @@
         <div class="modal-content">
             <span class="close-btn" onclick="closeExerciseSelector()">&times;</span>
             <h3>Select Exercises</h3>
-            <div class="filter-tabs" style="margin-bottom: 16px;">
-                <div class="filter-tab active" onclick="filterModalExercises('all')">All</div>
-                <div class="filter-tab" onclick="filterModalExercises('chest')">Chest</div>
-                <div class="filter-tab" onclick="filterModalExercises('back')">Back</div>
-                <div class="filter-tab" onclick="filterModalExercises('shoulders')">Shoulders</div>
-                <div class="filter-tab" onclick="filterModalExercises('arms')">Arms</div>
-                <div class="filter-tab" onclick="filterModalExercises('legs')">Legs</div>
-                <div class="filter-tab" onclick="filterModalExercises('core')">Core</div>
-            </div>
+            <div id="modalFilterTabs" class="filter-tabs" style="margin-bottom: 16px;"></div>
             <div id="modalExerciseGrid" class="exercise-grid"></div>
             <button class="btn" onclick="confirmExerciseSelection()">Add Selected Exercises</button>
         </div>
