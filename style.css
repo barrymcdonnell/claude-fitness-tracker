@@ -289,8 +289,8 @@
            background-color: #6b7280; /* gray */
        }
        .equipment-badge.mat {
-           background-color: #fff; /* white */
-           color: #000;
+           background-color: #000; /* black */
+           color: #fff;
        }
        .equipment-badge.bike {
            background-color: #1c1c84; /* navy blue */
