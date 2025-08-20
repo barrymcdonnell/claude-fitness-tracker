@@ -762,8 +762,14 @@
             container.innerHTML = selectedExercises.map((exercise, index) => `
                 <div class="exercise-item">
                     <div class="exercise-details">
-                        <div class="exercise-name">${exercise.name}</div>
-                        <div class="set-inputs">
+                        <!-- Name + Delete button in one row -->
+                        <div class="d-flex justify-content-between align-items-center">
+                            <div class="exercise-name">${exercise.name}</div>
+                            <button class="btn btn-danger btn-sm ms-2" onclick="removeSelectedExercise(${index})">×</button>
+                        </div>
+            
+                        <!-- Inputs underneath -->
+                        <div class="set-inputs mt-2">
                             <input type="number" placeholder="Sets" value="${exercise.sets}" 
                                    onchange="updateExerciseParam(${index}, 'sets', this.value)">
                             <input type="number" placeholder="Reps" value="${exercise.reps}"
@@ -772,7 +778,6 @@
                                    onchange="updateExerciseParam(${index}, 'weight', this.value)">
                         </div>
                     </div>
-                    <button class="btn btn-danger btn-small" onclick="removeSelectedExercise(${index})">×</button>
                 </div>
             `).join('');
         }
