@@ -761,25 +761,21 @@
             
             container.innerHTML = selectedExercises.map((exercise, index) => `
                 <div class="exercise-item">
-                    <!-- Top row: name + delete button -->
-                    <div class="exercise-header d-flex justify-content-between align-items-center">
+                    <div class="exercise-header">
                         <div class="exercise-name">${exercise.name}</div>
-                        <button class="btn btn-danger btn-sm" onclick="removeSelectedExercise(${index})">×</button>
+                        <button class="btn btn-danger btn-sm delete-btn" onclick="removeSelectedExercise(${index})">×</button>
                     </div>
-            
-                    <!-- Inputs row -->
-                    <div class="exercise-details mt-2">
-                        <div class="set-inputs">
-                            <input type="number" placeholder="Sets" value="${exercise.sets}" 
-                                   onchange="updateExerciseParam(${index}, 'sets', this.value)">
-                            <input type="number" placeholder="Reps" value="${exercise.reps}"
-                                   onchange="updateExerciseParam(${index}, 'reps', this.value)">
-                            <input type="number" placeholder="Weight" value="${exercise.weight}"
-                                   onchange="updateExerciseParam(${index}, 'weight', this.value)">
-                        </div>
+                    <div class="set-inputs">
+                        <input type="number" placeholder="Sets" value="${exercise.sets}" 
+                               onchange="updateExerciseParam(${index}, 'sets', this.value)">
+                        <input type="number" placeholder="Reps" value="${exercise.reps}"
+                               onchange="updateExerciseParam(${index}, 'reps', this.value)">
+                        <input type="number" placeholder="Weight" value="${exercise.weight}"
+                               onchange="updateExerciseParam(${index}, 'weight', this.value)">
                     </div>
                 </div>
             `).join('');
+
         }
 
         function updateExerciseParam(index, param, value) {
