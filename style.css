@@ -136,8 +136,8 @@
             transition: all 0.2s ease;
         }
 
-        .greeting h4 {
-            font-size: 1.2em;
+        .greeting h3 {
+            font-size: 1em;
             margin-bottom: 5px;
             color: #fff;
         }
