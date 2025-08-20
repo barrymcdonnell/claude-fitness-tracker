@@ -707,9 +707,30 @@
 
         function displayModalExercises() {
             const container = document.getElementById('modalExerciseGrid');
-            const filteredExercises = currentFilter === 'all' ? 
-                exercises : exercises.filter(ex => ex.primaryMuscle === currentFilter);
-            
+            const modalFilterContainer = document.getElementById('modalFilterTabs');
+        
+            // Create filter tabs dynamically
+            const allMuscles = [...new Set(exercises.map(ex => ex.primaryMuscle))];
+            modalFilterContainer.innerHTML = `
+                <span class="filter-tab ${currentFilter === 'all' ? 'active' : ''}" data-filter="all">All</span>
+                ${allMuscles.map(muscle => `
+                    <span class="filter-tab ${currentFilter === muscle ? 'active' : ''}" data-filter="${muscle}">${muscle}</span>
+                `).join('')}
+            `;
+        
+            // Add click listeners to tabs
+            modalFilterContainer.querySelectorAll('.filter-tab').forEach(tab => {
+                tab.addEventListener('click', (e) => {
+                    const filter = e.target.dataset.filter;
+                    currentFilter = filter;
+                    displayModalExercises(); // refresh the modal list with the new filter
+                });
+            });
+        
+            // Filter exercises
+            const filteredExercises = currentFilter === 'all' ? exercises : exercises.filter(ex => ex.primaryMuscle === currentFilter);
+        
+            // Build exercise items
             container.innerHTML = filteredExercises.map(exercise => `
                 <div class="exercise-item ${selectedExercises.find(e => e.id === exercise.id) ? 'selected' : ''}" 
                      onclick="toggleExerciseSelection('${exercise.id}')">
@@ -720,11 +741,11 @@
                             ${exercise.secondaryMuscles && exercise.secondaryMuscles.length > 0 ? ` + ${exercise.secondaryMuscles.join(', ')}` : ''}
                             • ${exercise.equipment}
                         </div>
-
                     </div>
                 </div>
             `).join('');
         }
+
 
         function filterModalExercises(muscle) {
             currentFilter = muscle;
