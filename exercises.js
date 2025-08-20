@@ -111,7 +111,7 @@ const exercises = [
         "name": "Resistance Band Squat Walks",
         "category": "Strength",
         "primaryMuscle": "Quads",
-        "secondaryMuscles": ["Quads"],
+        "secondaryMuscles": [],
         "equipment": "Resistance Band"
     },
 
