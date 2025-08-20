@@ -136,7 +136,7 @@
             transition: all 0.2s ease;
         }
 
-        .greeting h3 {
+        .greeting h5 {
             font-size: 1em;
             margin-bottom: 5px;
             color: #fff;
