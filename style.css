@@ -253,6 +253,43 @@
             color: #fff;
         }
 
+        .exercise-header {
+           display: flex;
+           justify-content: space-between;
+           align-items: center;
+           margin-bottom: 4px;
+       }
+       
+       .equipment-badge {
+           font-size: 12px;
+           padding: 2px 8px;
+           border-radius: 12px;
+           color: #fff;
+           font-weight: 500;
+       }
+       
+       /* Example color coding */
+       .equipment-badge.bodyweight {
+           background-color: #3b82f6; /* blue */
+       }
+       .equipment-badge.dumbbell {
+           background-color: #f59e0b; /* amber */
+       }
+       .equipment-badge.kettlebell {
+           background-color: #10b981; /* green */
+       }
+       .equipment-badge.band,
+       .equipment-badge.resistance-band {
+           background-color: #8b5cf6; /* purple */
+       }
+       .equipment-badge.trx {
+           background-color: #ef4444; /* red */
+       }
+       .equipment-badge.none {
+           background-color: #6b7280; /* gray */
+       }
+
+
         .workout-item, .plan-item {
             background: rgba(255, 255, 255, 0.05);
             padding: 16px;
