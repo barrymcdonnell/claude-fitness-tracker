@@ -782,14 +782,14 @@
                 <div class="exercise-item">
                     <div class="exercise-header">
                         <div class="exercise-name">${exercise.name}</div>
-                        <button class="btn btn-danger btn-sm delete-btn" onclick="removeSelectedExercise(${index})">×</button>
+                        <button class="delete-btn" onclick="removeSelectedExercise(${index})">×</button>
                     </div>
                     <div class="set-inputs">
-                        <input type="number" placeholder="Sets" value="${exercise.sets}" 
+                        Sets <input type="number" placeholder="Sets" value="${exercise.sets}" 
                                onchange="updateExerciseParam(${index}, 'sets', this.value)">
-                        <input type="number" placeholder="Reps" value="${exercise.reps}"
+                        Reps <input type="number" placeholder="Reps" value="${exercise.reps}"
                                onchange="updateExerciseParam(${index}, 'reps', this.value)">
-                        <input type="number" placeholder="Weight" value="${exercise.weight}"
+                        Weight <input type="number" placeholder="Weight" value="${exercise.weight}"
                                onchange="updateExerciseParam(${index}, 'weight', this.value)">
                     </div>
                 </div>
