@@ -112,7 +112,11 @@
                     </div>
                 </div>
 
-                
+                <!-- Container for active workouts -->
+                <div id="activeWorkoutContainer"></div>
+
+                <!-- Showing completed workouts -->
+                <div id="completedWorkouts"></div>
             </div>
 
             <!-- Plans Section -->
@@ -913,6 +917,33 @@
           displayCompletedWorkouts();
         }
 
+        // Render active workouts
+        function renderActiveWorkout() {
+              const container = document.getElementById("activeWorkoutContainer");
+              container.innerHTML = `
+                <h3>Active Workout: ${activeWorkout.name}</h3>
+                <p>Started at: ${activeWorkout.startTime.toLocaleTimeString()}</p>
+                <ul>
+                  ${activeWorkout.exercises.map(ex => `<li>${ex.name}</li>`).join("")}
+                </ul>
+                <button class="btn btn-success" onclick="finishWorkout()">Finish Workout</button>
+              `;
+        }
+
+        // Display Completed Workouts
+        function displayCompletedWorkouts() {
+              const container = document.getElementById("completedWorkouts");
+              let completed = JSON.parse(localStorage.getItem("completedWorkouts") || "[]");
+            
+              container.innerHTML = completed.map(w => `
+                <div class="completed-item">
+                  <h4>${w.name}</h4>
+                  <p>Start: ${new Date(w.startTime).toLocaleTimeString()}</p>
+                  <p>End: ${new Date(w.endTime).toLocaleTimeString()}</p>
+                  <p>Duration: ${w.duration} mins</p>
+                </div>
+              `).join("");
+        }
 
         // Plan Management
         function savePlan() {
