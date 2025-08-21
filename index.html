@@ -874,8 +874,8 @@
                 <div class="workout-item">
                     <div class="workout-header">
                         <div class="workout-name">${workout.name}</div>
-                        <button class="btn btn-start" onclick="startWorkout(${workout.id})">Start ▶</button>
-                        <button class="btn btn-danger btn-small" onclick="deleteWorkout(${workout.id})">Delete</button>
+                        <button class="btn-start" onclick="startWorkout(${workout.id})">Start ▶</button>
+                        <button class="btn btn-danger btn-small" onclick="deleteWorkout(${workout.id})"><i class="bi bi-trash"></i></button>
                     </div>
                     <div class="workout-exercises">
                         ${workout.exercises.map(ex => 
