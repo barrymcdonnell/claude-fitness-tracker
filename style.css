@@ -176,6 +176,29 @@
             background: linear-gradient(135deg, #ef4444 0%, #dc2626 100%);
         }
 
+       .btn-start {
+         background-color: #28a745; /* Bootstrap green */
+         color: white;
+         border: none;
+         border-radius: 6px;
+         padding: 6px 14px;
+         font-size: 14px;
+         cursor: pointer;
+         transition: background-color 0.2s ease;
+         display: inline-flex;
+         align-items: center;
+         gap: 6px;
+       }
+       
+       .btn-start:hover {
+         background-color: #218838; /* darker green */
+       }
+       
+       .btn-start:active {
+         background-color: #1e7e34;
+       }
+
+
         .stats-grid {
             display: grid;
             grid-template-columns: 1fr 1fr;
