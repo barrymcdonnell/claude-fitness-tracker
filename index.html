@@ -117,6 +117,9 @@
 
                 <!-- Showing completed workouts -->
                 <div id="completedWorkouts"></div>
+
+                <!-- Show volume stats -->
+                <div id="volumeStats"></div>
             </div>
 
             <!-- Plans Section -->
@@ -905,7 +908,7 @@
               if (!activeWorkout) return;
             
               activeWorkout.endTime = new Date();
-              activeWorkout.duration = 
+              activeWorkout.duration =
                 Math.round((activeWorkout.endTime - activeWorkout.startTime) / 1000 / 60);
             
               // Calculate per-exercise volume
@@ -919,17 +922,31 @@
               });
             
               // Workout total volume
-              activeWorkout.totalVolume = activeWorkout.exercises.reduce((sum, ex) => sum + (ex.volume || 0), 0);
+              activeWorkout.totalVolume = activeWorkout.exercises.reduce(
+                (sum, ex) => sum + (ex.volume || 0),
+                0
+              );
             
+              // Save workout
               let completed = JSON.parse(localStorage.getItem("completedWorkouts") || "[]");
               completed.push(activeWorkout);
               localStorage.setItem("completedWorkouts", JSON.stringify(completed));
+            
+              // 📊 Save volume log
+              let volumeLog = JSON.parse(localStorage.getItem("workoutVolumeLog") || "[]");
+              volumeLog.push({
+                date: activeWorkout.endTime,
+                volume: activeWorkout.totalVolume
+              });
+              localStorage.setItem("workoutVolumeLog", JSON.stringify(volumeLog));
             
               activeWorkout = null;
               document.getElementById("activeWorkoutContainer").innerHTML = "";
               alert("Workout completed!");
               displayCompletedWorkouts();
+              displayVolumeStats(); // ⬅ show updated totals
         }
+
 
         // Render active workouts
         function renderActiveWorkout() {
@@ -994,6 +1011,51 @@
               }
         }
 
+        // Display volume stats
+        function displayVolumeStats() {
+              let volumeLog = JSON.parse(localStorage.getItem("workoutVolumeLog") || "[]");
+              if (volumeLog.length === 0) return;
+            
+              let now = new Date();
+            
+              let totals = {
+                week: 0,
+                month: 0,
+                year: 0,
+                all: 0
+              };
+            
+              volumeLog.forEach(entry => {
+                let d = new Date(entry.date);
+                totals.all += entry.volume;
+            
+                // This week (Mon–Sun)
+                let weekStart = new Date(now);
+                weekStart.setDate(now.getDate() - now.getDay() + 1); // Monday
+                weekStart.setHours(0, 0, 0, 0);
+                if (d >= weekStart) totals.week += entry.volume;
+            
+                // This month
+                if (d.getMonth() === now.getMonth() && d.getFullYear() === now.getFullYear()) {
+                  totals.month += entry.volume;
+                }
+            
+                // This year
+                if (d.getFullYear() === now.getFullYear()) {
+                  totals.year += entry.volume;
+                }
+              });
+            
+              document.getElementById("volumeStats").innerHTML = `
+                <h4>Volume Lifted</h4>
+                <ul>
+                  <li>This Week: ${totals.week} kg</li>
+                  <li>This Month: ${totals.month} kg</li>
+                  <li>This Year: ${totals.year} kg</li>
+                  <li>All Time: ${totals.all} kg</li>
+                </ul>
+              `;
+        }
 
 
         // ****************************
