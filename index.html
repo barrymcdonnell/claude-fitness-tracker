@@ -111,6 +111,8 @@
                         </div>
                     </div>
                 </div>
+
+                
             </div>
 
             <!-- Plans Section -->
@@ -809,6 +811,7 @@
             updateSelectedExercisesDisplay();
         }
 
+        // **********************
         // Workout Management
         function saveWorkout() {
             const name = document.getElementById('workoutName').value;
@@ -875,6 +878,41 @@
                 </div>
             `).join('');
         }
+
+        // Start workout
+        let activeWorkout = null;
+
+        function startWorkout(workoutId) {
+          const workout = workouts.find(w => w.id === workoutId);
+          if (!workout) return;
+        
+          activeWorkout = {
+            ...workout,
+            startTime: new Date(),
+            endTime: null
+          };
+        
+          // Navigate or render workout-in-progress view
+          renderActiveWorkout();
+        }
+        
+        function finishWorkout() {
+          if (!activeWorkout) return;
+        
+          activeWorkout.endTime = new Date();
+          activeWorkout.duration = 
+            Math.round((activeWorkout.endTime - activeWorkout.startTime) / 1000 / 60); // minutes
+        
+          // Save to completed workouts (localStorage or backend)
+          let completed = JSON.parse(localStorage.getItem("completedWorkouts") || "[]");
+          completed.push(activeWorkout);
+          localStorage.setItem("completedWorkouts", JSON.stringify(completed));
+        
+          activeWorkout = null;
+          alert("Workout completed!");
+          displayCompletedWorkouts();
+        }
+
 
         // Plan Management
         function savePlan() {
