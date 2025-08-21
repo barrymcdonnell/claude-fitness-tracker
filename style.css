@@ -346,9 +346,8 @@
         .workout-header {
            display: flex;
            justify-content: space-between;
-           align-items: center;
+           align-items: flex-start; /* align to the top of the line */
            gap: 8px;
-           flex-wrap: wrap; /* allow wrapping if necessary */
         }
 
         .workout-name {
@@ -360,6 +359,12 @@
         .workout-header button {
            flex: 0 0 auto;   /* buttons keep their size */
            white-space: nowrap; /* prevent button text from wrapping */
+        }
+
+        .workout-actions {
+            display: flex;
+            gap: 6px; /* keep start + delete close together */
+            flex-shrink: 0; /* prevent them being pushed to new line */
         }
 
         .workout-exercises {
