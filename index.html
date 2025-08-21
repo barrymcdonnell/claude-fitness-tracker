@@ -18,7 +18,6 @@
             <p>Advanced Body Recomposition Tracking</p>
             <p id="todaysDate" class="app-date"></p>
             <div id="greeting" class="greeting"></div>
-            <p>App Version 1.0.0</p>
         </div>
 
         <div class="nav">
@@ -112,15 +111,6 @@
                         </div>
                     </div>
                 </div>
-
-                <!-- Active workout will render here when started -->
-                <div class="card" id="activeWorkoutContainer"></div>
-
-                <!-- Show completed workouts -->
-                <div id="completedWorkouts"></div>
-
-                <!-- Show total volume stats -->
-                <div id="volumeStats"></div>
             </div>
 
             <!-- Plans Section -->
@@ -819,7 +809,6 @@
             updateSelectedExercisesDisplay();
         }
 
-        // **************
         // Workout Management
         function saveWorkout() {
             const name = document.getElementById('workoutName').value;
@@ -887,179 +876,6 @@
             `).join('');
         }
 
-        // Start a workout
-        let activeWorkout = null;
-
-        function startWorkout(workoutId) {
-          const workout = workouts.find(w => w.id === workoutId);
-          if (!workout) return;
-        
-          activeWorkout = {
-            ...workout,
-            startTime: new Date(),
-            endTime: null
-          };
-        
-          // Navigate or render workout-in-progress view
-          renderActiveWorkout();
-        }
-
-        // Finish a workout
-        function finishWorkout() {
-              if (!activeWorkout) return;
-            
-              activeWorkout.endTime = new Date();
-              activeWorkout.duration =
-                Math.round((activeWorkout.endTime - activeWorkout.startTime) / 1000 / 60);
-            
-              // Calculate per-exercise volume
-              activeWorkout.exercises.forEach(ex => {
-                const setsCompleted = ex.completedSets ? ex.completedSets.length : 0;
-                const reps = parseInt(ex.reps) || 0;
-                const weight = parseFloat(ex.weight) || 0;
-            
-                ex.setsCompleted = setsCompleted;
-                ex.volume = setsCompleted * reps * weight;
-              });
-            
-              // Workout total volume
-              activeWorkout.totalVolume = activeWorkout.exercises.reduce(
-                (sum, ex) => sum + (ex.volume || 0),
-                0
-              );
-            
-              // Save workout
-              let completed = JSON.parse(localStorage.getItem("completedWorkouts") || "[]");
-              completed.push(activeWorkout);
-              localStorage.setItem("completedWorkouts", JSON.stringify(completed));
-            
-              // 📊 Save volume log
-              let volumeLog = JSON.parse(localStorage.getItem("workoutVolumeLog") || "[]");
-              volumeLog.push({
-                date: activeWorkout.endTime,
-                volume: activeWorkout.totalVolume
-              });
-              localStorage.setItem("workoutVolumeLog", JSON.stringify(volumeLog));
-            
-              activeWorkout = null;
-              document.getElementById("activeWorkoutContainer").innerHTML = "";
-              alert("Workout completed!");
-              displayCompletedWorkouts();
-              displayVolumeStats(); // ⬅ show updated totals
-        }
-
-
-
-        // Render active workout
-        function renderActiveWorkout() {
-          const container = document.getElementById("activeWorkoutContainer");
-        
-          container.innerHTML = `
-            <h3>Active Workout: ${activeWorkout.name}</h3>
-            <p>Started at: ${activeWorkout.startTime.toLocaleTimeString()}</p>
-            <div class="exercise-list">
-              ${activeWorkout.exercises.map((ex, i) => `
-                <div class="exercise-block">
-                  <h5>${ex.name}</h5>
-                  ${Array.from({ length: ex.sets }).map((_, setIndex) => `
-                    <div class="set-row">
-                      <label>
-                        <input type="checkbox" onchange="toggleSetComplete(${i}, ${setIndex})">
-                        Set ${setIndex + 1}: ${ex.reps} reps @ ${ex.weight || '-'} kg
-                      </label>
-                    </div>
-                  `).join("")}
-                </div>
-              `).join("")}
-            </div>
-            <button class="btn btn-success mt-3" onclick="finishWorkout()">Finish Workout</button>
-          `;
-        }
-
-        function toggleSetComplete(exIndex, setIndex) {
-              const exercise = activeWorkout.exercises[exIndex];
-            
-              if (!exercise.completedSets) exercise.completedSets = [];
-            
-              if (exercise.completedSets.includes(setIndex)) {
-                // uncheck
-                exercise.completedSets = exercise.completedSets.filter(i => i !== setIndex);
-              } else {
-                // check
-                exercise.completedSets.push(setIndex);
-              }
-        }
-
-        // Display completed workouts
-        function displayCompletedWorkouts() {
-              const container = document.getElementById("completedWorkouts");
-              let completed = JSON.parse(localStorage.getItem("completedWorkouts") || "[]");
-            
-              container.innerHTML = completed.map(workout => `
-                <div class="completed-workout">
-                  <h4>${workout.name}</h4>
-                  <p>Duration: ${workout.duration} min</p>
-                  <p>Total Volume: ${workout.totalVolume} kg</p>
-                  <ul>
-                    ${workout.exercises.map(ex => `
-                      <li>
-                        ${ex.name}: ${ex.setsCompleted || 0}/${ex.sets} sets completed 
-                        (${ex.volume || 0} kg lifted)
-                      </li>
-                    `).join("")}
-                  </ul>
-                </div>
-              `).join("");
-        }
-
-        // Display volume stats
-        function displayVolumeStats() {
-          let volumeLog = JSON.parse(localStorage.getItem("workoutVolumeLog") || "[]");
-          if (volumeLog.length === 0) return;
-        
-          let now = new Date();
-        
-          let totals = {
-            week: 0,
-            month: 0,
-            year: 0,
-            all: 0
-          };
-        
-          volumeLog.forEach(entry => {
-            let d = new Date(entry.date);
-            totals.all += entry.volume;
-        
-            // This week (Mon–Sun)
-            let weekStart = new Date(now);
-            weekStart.setDate(now.getDate() - now.getDay() + 1); // Monday
-            weekStart.setHours(0, 0, 0, 0);
-            if (d >= weekStart) totals.week += entry.volume;
-        
-            // This month
-            if (d.getMonth() === now.getMonth() && d.getFullYear() === now.getFullYear()) {
-              totals.month += entry.volume;
-            }
-        
-            // This year
-            if (d.getFullYear() === now.getFullYear()) {
-              totals.year += entry.volume;
-            }
-          });
-        
-          document.getElementById("volumeStats").innerHTML = `
-            <h4>Volume Lifted</h4>
-            <ul>
-              <li>This Week: ${totals.week} kg</li>
-              <li>This Month: ${totals.month} kg</li>
-              <li>This Year: ${totals.year} kg</li>
-              <li>All Time: ${totals.all} kg</li>
-            </ul>
-          `;
-        }
-
-        
-        // ************* 
         // Plan Management
         function savePlan() {
             const name = document.getElementById('planName').value;
