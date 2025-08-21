@@ -874,8 +874,10 @@
                 <div class="workout-item">
                     <div class="workout-header">
                         <div class="workout-name">${workout.name}</div>
-                        <button class="btn-start" onclick="startWorkout(${workout.id})">Start ▶</button>
-                        <button class="btn btn-danger btn-small" onclick="deleteWorkout(${workout.id})"><i class="bi bi-trash"></i></button>
+                        <div class="workout-actions">
+                            <button class="btn-start" onclick="startWorkout(${workout.id})">Start ▶</button>
+                            <button class="btn btn-danger btn-small" onclick="deleteWorkout(${workout.id})"><i class="bi bi-trash"></i></button>
+                        </div>                    
                     </div>
                     <div class="workout-exercises">
                         <ul>
