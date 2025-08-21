@@ -899,13 +899,27 @@
           // Navigate or render workout-in-progress view
           renderActiveWorkout();
         }
-        
+
+        // Finish workout
         function finishWorkout() {
               if (!activeWorkout) return;
             
               activeWorkout.endTime = new Date();
               activeWorkout.duration = 
                 Math.round((activeWorkout.endTime - activeWorkout.startTime) / 1000 / 60);
+            
+              // Calculate per-exercise volume
+              activeWorkout.exercises.forEach(ex => {
+                const setsCompleted = ex.completedSets ? ex.completedSets.length : 0;
+                const reps = parseInt(ex.reps) || 0;
+                const weight = parseFloat(ex.weight) || 0;
+            
+                ex.setsCompleted = setsCompleted;
+                ex.volume = setsCompleted * reps * weight;
+              });
+            
+              // Workout total volume
+              activeWorkout.totalVolume = activeWorkout.exercises.reduce((sum, ex) => sum + (ex.volume || 0), 0);
             
               let completed = JSON.parse(localStorage.getItem("completedWorkouts") || "[]");
               completed.push(activeWorkout);
@@ -916,7 +930,6 @@
               alert("Workout completed!");
               displayCompletedWorkouts();
         }
-
 
         // Render active workouts
         function renderActiveWorkout() {
@@ -944,36 +957,43 @@
               `;
         }
 
-
         // Display Completed Workouts
         function displayCompletedWorkouts() {
               const container = document.getElementById("completedWorkouts");
               let completed = JSON.parse(localStorage.getItem("completedWorkouts") || "[]");
             
-              container.innerHTML = completed.map(w => `
-                <div class="completed-item">
-                  <h4>${w.name}</h4>
-                  <p>Start: ${new Date(w.startTime).toLocaleTimeString()}</p>
-                  <p>End: ${new Date(w.endTime).toLocaleTimeString()}</p>
-                  <p>Duration: ${w.duration} mins</p>
+              container.innerHTML = completed.map(workout => `
+                <div class="completed-workout">
+                  <h4>${workout.name}</h4>
+                  <p>Duration: ${workout.duration} min</p>
+                  <p>Total Volume: ${workout.totalVolume} kg</p>
+                  <ul>
+                    ${workout.exercises.map(ex => `
+                      <li>
+                        ${ex.name}: ${ex.setsCompleted || 0}/${ex.sets} sets completed 
+                        (${ex.volume || 0} kg lifted)
+                      </li>
+                    `).join("")}
+                  </ul>
                 </div>
               `).join("");
         }
 
+
         function toggleSetComplete(exIndex, setIndex) {
-              if (!activeWorkout.exercises[exIndex].completedSets) {
-                activeWorkout.exercises[exIndex].completedSets = [];
-              }
-              const completed = activeWorkout.exercises[exIndex].completedSets;
+              const exercise = activeWorkout.exercises[exIndex];
             
-              if (completed.includes(setIndex)) {
+              if (!exercise.completedSets) exercise.completedSets = [];
+            
+              if (exercise.completedSets.includes(setIndex)) {
                 // uncheck
-                activeWorkout.exercises[exIndex].completedSets = completed.filter(i => i !== setIndex);
+                exercise.completedSets = exercise.completedSets.filter(i => i !== setIndex);
               } else {
                 // check
-                completed.push(setIndex);
+                exercise.completedSets.push(setIndex);
               }
         }
+
 
 
         // ****************************
