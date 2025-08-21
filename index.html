@@ -901,34 +901,49 @@
         }
         
         function finishWorkout() {
-          if (!activeWorkout) return;
-        
-          activeWorkout.endTime = new Date();
-          activeWorkout.duration = 
-            Math.round((activeWorkout.endTime - activeWorkout.startTime) / 1000 / 60); // minutes
-        
-          // Save to completed workouts (localStorage or backend)
-          let completed = JSON.parse(localStorage.getItem("completedWorkouts") || "[]");
-          completed.push(activeWorkout);
-          localStorage.setItem("completedWorkouts", JSON.stringify(completed));
-        
-          activeWorkout = null;
-          alert("Workout completed!");
-          displayCompletedWorkouts();
+              if (!activeWorkout) return;
+            
+              activeWorkout.endTime = new Date();
+              activeWorkout.duration = 
+                Math.round((activeWorkout.endTime - activeWorkout.startTime) / 1000 / 60);
+            
+              let completed = JSON.parse(localStorage.getItem("completedWorkouts") || "[]");
+              completed.push(activeWorkout);
+              localStorage.setItem("completedWorkouts", JSON.stringify(completed));
+            
+              activeWorkout = null;
+              document.getElementById("activeWorkoutContainer").innerHTML = "";
+              alert("Workout completed!");
+              displayCompletedWorkouts();
         }
+
 
         // Render active workouts
         function renderActiveWorkout() {
               const container = document.getElementById("activeWorkoutContainer");
+            
               container.innerHTML = `
                 <h3>Active Workout: ${activeWorkout.name}</h3>
                 <p>Started at: ${activeWorkout.startTime.toLocaleTimeString()}</p>
-                <ul>
-                  ${activeWorkout.exercises.map(ex => `<li>${ex.name}</li>`).join("")}
-                </ul>
-                <button class="btn btn-success" onclick="finishWorkout()">Finish Workout</button>
+                <div class="exercise-list">
+                  ${activeWorkout.exercises.map((ex, i) => `
+                    <div class="exercise-block">
+                      <h5>${ex.name}</h5>
+                      ${Array.from({ length: ex.sets }).map((_, setIndex) => `
+                        <div class="set-row">
+                          <label>
+                            <input type="checkbox" onchange="toggleSetComplete(${i}, ${setIndex})">
+                            Set ${setIndex + 1}: ${ex.reps} reps @ ${ex.weight || '-'} kg
+                          </label>
+                        </div>
+                      `).join("")}
+                    </div>
+                  `).join("")}
+                </div>
+                <button class="btn btn-success mt-3" onclick="finishWorkout()">Finish Workout</button>
               `;
         }
+
 
         // Display Completed Workouts
         function displayCompletedWorkouts() {
@@ -945,6 +960,23 @@
               `).join("");
         }
 
+        function toggleSetComplete(exIndex, setIndex) {
+              if (!activeWorkout.exercises[exIndex].completedSets) {
+                activeWorkout.exercises[exIndex].completedSets = [];
+              }
+              const completed = activeWorkout.exercises[exIndex].completedSets;
+            
+              if (completed.includes(setIndex)) {
+                // uncheck
+                activeWorkout.exercises[exIndex].completedSets = completed.filter(i => i !== setIndex);
+              } else {
+                // check
+                completed.push(setIndex);
+              }
+        }
+
+
+        // ****************************
         // Plan Management
         function savePlan() {
             const name = document.getElementById('planName').value;
