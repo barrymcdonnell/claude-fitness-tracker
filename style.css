@@ -344,15 +344,22 @@
         }
 
         .workout-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: flex-start;
-            margin-bottom: 8px;
+           display: flex;
+           justify-content: space-between;
+           align-items: center;
+           gap: 8px;
+           flex-wrap: wrap; /* allow wrapping if necessary */
         }
 
         .workout-name {
-            font-weight: 600;
-            font-size: 16px;
+           flex: 1 1 auto;   /* allows name to take remaining space */
+           min-width: 0;     /* prevents overflow issues on mobile */
+           word-break: break-word; /* wrap long names nicely */
+        }
+
+        .workout-header button {
+           flex: 0 0 auto;   /* buttons keep their size */
+           white-space: nowrap; /* prevent button text from wrapping */
         }
 
         .workout-exercises {
