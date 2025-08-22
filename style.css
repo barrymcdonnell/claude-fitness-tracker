@@ -440,6 +440,49 @@ body {
     font-weight: 600;
 }
 
+.donut {
+    position: relative;
+    width: 140px;
+    height: 140px;
+}
+
+.donut svg {
+    transform: rotate(-90deg);
+}
+  
+.donut circle {
+    fill: none;
+    stroke-width: 12;
+    r: 60;
+    cx: 70;
+    cy: 70;
+}
+
+.donut .bg {
+    stroke: #eee;
+}
+  
+.donut .progress {
+    stroke-linecap: round;
+    stroke-dasharray: 377; /* circumference = 2πr (r=60) */
+    stroke-dashoffset: 377;
+    transition: stroke-dashoffset 1s ease-out;
+}
+  
+.donut-text {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    font-weight: bold;
+    font-size: 16px;
+}
+  
+.label {
+    margin-top: 10px;
+    font-weight: 600;
+}
+
         .schedule-grid {
             display: grid;
             grid-template-columns: repeat(7, 1fr);
