@@ -1103,17 +1103,7 @@
                     </div>
                   </div>
                 `;
-
-            
-              // Set the donut fill (no animation yet; just jump to value)
-              document.querySelectorAll('#volumeStats .progress').forEach(el => {
-                const key = el.getAttribute('data-key');
-                const value = totals[key] || 0;
-                const offset = C - (value / max) * C;
-                el.style.strokeDashoffset = offset;
-              });
         }
-
 
         if (document.getElementById("volumeStats")) {
             displayVolumeStats();
