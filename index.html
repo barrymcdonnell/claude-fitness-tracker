@@ -1048,34 +1048,62 @@
               const container = document.getElementById("volumeStats");
               if (!container) return;
             
-              const items = [
-                { key: "week",  label: "This Week",  color: "#4CAF50" },
-                { key: "month", label: "This Month", color: "#2196F3" },
-                { key: "year",  label: "This Year",  color: "#FF9800" },
-                { key: "all",   label: "All Time",   color: "#9C27B0" },
-              ];
-            
               const R = 60;
               const C = 2 * Math.PI * R;
               const max = Math.max(100, ...items.map(i => totals[i.key] || 0)); // keeps proportions sane
             
               container.innerHTML = `
-                <div class="volume-grid">
-                  ${items.map(i => `
+                  <div class="volume-grid">
                     <div class="volume-item">
                       <div class="donut">
                         <svg width="140" height="140">
                           <circle class="bg" r="${R}" cx="70" cy="70"></circle>
-                          <circle class="progress" data-key="${i.key}" r="${R}" cx="70" cy="70"
-                                  stroke="${i.color}" style="stroke-dasharray:${C}; stroke-dashoffset:${C};"></circle>
+                          <circle class="progress" r="${R}" cx="70" cy="70"
+                                  stroke="#3b82f6" style="stroke-dasharray:${C}; stroke-dashoffset:0;"></circle>
                         </svg>
-                        <div class="donut-text" id="vol-${i.key}">${(totals[i.key] || 0)} kg</div>
+                        <div class="donut-text">${totals.week || 0} kg</div>
                       </div>
-                      <div class="label">${i.label}</div>
+                      <div class="label">This Week</div>
                     </div>
-                  `).join("")}
-                </div>
-              `;
+                
+                    <div class="volume-item">
+                      <div class="donut">
+                        <svg width="140" height="140">
+                          <circle class="bg" r="${R}" cx="70" cy="70"></circle>
+                          <circle class="progress" r="${R}" cx="70" cy="70"
+                                  stroke="#10b981" style="stroke-dasharray:${C}; stroke-dashoffset:0;"></circle>
+                        </svg>
+                        <div class="donut-text">${totals.month || 0} kg</div>
+                      </div>
+                      <div class="label">This Month</div>
+                    </div>
+                
+                    <div class="volume-item">
+                      <div class="donut">
+                        <svg width="140" height="140">
+                          <circle class="bg" r="${R}" cx="70" cy="70"></circle>
+                          <circle class="progress" r="${R}" cx="70" cy="70"
+                                  stroke="#facc15" style="stroke-dasharray:${C}; stroke-dashoffset:0;"></circle>
+                        </svg>
+                        <div class="donut-text">${totals.year || 0} kg</div>
+                      </div>
+                      <div class="label">This Year</div>
+                    </div>
+                
+                    <div class="volume-item">
+                      <div class="donut">
+                        <svg width="140" height="140">
+                          <circle class="bg" r="${R}" cx="70" cy="70"></circle>
+                          <circle class="progress" r="${R}" cx="70" cy="70"
+                                  stroke="#ef4444" style="stroke-dasharray:${C}; stroke-dashoffset:0;"></circle>
+                        </svg>
+                        <div class="donut-text">${totals.all || 0} kg</div>
+                      </div>
+                      <div class="label">All Time</div>
+                    </div>
+                  </div>
+                `;
+
             
               // Set the donut fill (no animation yet; just jump to value)
               document.querySelectorAll('#volumeStats .progress').forEach(el => {
