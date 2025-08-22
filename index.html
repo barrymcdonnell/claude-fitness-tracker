@@ -1019,76 +1019,73 @@
 
         // Display volume stats
         function displayVolumeStats() {
-              let volumeLog = JSON.parse(localStorage.getItem("workoutVolumeLog") || "[]");
-              if (volumeLog.length === 0) return;
+              const log = JSON.parse(localStorage.getItem("workoutVolumeLog") || "[]");
+              const now = new Date();
             
-              let now = new Date();
+              const totals = { week: 0, month: 0, year: 0, all: 0 };
             
-              let totals = {
-                week: 0,
-                month: 0,
-                year: 0,
-                all: 0
-              };
+              log.forEach(entry => {
+                const d = new Date(entry.date);
+                const v = Number(entry.volume) || 0;
             
-              volumeLog.forEach(entry => {
-                let d = new Date(entry.date);
-                totals.all += entry.volume;
+                totals.all += v;
             
-                // This week (Mon–Sun)
-                let weekStart = new Date(now);
-                weekStart.setDate(now.getDate() - now.getDay() + 1); // Monday
+                // Monday start
+                const weekStart = new Date(now);
+                const day = now.getDay() || 7; // Sun=0 -> 7
+                weekStart.setDate(now.getDate() - day + 1);
                 weekStart.setHours(0, 0, 0, 0);
-                if (d >= weekStart) totals.week += entry.volume;
+                if (d >= weekStart) totals.week += v;
             
-                // This month
                 if (d.getMonth() === now.getMonth() && d.getFullYear() === now.getFullYear()) {
-                  totals.month += entry.volume;
+                  totals.month += v;
                 }
-            
-                // This year
                 if (d.getFullYear() === now.getFullYear()) {
-                  totals.year += entry.volume;
+                  totals.year += v;
                 }
               });
             
-              document.getElementById("volumeStats").innerHTML = `
-                <h4>Volume Lifted</h4>
+              const container = document.getElementById("volumeStats");
+              if (!container) return;
+            
+              const items = [
+                { key: "week",  label: "This Week",  color: "#4CAF50" },
+                { key: "month", label: "This Month", color: "#2196F3" },
+                { key: "year",  label: "This Year",  color: "#FF9800" },
+                { key: "all",   label: "All Time",   color: "#9C27B0" },
+              ];
+            
+              const R = 60;
+              const C = 2 * Math.PI * R;
+              const max = Math.max(100, ...items.map(i => totals[i.key] || 0)); // keeps proportions sane
+            
+              container.innerHTML = `
                 <div class="volume-grid">
+                  ${items.map(i => `
                     <div class="volume-item">
-                        <div class="donut circle-blue">
-                            <span class="donut-text" id="weekVolume">0 kg</span>
-                        </div>
-                        <div class="label">This Week</div>
+                      <div class="donut">
+                        <svg width="140" height="140">
+                          <circle class="bg" r="${R}" cx="70" cy="70"></circle>
+                          <circle class="progress" data-key="${i.key}" r="${R}" cx="70" cy="70"
+                                  stroke="${i.color}" style="stroke-dasharray:${C}; stroke-dashoffset:${C};"></circle>
+                        </svg>
+                        <div class="donut-text" id="vol-${i.key}">${(totals[i.key] || 0)} kg</div>
+                      </div>
+                      <div class="label">${i.label}</div>
                     </div>
-                    <div class="volume-item">
-                        <div class="donut circle-green">
-                            <span class="donut-text" id="monthVolume">0 kg</span>
-                        </div>
-                        <div class="label">This Month</div>
-                    </div>
-                    <div class="volume-item">
-                        <div class="donut circle-yellow">
-                            <span class="donut-text" id="yearVolume">0 kg</span>
-                        </div>
-                        <div class="label">This Year</div>
-                    </div>
-                    <div class="volume-item">
-                        <div class="donut circle-red">
-                            <span class="donut-text" id="allVolume">0 kg</span>
-                        </div>
-                        <div class="label">All Time</div>
-                    </div>
+                  `).join("")}
                 </div>
-                    <hr>
-                <ul>
-                  <li>This Week: ${totals.week} kg</li>
-                  <li>This Month: ${totals.month} kg</li>
-                  <li>This Year: ${totals.year} kg</li>
-                  <li>All Time: ${totals.all} kg</li>
-                </ul>
               `;
+            
+              // Set the donut fill (no animation yet; just jump to value)
+              document.querySelectorAll('#volumeStats .progress').forEach(el => {
+                const key = el.getAttribute('data-key');
+                const value = totals[key] || 0;
+                const offset = C - (value / max) * C;
+                el.style.strokeDashoffset = offset;
+              });
         }
+
 
         if (document.getElementById("volumeStats")) {
             displayVolumeStats();
