@@ -397,15 +397,11 @@ body {
 
 .volume-grid {
   display: grid;
-  grid-template-columns: repeat(2, minmax(0, 1fr));
+  grid-template-columns: repeat(2, 1fr);
   gap: 20px;
   justify-items: center;
   align-items: center;
   text-align: center;
-}
-
-@media (min-width: 768px) {
-  .volume-grid { grid-template-columns: repeat(4, minmax(0, 1fr)); }
 }
 
 .volume-item {
@@ -415,8 +411,9 @@ body {
 }
 
 .label {
-    margin-bottom: 10px;
-    font-weight: 600;
+  margin-top: 10px;
+  font-weight: 600;
+  color: #fff;
 }
 
 .donut {
@@ -442,7 +439,6 @@ body {
   fill: none;
   stroke-width: 12;
   stroke-linecap: round;
-  transition: stroke-dashoffset 0.6s ease-out;
 }
   
 .donut-text {
