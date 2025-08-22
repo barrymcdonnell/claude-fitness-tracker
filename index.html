@@ -327,7 +327,7 @@
             <!-- Measurements Section -->
             <div id="measurements" class="section">
                 <div class="card">
-                    <h3>📏 Weight Volume</h3>
+                    <h3>🏋️ Weight Volume</h3>
                     <!-- Show volume stats -->
                     <div id="volumeStats"></div>
                 </div>
@@ -1054,6 +1054,33 @@
             
               document.getElementById("volumeStats").innerHTML = `
                 <h4>Volume Lifted</h4>
+                <div class="volume-grid">
+                    <div class="volume-item">
+                      <h5>Weekly</h5>
+                      <div class="circle circle-blue">
+                        <span id="weeklyVolume">0</span> kg
+                      </div>
+                    </div>
+                    <div class="volume-item">
+                      <h5>Monthly</h5>
+                      <div class="circle circle-green">
+                        <span id="monthlyVolume">0</span> kg
+                      </div>
+                    </div>
+                    <div class="volume-item">
+                      <h5>Yearly</h5>
+                      <div class="circle circle-yellow">
+                        <span id="yearlyVolume">0</span> kg
+                      </div>
+                    </div>
+                    <div class="volume-item">
+                      <h5>Total</h5>
+                      <div class="circle circle-red">
+                        <span id="totalVolume">0</span> kg
+                      </div>
+                    </div>
+                    </div>
+                    <hr>
                 <ul>
                   <li>This Week: ${totals.week} kg</li>
                   <li>This Month: ${totals.month} kg</li>
