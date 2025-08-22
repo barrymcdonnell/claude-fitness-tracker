@@ -1017,6 +1017,13 @@
               }
         }
 
+        // Helper function to abbreviate numbers in the displayVolumeSets if they get too big
+        function formatVolume(n) {
+            if (n >= 1_000_000) return (n / 1_000_000).toFixed(1) + 'M';
+            if (n >= 1_000) return (n / 1_000).toFixed(1) + 'k';
+            return n; // small numbers stay as-is
+        }
+
         // Display volume stats
         function displayVolumeStats() {
               const log = JSON.parse(localStorage.getItem("workoutVolumeLog") || "[]");
@@ -1058,9 +1065,9 @@
                         <svg width="140" height="140">
                           <circle class="bg" r="${R}" cx="70" cy="70"></circle>
                           <circle class="progress" r="${R}" cx="70" cy="70"
-                                  stroke="#a8dadc" style="stroke-dasharray:${C}; stroke-dashoffset:0;"></circle>
+                                  stroke="#a3dc9a" style="stroke-dasharray:${C}; stroke-dashoffset:0;"></circle>
                         </svg>
-                        <div class="donut-text">${totals.week || 0} kg</div>
+                        <div class="donut-text">${formatVolume(totals.week)} kg</div>
                       </div>
                       <div class="label">This Week</div>
                     </div>
@@ -1070,9 +1077,9 @@
                         <svg width="140" height="140">
                           <circle class="bg" r="${R}" cx="70" cy="70"></circle>
                           <circle class="progress" r="${R}" cx="70" cy="70"
-                                  stroke="#ffd6a5" style="stroke-dasharray:${C}; stroke-dashoffset:0;"></circle>
+                                  stroke="#dee791" style="stroke-dasharray:${C}; stroke-dashoffset:0;"></circle>
                         </svg>
-                        <div class="donut-text">${totals.month || 0} kg</div>
+                        <div class="donut-text">${formatVolume(totals.month)} kg</div>
                       </div>
                       <div class="label">This Month</div>
                     </div>
@@ -1082,9 +1089,9 @@
                         <svg width="140" height="140">
                           <circle class="bg" r="${R}" cx="70" cy="70"></circle>
                           <circle class="progress" r="${R}" cx="70" cy="70"
-                                  stroke="#cdb4db" style="stroke-dasharray:${C}; stroke-dashoffset:0;"></circle>
+                                  stroke="#d29f80" style="stroke-dasharray:${C}; stroke-dashoffset:0;"></circle>
                         </svg>
-                        <div class="donut-text">${totals.year || 0} kg</div>
+                        <div class="donut-text">${formatVolume(totals.year)} kg</div>
                       </div>
                       <div class="label">This Year</div>
                     </div>
@@ -1094,9 +1101,9 @@
                         <svg width="140" height="140">
                           <circle class="bg" r="${R}" cx="70" cy="70"></circle>
                           <circle class="progress" r="${R}" cx="70" cy="70"
-                                  stroke="#b5ead7" style="stroke-dasharray:${C}; stroke-dashoffset:0;"></circle>
+                                  stroke="#a2aadb" style="stroke-dasharray:${C}; stroke-dashoffset:0;"></circle>
                         </svg>
-                        <div class="donut-text">${totals.all || 0} kg</div>
+                        <div class="donut-text">${formatVolume(totals.all)} kg</div>
                       </div>
                       <div class="label">All Time</div>
                     </div>
