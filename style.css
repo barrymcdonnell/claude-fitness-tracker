@@ -393,6 +393,14 @@ body {
         }
 
 /* Volume stats */
+.volume-container {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 20px;
+    margin: 20px 0;
+    text-align: center;
+  }
+
 .volume-grid {
     display: grid;
     grid-template-columns: repeat(2, 1fr);
@@ -422,6 +430,15 @@ body {
 .circle-green { background: #10b981; }
 .circle-yellow { background: #facc15; color: black; }
 .circle-red { background: #ef4444; }
+
+.week   { background: #4CAF50; } /* green */
+.month  { background: #2196F3; } /* blue */
+.year   { background: #FF9800; } /* orange */
+.all    { background: #9C27B0; } /* purple */
+.label {
+    margin-bottom: 10px;
+    font-weight: 600;
+}
 
         .schedule-grid {
             display: grid;
