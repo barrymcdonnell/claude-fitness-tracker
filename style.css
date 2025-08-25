@@ -392,6 +392,19 @@ body {
           font-size: 14px;
         }
 
+/* Workout tabs */
+.tabs { display: flex; gap: 8px; margin-bottom: 12px; }
+.tab-btn {
+  background: rgba(255,255,255,0.1);
+  border: 1px solid rgba(255,255,255,0.2);
+  padding: 6px 12px;
+  border-radius: 6px;
+  cursor: pointer;
+}
+.tab-btn.active { background: #6366f1; color: white; }
+.tab-content { margin-top: 8px; }
+
+
 /* Volume stats */
 #volumeStats { margin: 20px 0; }
 
