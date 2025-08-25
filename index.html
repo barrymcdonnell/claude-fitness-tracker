@@ -104,13 +104,25 @@
 
                 <div class="card">
                     <h3>📝 My Workouts</h3>
-                    <div id="workoutsList">
-                        <div class="empty-state">
-                            <h4>No workouts created</h4>
-                            <p>Create your first workout above!</p>
+                    <div class="tabs">
+                        <button class="tab-btn active" data-tab="upcoming" onclick="switchWorkoutTab(event)">Planned</button>
+                        <button class="tab-btn" data-tab="completed" onclick="switchWorkoutTab(event)">Completed</button>
+                      </div>
+
+                    <div id="workoutsTab-upcoming" class="tab-content">
+                        <div id="workoutsList">
+                            <div class="empty-state">
+                                <h4>No workouts created</h4>
+                                <p>Create your first workout above!</p>
+                            </div>
                         </div>
                     </div>
+
+                    <div id="workoutsTab-completed" class="tab-content" style="display:none;">
+                        <div id="completedWorkouts"></div>
+                    </div>
                 </div>
+                
 
                 <!-- Container for active workouts -->
                 <div id="activeWorkoutContainer"></div>
@@ -822,6 +834,22 @@
 
         // **********************
         // Workout Management
+        // **********************
+        
+        // Logic to switch tabs between planned and completed workouts
+        function switchWorkoutTab(e) {
+          const tab = e.currentTarget;
+          const tabName = tab.dataset.tab;
+        
+          // remove active from all buttons
+          document.querySelectorAll('.tab-btn').forEach(btn => btn.classList.remove('active'));
+          tab.classList.add('active');
+        
+          // hide all tab contents
+          document.querySelectorAll('.tab-content').forEach(c => c.style.display = 'none');
+          document.getElementById('workoutsTab-' + tabName).style.display = 'block';
+        }
+
         function saveWorkout() {
             const name = document.getElementById('workoutName').value;
             
@@ -984,6 +1012,11 @@
         function displayCompletedWorkouts() {
               const container = document.getElementById("completedWorkouts");
               let completed = JSON.parse(localStorage.getItem("completedWorkouts") || "[]");
+
+              if (completed.length === 0) {
+                container.innerHTML = `<div class="empty-state"><h4>No completed workouts</h4></div>`;
+                return;
+              }
             
               container.innerHTML = completed.map(workout => `
                 <div class="completed-workout">
@@ -1002,7 +1035,10 @@
               `).join("");
         }
 
-
+        document.addEventListener("DOMContentLoaded", () => {
+          displayCompletedWorkouts();
+        });
+        
         function toggleSetComplete(exIndex, setIndex) {
               const exercise = activeWorkout.exercises[exIndex];
             
