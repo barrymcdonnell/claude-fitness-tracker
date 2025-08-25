@@ -167,19 +167,22 @@ body {
        }
        
 .btn-secondary {
-  background: linear-gradient(135deg, #64748b, #94a3b8); /* slate blue/gray */
+  background: linear-gradient(135deg, #3b82f6, #f97316); /* blue → orange */
   color: white;
-  font-weight: 500;
-  padding: 10px 18px;
+  font-weight: 600;
+  padding: 12px 18px;
   border: none;
   border-radius: 8px;
   cursor: pointer;
+  width: 100%;
+  text-align: center;
+  margin-bottom: 12px;   /* 🔥 spacing below */
   transition: transform 0.2s ease, box-shadow 0.2s ease;
 }
 
 .btn-secondary:hover {
   transform: translateY(-2px);
-  box-shadow: 0 4px 8px rgba(100, 116, 139, 0.4);
+  box-shadow: 0 4px 10px rgba(59, 130, 246, 0.4); /* blue glow */
 }
 
        
