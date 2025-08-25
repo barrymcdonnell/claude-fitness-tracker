@@ -395,42 +395,41 @@ body {
 /* Workout tabs */
 .tabs {
   display: flex;
-  border-bottom: 2px solid #ccc;
+  border-bottom: 2px solid rgba(255,255,255,0.15);
   margin-bottom: 12px;
 }
 
 .tab-btn {
-  background: #f9f9f9;
-  border: 1px solid #ccc;
-  border-bottom: none;
+  flex: 1;
+  text-align: center;
   padding: 10px 16px;
   cursor: pointer;
   font-weight: 600;
-  color: #555;
-  transition: all 0.2s ease;
+  color: white;
+  background: linear-gradient(135deg, #4f46e5, #3b82f6); /* purple → blue */
+  border: none;
+  border-radius: 8px 8px 0 0;
   margin-right: 4px;
-  border-top-left-radius: 6px;
-  border-top-right-radius: 6px;
+  transition: all 0.2s ease;
+  opacity: 0.6;
 }
 
 .tab-btn:hover {
-  background: #eee;
-  color: #222;
+  opacity: 0.8;
 }
 
 .tab-btn.active {
-  background: #fff;
-  color: #222;
-  border: 1px solid #ccc;
-  border-bottom: 2px solid #fff; /* merges with content box */
+  opacity: 1;
+  box-shadow: 0 -2px 6px rgba(0,0,0,0.2);
 }
 
 .tab-content {
-  border: 1px solid #ccc;
+  background: inherit; /* keep same as parent card */
   padding: 16px;
-  background: #fff;
-  border-radius: 0 6px 6px 6px;
+  border-radius: 0 0 8px 8px;
+  color: white;
 }
+
 
 
 
