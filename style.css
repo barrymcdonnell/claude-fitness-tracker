@@ -395,33 +395,43 @@ body {
 /* Workout tabs */
 .tabs {
   display: flex;
-  border-bottom: 2px solid #ddd; /* line under the tab bar */
+  border-bottom: 2px solid #ccc;
   margin-bottom: 12px;
 }
 
 .tab-btn {
-  background: none;
-  border: none;
+  background: #f9f9f9;
+  border: 1px solid #ccc;
+  border-bottom: none;
   padding: 10px 16px;
   cursor: pointer;
   font-weight: 600;
-  color: #666;
-  border-bottom: 2px solid transparent;
+  color: #555;
   transition: all 0.2s ease;
+  margin-right: 4px;
+  border-top-left-radius: 6px;
+  border-top-right-radius: 6px;
 }
 
 .tab-btn:hover {
-  color: #111;
+  background: #eee;
+  color: #222;
 }
 
 .tab-btn.active {
-  color: #111;
-  border-bottom: 2px solid #6366f1; /* highlight active tab */
+  background: #fff;
+  color: #222;
+  border: 1px solid #ccc;
+  border-bottom: 2px solid #fff; /* merges with content box */
 }
 
 .tab-content {
-  padding: 12px;
+  border: 1px solid #ccc;
+  padding: 16px;
+  background: #fff;
+  border-radius: 0 6px 6px 6px;
 }
+
 
 
 /* Volume stats */
