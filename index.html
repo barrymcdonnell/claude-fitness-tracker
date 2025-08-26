@@ -121,7 +121,7 @@
 
                     <!-- Container for completed workouts -->
                     <div id="workoutsTab-completed" class="tab-content" style="display:none;">
-                        <div id="completedWorkoutsList"></div>
+                        <div id="completedWorkoutsList" class="completed-workouts"></div>
                     </div>
                 </div>
                 
@@ -848,6 +848,15 @@
           document.querySelectorAll('.tab-content').forEach(c => c.style.display = 'none');
           document.getElementById('workoutsTab-' + tabName).style.display = 'block';
         }
+
+        function toggleWorkoutDetails(header) {
+          const card = header.parentElement;
+          card.classList.toggle("active");
+        
+          const details = card.querySelector(".workout-details");
+          details.style.display = details.style.display === "block" ? "none" : "block";
+        }
+
 
         function saveWorkout() {
             const name = document.getElementById('workoutName').value;
