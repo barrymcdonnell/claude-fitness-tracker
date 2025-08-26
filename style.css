@@ -464,7 +464,51 @@ body {
   color: white;
 }
 
+/* Completed workouts */
+.completed-workouts .workout-card {
+  border: 1px solid #444;
+  border-radius: 8px;
+  margin-bottom: 12px;
+  background: #222;
+  overflow: hidden;
+}
 
+.completed-workouts .workout-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 12px;
+  cursor: pointer;
+  background: linear-gradient(135deg, #ff7e5f, #feb47b);
+  color: #fff;
+  font-weight: 600;
+}
+
+.completed-workouts .workout-name {
+  flex: 1;
+}
+
+.completed-workouts .workout-date {
+  margin-right: 10px;
+  font-size: 0.9em;
+  opacity: 0.9;
+}
+
+.completed-workouts .toggle-icon {
+  transition: transform 0.3s ease;
+}
+
+.completed-workouts .workout-card.active .toggle-icon {
+  transform: rotate(90deg);
+}
+
+.completed-workouts .workout-details {
+  display: none;
+  padding: 12px;
+  border-top: 1px solid #444;
+  background: #1a1a1a;
+  font-size: 0.95em;
+}
 
 
 /* Volume stats */
