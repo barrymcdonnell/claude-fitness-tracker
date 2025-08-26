@@ -30,6 +30,7 @@
             <button class="nav-item" onclick="showSection('goals', this)">Goals</button>
             <button class="nav-item" onclick="showSection('achievements', this)">Achievements</button>
             <button class="nav-item" onclick="showSection('measurements', this)">Progress</button>
+            <button class="nav-item" onclick="showSection('challenges', this)">Challenges</button>
         </div>
 
         <div class="content">
@@ -379,6 +380,40 @@
                     </div>
                 </div>
             </div>
+
+            <!-- Challenges Section -->
+            <div id="challenges" class="section" style="display:none;">
+              <div class="card">
+                <h3>🔥 Challenges</h3>
+            
+                <!-- Collapsible Create Challenge -->
+                <div class="challenge-create-header" onclick="toggleChallengeForm()">
+                  <span class="chevron">▶</span> Create A Challenge
+                </div>
+            
+                <div id="challengeFormContainer" style="display:none;">
+                  <form id="challengeForm" onsubmit="createChallenge(event)">
+                    <label for="challengeType">Challenge Type:</label>
+                    <select id="challengeType" required>
+                      <option value="pushups">Push-Ups</option>
+                      <option value="running">Running</option>
+                      <option value="cycling">Cycling</option>
+                    </select>
+            
+                    <div id="challengeOptions"></div>
+            
+                    <button type="submit" class="btn-save full-width">Save Challenge</button>
+                  </form>
+                </div>
+              </div>
+            
+              <!-- List of Challenges with Tracking -->
+              <div class="card">
+                <h4>Active Challenges</h4>
+                <div id="challengesList"></div>
+              </div>
+            </div>
+
         </div>
     </div>
 
@@ -2066,6 +2101,123 @@
             // Update global state so it’s consistent elsewhere
             window.measurements = measurements;
         }
+
+        // ******************************************* 
+        // Challenges Section
+        function toggleChallengeForm() {
+          const container = document.getElementById("challengeFormContainer");
+          const chevron = document.querySelector(".challenge-create-header .chevron");
+          const isOpen = container.style.display === "block";
+          container.style.display = isOpen ? "none" : "block";
+          chevron.classList.toggle("open", !isOpen);
+        }
+        
+        document.getElementById("challengeType").addEventListener("change", updateChallengeOptions);
+        
+        function updateChallengeOptions() {
+          const type = document.getElementById("challengeType").value;
+          const container = document.getElementById("challengeOptions");
+        
+          if (type === "pushups") {
+            container.innerHTML = `
+              <label>Reps per day:</label>
+              <input type="number" id="repsPerDay" required>
+              <label>Duration (days):</label>
+              <input type="number" id="durationDays" required>
+            `;
+          } else {
+            container.innerHTML = `
+              <label>Distance (km):</label>
+              <input type="number" id="distanceKm" required>
+              <label>Frequency:</label>
+              <select id="frequency" required>
+                <option value="daily">Daily</option>
+                <option value="weekly">Weekly</option>
+                <option value="weekend">Weekend</option>
+              </select>
+            `;
+          }
+        }
+        
+        // Run once on load
+        updateChallengeOptions();
+        
+        function createChallenge(e) {
+          e.preventDefault();
+          const type = document.getElementById("challengeType").value;
+          let challenge = { type, createdAt: new Date().toISOString(), progress: [] };
+        
+          if (type === "pushups") {
+            challenge.repsPerDay = +document.getElementById("repsPerDay").value;
+            challenge.durationDays = +document.getElementById("durationDays").value;
+            challenge.title = `${challenge.repsPerDay} push-ups/day for ${challenge.durationDays} days`;
+            challenge.progress = Array(challenge.durationDays).fill(false); // daily checkboxes
+          } else {
+            challenge.distanceKm = +document.getElementById("distanceKm").value;
+            challenge.frequency = document.getElementById("frequency").value;
+            challenge.title = `${type} ${challenge.distanceKm}km (${challenge.frequency})`;
+            challenge.progress = 0; // numeric progress (km completed)
+          }
+        
+          let challenges = JSON.parse(localStorage.getItem("challenges")) || [];
+          challenges.push(challenge);
+          localStorage.setItem("challenges", JSON.stringify(challenges));
+        
+          displayChallenges();
+          document.getElementById("challengeForm").reset();
+          updateChallengeOptions();
+        }
+        
+        function displayChallenges() {
+          const container = document.getElementById("challengesList");
+          let challenges = JSON.parse(localStorage.getItem("challenges")) || [];
+        
+          if (!challenges.length) {
+            container.innerHTML = `<p class="empty-state">No challenges yet. Create one above!</p>`;
+            return;
+          }
+        
+          container.innerHTML = challenges.map((c, i) => {
+            if (c.type === "pushups") {
+              return `
+                <div class="challenge-item">
+                  <strong>${c.title}</strong>
+                  <div class="challenge-progress">
+                    ${c.progress.map((done, day) => `
+                      <input type="checkbox" ${done ? "checked" : ""} 
+                        onchange="updatePushupProgress(${i}, ${day}, this.checked)">
+                    `).join("")}
+                  </div>
+                </div>
+              `;
+            } else {
+              return `
+                <div class="challenge-item">
+                  <strong>${c.title}</strong>
+                  <div>
+                    <input type="number" min="0" value="${c.progress}" 
+                      onchange="updateDistanceProgress(${i}, this.value)"> / ${c.distanceKm} km
+                  </div>
+                </div>
+              `;
+            }
+          }).join("");
+        }
+        
+        function updatePushupProgress(challengeIndex, dayIndex, checked) {
+          let challenges = JSON.parse(localStorage.getItem("challenges")) || [];
+          challenges[challengeIndex].progress[dayIndex] = checked;
+          localStorage.setItem("challenges", JSON.stringify(challenges));
+          displayChallenges();
+        }
+        
+        function updateDistanceProgress(challengeIndex, value) {
+          let challenges = JSON.parse(localStorage.getItem("challenges")) || [];
+          challenges[challengeIndex].progress = +value;
+          localStorage.setItem("challenges", JSON.stringify(challenges));
+          displayChallenges();
+        }
+
 
         // Dashboard Updates
         function updateDashboard() {
