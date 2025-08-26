@@ -1009,30 +1009,51 @@
 
         // Display Completed Workouts
         function displayCompletedWorkouts() {
-              const container = document.getElementById("completedWorkouts");
-              let completed = JSON.parse(localStorage.getItem("completedWorkouts") || "[]");
-
-              if (completed.length === 0) {
-                container.innerHTML = `<div class="empty-state"><h4>No completed workouts</h4></div>`;
-                return;
-              }
-            
-              container.innerHTML = completed.map(workout => `
-                <div class="completed-workout">
-                  <h4>${workout.name}</h4>
-                  <p>Duration: ${workout.duration} min</p>
-                  <p>Total Volume: ${workout.totalVolume} kg</p>
-                  <ul>
-                    ${workout.exercises.map(ex => `
-                      <li>
-                        ${ex.name}: ${ex.setsCompleted || 0}/${ex.sets} sets completed 
-                        (${ex.volume || 0} kg lifted)
-                      </li>
-                    `).join("")}
-                  </ul>
+          const container = document.getElementById("completedWorkoutsList");
+          container.innerHTML = "";
+        
+          const completed = JSON.parse(localStorage.getItem("completedWorkouts")) || [];
+        
+          completed.forEach((workout, index) => {
+            const card = document.createElement("div");
+            card.classList.add("workout-card");
+        
+            const date = new Date(workout.date || Date.now()).toLocaleDateString();
+        
+            card.innerHTML = `
+              <div class="workout-header">
+                <div class="workout-title">
+                  <span class="chevron">▶</span>
+                  <span>${workout.name}</span>
                 </div>
-              `).join("");
+                <span class="workout-date">${date}</span>
+              </div>
+              <div class="workout-details" id="workoutDetails-${index}">
+                <p><strong>Duration:</strong> ${workout.duration || "N/A"}</p>
+                <p><strong>Total Volume:</strong> ${workout.totalVolume || 0} kg</p>
+                <p><strong>Exercises:</strong></p>
+                <ul>
+                  ${workout.exercises.map(ex =>
+                    `<li>${ex.name}: ${ex.setsCompleted} sets, ${ex.volume} kg</li>`
+                  ).join("")}
+                </ul>
+              </div>
+            `;
+        
+            const header = card.querySelector(".workout-header");
+            const chevron = card.querySelector(".chevron");
+            const details = card.querySelector(".workout-details");
+        
+            header.addEventListener("click", () => {
+              const isOpen = details.style.display === "block";
+              details.style.display = isOpen ? "none" : "block";
+              chevron.classList.toggle("open", !isOpen);
+            });
+        
+            container.appendChild(card);
+          });
         }
+
 
         document.addEventListener("DOMContentLoaded", () => {
           displayCompletedWorkouts();
