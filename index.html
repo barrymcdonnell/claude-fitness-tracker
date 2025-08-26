@@ -987,6 +987,9 @@
               alert("Workout completed!");
               displayCompletedWorkouts();
               displayVolumeStats(); // ⬅ show updated totals
+
+              // After saving and calling displayCompletedWorkouts();
+              switchWorkoutTab({ target: document.querySelector('[data-tab="completed"]') });
         }
 
 
