@@ -674,7 +674,8 @@
                 updateDailyTrackingHistory(); 
             } else if (sectionName === 'measurements') {
                 updateProgressHistory();
-                // updateWeightProgress(); not needed as took out chart on Progress page
+            } else if (sectionId === "challenges") {
+                displayChallenges();
             }
         }
 
