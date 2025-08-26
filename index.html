@@ -1038,28 +1038,30 @@
                 <span class="workout-date">${date}</span>
               </div>
               <div class="workout-details" id="workoutDetails-${index}">
-                <p><strong>Duration:</strong> ${workout.duration || "N/A"}</p>
-                <p><strong>Total Volume:</strong> ${workout.totalVolume || 0} kg</p>
-                <p><strong>Exercises:</strong></p>
-                <ul>
+                <div class="workout-meta">
+                  <span><strong>Time:</strong> ${workout.duration ? workout.duration + " mins" : "N/A"}</span>
+                  <span><strong>Weight:</strong> ${workout.totalVolume || 0} kg</span>
+                </div>
+                <ul class="exercise-list">
                   ${workout.exercises.map(ex =>
                     `<li>${ex.name}: ${ex.setsCompleted} sets, ${ex.volume} kg</li>`
                   ).join("")}
                 </ul>
               </div>
             `;
-        
+            
             const header = card.querySelector(".workout-header");
             const chevron = card.querySelector(".chevron");
             const details = card.querySelector(".workout-details");
-        
+            
             header.addEventListener("click", () => {
               const isOpen = details.style.display === "block";
               details.style.display = isOpen ? "none" : "block";
               chevron.classList.toggle("open", !isOpen);
             });
-        
+            
             container.appendChild(card);
+
           });
         }
 
