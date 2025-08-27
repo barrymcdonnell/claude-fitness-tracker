@@ -2173,6 +2173,8 @@
         function displayChallenges() {
           const container = document.getElementById("challengesList");
           let challenges = JSON.parse(localStorage.getItem("challenges")) || [];
+
+          console.log("Loaded challenges from storage:", challenges);
         
           if (!challenges.length) {
             container.innerHTML = `<p class="empty-state">No challenges yet. Create one above!</p>`;
@@ -2180,6 +2182,7 @@
           }
         
           container.innerHTML = challenges.map((c, i) => {
+              console.log("Rendering challenge:", c);
             if (c.type === "pushups") {
               return `
                 <div class="challenge-item">
