@@ -628,6 +628,12 @@
             document.getElementById('trackingDate').value = today;
             document.getElementById('measurementDate').value = today;
             document.getElementById('scheduleStartDate').value = today;
+            document.getElementById("challengeFrequency").addEventListener("change", function () {
+            document.getElementById("dailyDurationGroup").style.display = 
+                this.value === "daily" ? "block" : "none";
+            document.getElementById("weeklyDurationGroup").style.display = 
+                this.value === "weekly" ? "block" : "none";
+            });
             
             //exercises = exerciseDatabase; no longer needed; exercises now coming from exercises.js file
             loadData();
@@ -2150,17 +2156,18 @@
         
         // Run once on load
         updateChallengeOptions();
-        
+
+        // Create Challenge
         function createChallenge(e) {
             e.preventDefault();
             const type = document.getElementById("challengeType").value;
             const startDateInput = document.getElementById("startDate").value;
             const startDate = startDateInput ? new Date(startDateInput) : new Date();
-
+        
             function capitalizeWords(str) {
                 return str.replace(/\b\w/g, char => char.toUpperCase());
             }
-            
+        
             let challenge = {
                 type,
                 createdAt: new Date().toISOString(),
@@ -2175,23 +2182,29 @@
         
                 // Daily checkboxes
                 challenge.progress = Array(challenge.durationDays).fill(false);
+        
             } else {
                 challenge.distanceKm = +document.getElementById("distanceKm").value;
                 challenge.frequency = document.getElementById("frequency").value;
         
-                // Determine durationDays based on frequency
                 if (challenge.frequency === "daily") {
-                    challenge.durationDays = +document.getElementById("durationDays").value; // must add this input for daily
+                    // User chooses number of days
+                    challenge.durationDays = +document.getElementById("durationDays").value;
+                    challenge.title = `${capitalizeWords(type)} ${challenge.distanceKm} KM Daily for ${challenge.durationDays} Days`;
+                    challenge.progress = Array(challenge.durationDays).fill(0);
+        
                 } else if (challenge.frequency === "weekly") {
-                    challenge.durationDays = 7; // one week
+                    // User chooses number of weeks
+                    challenge.durationWeeks = +document.getElementById("durationWeeks").value;
+                    challenge.title = `${capitalizeWords(type)} ${challenge.distanceKm} KM Weekly for ${challenge.durationWeeks} Weeks`;
+                    challenge.progress = Array(challenge.durationWeeks).fill(0);
+        
                 } else if (challenge.frequency === "weekend") {
-                    challenge.durationDays = 2; // Saturday + Sunday
+                    // Fixed 2 days
+                    challenge.durationDays = 2;
+                    challenge.title = `${capitalizeWords(type)} ${challenge.distanceKm} KM Weekend Challenge`;
+                    challenge.progress = Array(2).fill(0);
                 }
-        
-                challenge.title = `${type} ${challenge.distanceKm} KM (${capitalizeWords(challenge.frequency)})`;
-        
-                // Initialize daily progress array
-                challenge.progress = Array(challenge.durationDays).fill(0);
             }
         
             let challenges = JSON.parse(localStorage.getItem("challenges")) || [];
@@ -2202,9 +2215,8 @@
             document.getElementById("challengeForm").reset();
             updateChallengeOptions();
         }
-           
 
-        
+        // Display challenges
         function displayChallenges() {
             const container = document.getElementById("challengesList");
             let challenges = JSON.parse(localStorage.getItem("challenges")) || [];
