@@ -640,7 +640,22 @@ body {
   margin-top: 15px;
 }
 
+.quit-btn {
+  margin-top: 10px;
+  padding: 6px 12px;
+  background-color: #d9534f; /* red */
+  color: white;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  width: 100%;
+}
 
+.quit-btn:hover {
+  background-color: #c9302c;
+}
+
+// *************************************
 /* Schedule */
 .schedule-grid {
     display: grid;
