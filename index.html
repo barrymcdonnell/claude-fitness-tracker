@@ -2179,43 +2179,72 @@
         }
         
         function displayChallenges() {
-          const container = document.getElementById("challengesList");
-          let challenges = JSON.parse(localStorage.getItem("challenges")) || [];
-  
-          if (!challenges.length) {
-            container.innerHTML = `<p class="empty-state">No challenges yet. Create one above!</p>`;
-            return;
-          }
+            const container = document.getElementById("challengesList");
+            let challenges = JSON.parse(localStorage.getItem("challenges")) || [];
         
-          container.innerHTML = challenges.map((c, i) => {
-              
-            if (c.type === "pushups") {
-              return `
-                <div class="challenge-item">
-                  <strong>${c.title}</strong>
-                  <div class="challenge-progress">
-                    ${c.progress.map((done, day) => `
-                      <input type="checkbox" ${done ? "checked" : ""} 
-                        onchange="updatePushupProgress(${i}, ${day}, this.checked)">
-                    `).join("")}
-                  </div>
-                  <button class="btn-danger quit-btn" onclick="quitChallenge(${i})">Quit</button>
-                </div>
-              `;
-            } else {
-              return `
-                <div class="challenge-item">
-                  <strong>${c.title}</strong>
-                  <div>
-                    <input type="number" min="0" value="${c.progress}" 
-                      onchange="updateDistanceProgress(${i}, this.value)"> / ${c.distanceKm} km
-                  </div>
-                  <button class="btn-danger quit-btn" onclick="quitChallenge(${i})">Quit</button>
-                </div>
-              `;
+            if (!challenges.length) {
+                container.innerHTML = `<p class="empty-state">No challenges yet. Create one above!</p>`;
+                return;
             }
-          }).join("");
+        
+            container.innerHTML = challenges.map((c, challengeIndex) => {
+                if (c.type === "pushups") {
+                    // Push-Ups: daily checkboxes
+                    const checkboxes = c.progress.map((done, day) => `
+                        <input type="checkbox" ${done ? "checked" : ""} 
+                            onchange="updatePushupProgress(${challengeIndex}, ${day}, this.checked)">
+                    `).join("");
+        
+                    return `
+                        <div class="challenge-item">
+                            <strong>${c.title.toUpperCase()}</strong>
+                            <div class="challenge-progress">${checkboxes}</div>
+                            <button class="btn btn-danger btn-small" onclick="quitChallenge(${challengeIndex})">QUIT</button>
+                        </div>
+                    `;
+                } else {
+                    // Distance challenge: running/cycling
+                    const startDate = new Date(c.startDate);
+                    const dailyInputs = [];
+                    let totalCompleted = 0;
+        
+                    for (let i = 0; i < c.durationDays; i++) {
+                        let dayDate = new Date(startDate);
+                        if (c.frequency === 'daily') dayDate.setDate(startDate.getDate() + i);
+                        else if (c.frequency === 'weekly') dayDate.setDate(startDate.getDate() + i * 7);
+                        else if (c.frequency === 'weekend') {
+                            // push to next weekend day
+                            dayDate.setDate(startDate.getDate() + i);
+                            while (dayDate.getDay() !== 6 && dayDate.getDay() !== 0) dayDate.setDate(dayDate.getDate() + 1);
+                        }
+        
+                        const dateLabel = dayDate.toLocaleDateString(undefined, { weekday: 'short', month: 'short', day: 'numeric' });
+                        const value = c.progress[i] || 0;
+                        totalCompleted += value;
+        
+                        dailyInputs.push(`
+                            <label>${dateLabel.toUpperCase()}:</label>
+                            <input type="number" min="0" value="${value}" 
+                                onchange="updateDistanceProgress(${challengeIndex}, ${i}, this.value)"> KM
+                        `);
+                    }
+        
+                    const progressPercent = Math.min(100, Math.round(totalCompleted / c.distanceKm * 100));
+        
+                    return `
+                        <div class="challenge-item">
+                            <strong>${c.title.toUpperCase()}</strong>
+                            <div class="challenge-progress-bar">
+                                <div class="progress" style="width: ${progressPercent}%;"></div>
+                            </div>
+                            <div class="challenge-daily-inputs">${dailyInputs.join("")}</div>
+                            <button class="btn btn-danger btn-small" onclick="quitChallenge(${challengeIndex})">QUIT</button>
+                        </div>
+                    `;
+                }
+            }).join("");
         }
+
         
         function updatePushupProgress(challengeIndex, dayIndex, checked) {
           let challenges = JSON.parse(localStorage.getItem("challenges")) || [];
@@ -2224,22 +2253,23 @@
           displayChallenges();
         }
         
-        function updateDistanceProgress(challengeIndex, value) {
-          let challenges = JSON.parse(localStorage.getItem("challenges")) || [];
-          challenges[challengeIndex].progress = +value;
-          localStorage.setItem("challenges", JSON.stringify(challenges));
-          displayChallenges();
+        function updateDistanceProgress(challengeIndex, dayIndex, value) {
+            let challenges = JSON.parse(localStorage.getItem("challenges")) || [];
+            challenges[challengeIndex].progress[dayIndex] = Number(value);
+            localStorage.setItem("challenges", JSON.stringify(challenges));
+            displayChallenges();
         }
 
-        function quitChallenge(index) {
-          let challenges = JSON.parse(localStorage.getItem("challenges")) || [];
-        
-          if (confirm("Are you sure you want to quit this challenge?")) {
-            challenges.splice(index, 1); // remove challenge at index
-            localStorage.setItem("challenges", JSON.stringify(challenges));
-            displayChallenges(); // refresh UI
-          }
+
+        function quitChallenge(challengeIndex) {
+            let challenges = JSON.parse(localStorage.getItem("challenges")) || [];
+            if (confirm("Are you sure you want to quit this challenge?")) {
+                challenges.splice(challengeIndex, 1);
+                localStorage.setItem("challenges", JSON.stringify(challenges));
+                displayChallenges();
+            }
         }
+
 
         // ***********************************
         // Dashboard Updates
