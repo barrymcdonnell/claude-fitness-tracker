@@ -2232,56 +2232,53 @@
                 return;
             }
         
-            function capitalizeWords(str) {
-                return str.replace(/\b\w/g, char => char.toUpperCase());
-            }
-        
-            container.innerHTML = challenges.map((c, challengeIndex) => {
+            container.innerHTML = challenges.map((c, i) => {
+                // PUSH-UP CHALLENGE
                 if (c.type === "pushups") {
-                    // Push-Ups: daily checkboxes
-                    const checkboxes = c.progress.map((done, day) => `
-                        <input type="checkbox" ${done ? "checked" : ""} 
-                            onchange="updatePushupProgress(${challengeIndex}, ${day}, this.checked)">
-                    `).join("");
-        
-                    const startDate = c.startDate ? new Date(c.startDate).toLocaleDateString() : "N/A";
-        
                     return `
-                        <div class="challenge-item">
-                            <strong>${capitalizeWords(c.title)}</strong>
-                            <div>Start Date: ${startDate}</div>
-                            <div class="challenge-progress">${checkboxes}</div>
-                            <button class="btn-delete" onclick="quitChallenge(${challengeIndex})">Quit</button>
+                    <div class="challenge-item">
+                        <div class="challenge-header">
+                            <strong>${c.title}</strong>
+                            <button class="btn-quit" onclick="quitChallenge(${i})">Quit</button>
                         </div>
+                        <div class="challenge-progress pushup-progress">
+                            ${c.progress.map((done, day) => `
+                                <label>
+                                    <input type="checkbox" ${done ? "checked" : ""} 
+                                           onchange="updatePushupProgress(${i}, ${day}, this.checked)">
+                                    Day ${day + 1}
+                                </label>
+                            `).join("")}
+                        </div>
+                    </div>
                     `;
-                } else {
-                    // Distance challenge: running/cycling
-                    const startDate = c.startDate ? new Date(c.startDate).toLocaleDateString() : "N/A";
-                    const dailyInputs = [];
-                    let totalCompleted = 0;
-        
-                    for (let i = 0; i < c.durationDays; i++) {
-                        let value = c.progress[i] || 0;
-                        totalCompleted += value;
-                        dailyInputs.push(`
-                            <label>${capitalizeWords(c.frequency)} Day ${i + 1}:</label>
-                            <input type="number" min="0" value="${value}" 
-                                onchange="updateDistanceProgress(${challengeIndex}, ${i}, this.value)"> KM
-                        `);
-                    }
-        
-                    const progressPercent = Math.min(100, Math.round(totalCompleted / c.distanceKm * 100));
+                } 
+                // RUNNING / CYCLING CHALLENGE
+                else {
+                    const totalCompleted = c.progress.reduce((sum, val) => sum + Number(val || 0), 0);
+                    const totalGoal = c.distanceKm * c.durationDays;
+                    const percent = Math.min((totalCompleted / totalGoal) * 100, 100);
         
                     return `
-                        <div class="challenge-item">
-                            <strong>${capitalizeWords(c.title)}</strong>
-                            <div>Start Date: ${startDate}</div>
-                            <div class="challenge-progress-bar">
-                                <div class="progress" style="width: ${progressPercent}%;"></div>
-                            </div>
-                            <div class="challenge-daily-inputs">${dailyInputs.join("")}</div>
-                            <button class="btn-delete" onclick="quitChallenge(${challengeIndex})">Quit</button>
+                    <div class="challenge-item">
+                        <div class="challenge-header">
+                            <strong>${c.title}</strong>
+                            <button class="btn-quit" onclick="quitChallenge(${i})">Quit</button>
                         </div>
+                        <div class="daily-distance-inputs">
+                            ${c.progress.map((val, day) => `
+                                <div class="day-input">
+                                    <label>Day ${day + 1}:</label>
+                                    <input type="number" min="0" step="0.1" 
+                                           value="${val}" 
+                                           onchange="updateDistanceProgress(${i}, ${day}, this.value)"> / ${c.distanceKm} km
+                                </div>
+                            `).join("")}
+                        </div>
+                        <div class="challenge-progress-bar">
+                            <div class="challenge-progress-fill" style="width:${percent}%"></div>
+                        </div>
+                    </div>
                     `;
                 }
             }).join("");
@@ -2327,10 +2324,10 @@
           }
         }
 
-        function quitChallenge(challengeIndex) {
+        function quitChallenge(index) {
             let challenges = JSON.parse(localStorage.getItem("challenges")) || [];
             if (confirm("Are you sure you want to quit this challenge?")) {
-                challenges.splice(challengeIndex, 1);
+                challenges.splice(index, 1);
                 localStorage.setItem("challenges", JSON.stringify(challenges));
                 displayChallenges();
             }
