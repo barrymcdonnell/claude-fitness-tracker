@@ -2156,7 +2156,11 @@
             const type = document.getElementById("challengeType").value;
             const startDateInput = document.getElementById("startDate").value;
             const startDate = startDateInput ? new Date(startDateInput) : new Date();
-        
+
+            function capitalizeWords(str) {
+                return str.replace(/\b\w/g, char => char.toUpperCase());
+            }
+            
             let challenge = {
                 type,
                 createdAt: new Date().toISOString(),
