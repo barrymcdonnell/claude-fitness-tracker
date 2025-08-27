@@ -399,6 +399,9 @@
                       <option value="running">Running</option>
                       <option value="cycling">Cycling</option>
                     </select>
+
+                    <label for="startDate">Start Date:</label>
+                    <input type="date" id="startDate" required>
             
                     <div id="challengeOptions"></div>
             
@@ -2117,36 +2120,32 @@
         document.getElementById("challengeType").addEventListener("change", updateChallengeOptions);
         
         function updateChallengeOptions() {
-          const type = document.getElementById("challengeType").value;
-          const container = document.getElementById("challengeOptions");
+            const type = document.getElementById("challengeType").value;
+            const container = document.getElementById("challengeOptions");
         
-          if (type === "pushups") {
-            container.innerHTML = `
-              <div>
-                  <label for="repsPerDay">Reps per day:</label>
-                  <input type="number" id="repsPerDay" min="1" required>
-              </div>
-              <div>
-                  <label for="durationDays">Duration (days):</label>
-                  <input type="number" id="durationDays" min="1" required>
-              </div>
-            `;
-          } else {
-            container.innerHTML = `
-              <div>
-                  <label>Distance (km):</label>
-                  <input type="number" id="distanceKm" required>
-              </div>
-              <div>
-                  <label>Frequency:</label>
-                  <select id="frequency" required>
-                    <option value="daily">Daily</option>
-                    <option value="weekly">Weekly</option>
-                    <option value="weekend">Weekend</option>
-                  </select>
-              </div>
-            `;
-          }
+            if (type === "pushups") {
+                container.innerHTML = `
+                    <label>Reps per Day:</label>
+                    <input type="number" id="repsPerDay" required>
+                    <label>Duration (Days):</label>
+                    <input type="number" id="durationDays" required>
+                `;
+            } else {
+                container.innerHTML = `
+                    <label>Distance (KM):</label>
+                    <input type="number" id="distanceKm" required>
+                    <label>Frequency:</label>
+                    <select id="frequency" required>
+                        <option value="daily">Daily</option>
+                        <option value="weekly">Weekly</option>
+                        <option value="weekend">Weekend</option>
+                    </select>
+                    <div id="distanceDurationContainer"></div>
+                `;
+        
+                document.getElementById("frequency").addEventListener("change", updateDistanceDuration);
+                updateDistanceDuration(); // initial
+            }
         }
         
         // Run once on load
@@ -2280,6 +2279,20 @@
             challenges[challengeIndex].progress[dayIndex] = Number(value);
             localStorage.setItem("challenges", JSON.stringify(challenges));
             displayChallenges();
+        }
+
+        function updateDistanceDuration() {
+            const frequency = document.getElementById("frequency").value;
+            const container = document.getElementById("distanceDurationContainer");
+        
+            if (frequency === "daily") {
+                container.innerHTML = `
+                    <label>Duration (Days):</label>
+                    <input type="number" id="durationDays" required>
+                `;
+            } else {
+                container.innerHTML = "";
+            }
         }
 
 
