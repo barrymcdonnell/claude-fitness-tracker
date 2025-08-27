@@ -606,7 +606,8 @@ body {
     padding: 10px;
     border: 1px solid #ddd;
     border-radius: 8px;
-    background: #fff;
+    background: #f9fafb; /* match your card background */
+    color: #111; /* ensure text is visible */
 }
 
 .challenge-header {
@@ -632,7 +633,7 @@ body {
 }
 
 .challenge-progress-bar {
-    background: #eee;
+    background: #ddd;
     border-radius: 8px;
     height: 12px;
     overflow: hidden;
@@ -654,10 +655,12 @@ body {
 
 .pushup-progress label {
     margin-right: 5px;
+    color: #111;
 }
 
 .day-input {
     margin-bottom: 5px;
+    color: #111;
 }
 
 #challengeForm label {
