@@ -619,6 +619,27 @@ body {
   height: 18px;
 }
 
+#challengeForm label {
+  display: block;
+  margin-top: 10px;
+  font-weight: 500;
+}
+
+#challengeForm input,
+#challengeForm select {
+  display: block;
+  width: 100%;
+  margin-top: 5px;
+  padding: 6px 8px;
+  border: 1px solid #ccc;
+  border-radius: 6px;
+  box-sizing: border-box;
+}
+
+#challengeForm button {
+  margin-top: 15px;
+}
+
 
 /* Schedule */
 .schedule-grid {
