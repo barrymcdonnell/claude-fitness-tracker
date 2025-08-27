@@ -2181,16 +2181,14 @@
         function displayChallenges() {
           const container = document.getElementById("challengesList");
           let challenges = JSON.parse(localStorage.getItem("challenges")) || [];
-
-          console.log("Loaded challenges from storage:", challenges);
-        
+  
           if (!challenges.length) {
             container.innerHTML = `<p class="empty-state">No challenges yet. Create one above!</p>`;
             return;
           }
         
           container.innerHTML = challenges.map((c, i) => {
-              console.log("Rendering challenge:", c);
+              
             if (c.type === "pushups") {
               return `
                 <div class="challenge-item">
@@ -2201,6 +2199,7 @@
                         onchange="updatePushupProgress(${i}, ${day}, this.checked)">
                     `).join("")}
                   </div>
+                  <button class="btn-danger quit-btn" onclick="quitChallenge(${i})">Quit</button>
                 </div>
               `;
             } else {
@@ -2211,6 +2210,7 @@
                     <input type="number" min="0" value="${c.progress}" 
                       onchange="updateDistanceProgress(${i}, this.value)"> / ${c.distanceKm} km
                   </div>
+                  <button class="btn-danger quit-btn" onclick="quitChallenge(${i})">Quit</button>
                 </div>
               `;
             }
@@ -2231,7 +2231,17 @@
           displayChallenges();
         }
 
+        function quitChallenge(index) {
+          let challenges = JSON.parse(localStorage.getItem("challenges")) || [];
+        
+          if (confirm("Are you sure you want to quit this challenge?")) {
+            challenges.splice(index, 1); // remove challenge at index
+            localStorage.setItem("challenges", JSON.stringify(challenges));
+            displayChallenges(); // refresh UI
+          }
+        }
 
+        // ***********************************
         // Dashboard Updates
         function updateDashboard() {
             document.getElementById('totalWorkouts').textContent = workoutCompletions.length;
