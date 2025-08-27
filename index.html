@@ -2193,7 +2193,7 @@
         
                 } else if (challenge.frequency === "weekly") {
                     // User chooses number of weeks
-                    challenge.durationWeeks = +document.getElementById("durationWeeks").value;
+                    challenge.durationWeeks = +document.getElementById("challengeDurationWeeks").value;
                     challenge.title = `${capitalizeWords(type)} ${challenge.distanceKm} KM Weekly for ${challenge.durationWeeks} Weeks`;
                     challenge.progress = Array(challenge.durationWeeks).fill(0);
         
