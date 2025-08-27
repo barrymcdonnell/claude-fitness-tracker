@@ -628,12 +628,6 @@
             document.getElementById('trackingDate').value = today;
             document.getElementById('measurementDate').value = today;
             document.getElementById('scheduleStartDate').value = today;
-            document.getElementById("challengeFrequency").addEventListener("change", function () {
-            document.getElementById("dailyDurationGroup").style.display = 
-                this.value === "daily" ? "block" : "none";
-            document.getElementById("weeklyDurationGroup").style.display = 
-                this.value === "weekly" ? "block" : "none";
-            });
             
             //exercises = exerciseDatabase; no longer needed; exercises now coming from exercises.js file
             loadData();
@@ -2150,7 +2144,14 @@
                 `;
         
                 document.getElementById("frequency").addEventListener("change", updateDistanceDuration);
-                updateDistanceDuration(); // initial
+                
+                document.getElementById("challengeFrequency").addEventListener("change", function () {
+                document.getElementById("dailyDurationGroup").style.display = 
+                    this.value === "daily" ? "block" : "none";
+                document.getElementById("weeklyDurationGroup").style.display = 
+                    this.value === "weekly" ? "block" : "none";
+                updateDistanceDuration();
+                });
             }
         }
         
