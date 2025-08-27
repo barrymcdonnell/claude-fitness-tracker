@@ -2153,30 +2153,54 @@
         updateChallengeOptions();
         
         function createChallenge(e) {
-          e.preventDefault();
-          const type = document.getElementById("challengeType").value;
-          let challenge = { type, createdAt: new Date().toISOString(), progress: [] };
+            e.preventDefault();
+            const type = document.getElementById("challengeType").value;
+            const startDateInput = document.getElementById("startDate").value;
+            const startDate = startDateInput ? new Date(startDateInput) : new Date();
         
-          if (type === "pushups") {
-            challenge.repsPerDay = +document.getElementById("repsPerDay").value;
-            challenge.durationDays = +document.getElementById("durationDays").value;
-            challenge.title = `${challenge.repsPerDay} push-ups/day for ${challenge.durationDays} days`;
-            challenge.progress = Array(challenge.durationDays).fill(false); // daily checkboxes
-          } else {
-            challenge.distanceKm = +document.getElementById("distanceKm").value;
-            challenge.frequency = document.getElementById("frequency").value;
-            challenge.title = `${type} ${challenge.distanceKm}km (${challenge.frequency})`;
-            challenge.progress = 0; // numeric progress (km completed)
-          }
+            let challenge = {
+                type,
+                createdAt: new Date().toISOString(),
+                startDate: startDate.toISOString(),
+                progress: []
+            };
         
-          let challenges = JSON.parse(localStorage.getItem("challenges")) || [];
-          challenges.push(challenge);
-          localStorage.setItem("challenges", JSON.stringify(challenges));
+            if (type === "pushups") {
+                challenge.repsPerDay = +document.getElementById("repsPerDay").value;
+                challenge.durationDays = +document.getElementById("durationDays").value;
+                challenge.title = `${challenge.repsPerDay} Push-Ups/Day for ${challenge.durationDays} Days`;
         
-          displayChallenges();
-          document.getElementById("challengeForm").reset();
-          updateChallengeOptions();
+                // Daily checkboxes
+                challenge.progress = Array(challenge.durationDays).fill(false);
+            } else {
+                challenge.distanceKm = +document.getElementById("distanceKm").value;
+                challenge.frequency = document.getElementById("frequency").value;
+        
+                // Determine durationDays based on frequency
+                if (challenge.frequency === "daily") {
+                    challenge.durationDays = +document.getElementById("durationDays").value; // must add this input for daily
+                } else if (challenge.frequency === "weekly") {
+                    challenge.durationDays = 7; // one week
+                } else if (challenge.frequency === "weekend") {
+                    challenge.durationDays = 2; // Saturday + Sunday
+                }
+        
+                challenge.title = `${type} ${challenge.distanceKm} KM (${capitalizeWords(challenge.frequency)})`;
+        
+                // Initialize daily progress array
+                challenge.progress = Array(challenge.durationDays).fill(0);
+            }
+        
+            let challenges = JSON.parse(localStorage.getItem("challenges")) || [];
+            challenges.push(challenge);
+            localStorage.setItem("challenges", JSON.stringify(challenges));
+        
+            displayChallenges();
+            document.getElementById("challengeForm").reset();
+            updateChallengeOptions();
         }
+           
+
         
         function displayChallenges() {
             const container = document.getElementById("challengesList");
@@ -2187,6 +2211,10 @@
                 return;
             }
         
+            function capitalizeWords(str) {
+                return str.replace(/\b\w/g, char => char.toUpperCase());
+            }
+        
             container.innerHTML = challenges.map((c, challengeIndex) => {
                 if (c.type === "pushups") {
                     // Push-Ups: daily checkboxes
@@ -2195,35 +2223,27 @@
                             onchange="updatePushupProgress(${challengeIndex}, ${day}, this.checked)">
                     `).join("");
         
+                    const startDate = c.startDate ? new Date(c.startDate).toLocaleDateString() : "N/A";
+        
                     return `
                         <div class="challenge-item">
-                            <strong>${c.title.toUpperCase()}</strong>
+                            <strong>${capitalizeWords(c.title)}</strong>
+                            <div>Start Date: ${startDate}</div>
                             <div class="challenge-progress">${checkboxes}</div>
-                            <button class="btn btn-danger btn-small" onclick="quitChallenge(${challengeIndex})">QUIT</button>
+                            <button class="btn btn-danger btn-small" onclick="quitChallenge(${challengeIndex})">Quit</button>
                         </div>
                     `;
                 } else {
                     // Distance challenge: running/cycling
-                    const startDate = new Date(c.startDate);
+                    const startDate = c.startDate ? new Date(c.startDate).toLocaleDateString() : "N/A";
                     const dailyInputs = [];
                     let totalCompleted = 0;
         
                     for (let i = 0; i < c.durationDays; i++) {
-                        let dayDate = new Date(startDate);
-                        if (c.frequency === 'daily') dayDate.setDate(startDate.getDate() + i);
-                        else if (c.frequency === 'weekly') dayDate.setDate(startDate.getDate() + i * 7);
-                        else if (c.frequency === 'weekend') {
-                            // push to next weekend day
-                            dayDate.setDate(startDate.getDate() + i);
-                            while (dayDate.getDay() !== 6 && dayDate.getDay() !== 0) dayDate.setDate(dayDate.getDate() + 1);
-                        }
-        
-                        const dateLabel = dayDate.toLocaleDateString(undefined, { weekday: 'short', month: 'short', day: 'numeric' });
-                        const value = c.progress[i] || 0;
+                        let value = c.progress[i] || 0;
                         totalCompleted += value;
-        
                         dailyInputs.push(`
-                            <label>${dateLabel.toUpperCase()}:</label>
+                            <label>${capitalizeWords(c.frequency)} Day ${i + 1}:</label>
                             <input type="number" min="0" value="${value}" 
                                 onchange="updateDistanceProgress(${challengeIndex}, ${i}, this.value)"> KM
                         `);
@@ -2233,17 +2253,19 @@
         
                     return `
                         <div class="challenge-item">
-                            <strong>${c.title.toUpperCase()}</strong>
+                            <strong>${capitalizeWords(c.title)}</strong>
+                            <div>Start Date: ${startDate}</div>
                             <div class="challenge-progress-bar">
                                 <div class="progress" style="width: ${progressPercent}%;"></div>
                             </div>
                             <div class="challenge-daily-inputs">${dailyInputs.join("")}</div>
-                            <button class="btn btn-danger btn-small" onclick="quitChallenge(${challengeIndex})">QUIT</button>
+                            <button class="btn btn-danger btn-small" onclick="quitChallenge(${challengeIndex})">Quit</button>
                         </div>
                     `;
                 }
             }).join("");
         }
+
 
         
         function updatePushupProgress(challengeIndex, dayIndex, checked) {
