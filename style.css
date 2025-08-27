@@ -637,6 +637,7 @@ body {
     border-radius: 8px;
     height: 12px;
     overflow: hidden;
+    margin: 5px 0px;
 }
 
 .challenge-progress-bar .progress {
