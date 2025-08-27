@@ -2120,37 +2120,36 @@
         document.getElementById("challengeType").addEventListener("change", updateChallengeOptions);
         
         function updateChallengeOptions() {
-            const type = document.getElementById("challengeType").value;
-            const container = document.getElementById("challengeOptions");
+          const type = document.getElementById("challengeType").value;
+          const container = document.getElementById("challengeOptions");
         
-            if (type === "pushups") {
-                container.innerHTML = `
-                    <label>Reps per Day:</label>
-                    <input type="number" id="repsPerDay" required>
-                    <label>Duration (Days):</label>
-                    <input type="number" id="durationDays" required>
-                `;
-            } else {
-                container.innerHTML = `
-                    <label>Distance (KM):</label>
-                    <input type="number" id="distanceKm" required>
-                    <label>Frequency:</label>
-                    <select id="frequency" required>
-                        <option value="daily">Daily</option>
-                        <option value="weekly">Weekly</option>
-                        <option value="weekend">Weekend</option>
-                    </select>
-                    <div id="distanceDurationContainer"></div>
-                `;
+          if (type === "pushups") {
+            container.innerHTML = `
+              <label>Reps per Day:</label>
+              <input type="number" id="repsPerDay" min="1" required>
+              <label>Duration (Days):</label>
+              <input type="number" id="durationDays" min="1" required>
+            `;
+          } else {
+            container.innerHTML = `
+              <label>Distance (KM):</label>
+              <input type="number" id="distanceKm" min="0" step="0.1" required>
         
-                document.getElementById("frequency").addEventListener("change", function () {
-                document.getElementById("dailyDurationGroup").style.display = 
-                    this.value === "daily" ? "block" : "none";
-                document.getElementById("weeklyDurationGroup").style.display = 
-                    this.value === "weekly" ? "block" : "none";
-                updateDistanceDuration();
-                });
-            }
+              <label>Frequency:</label>
+              <select id="frequency" required>
+                <option value="daily">Daily</option>
+                <option value="weekly">Weekly</option>
+                <option value="weekend">Weekend</option>
+              </select>
+        
+              <div id="distanceDurationContainer" style="margin-top:10px;"></div>
+            `;
+        
+            // Attach ONE listener after the HTML exists
+            document.getElementById("frequency").addEventListener("change", updateDistanceDuration);
+            // Initial render of the duration controls for the default frequency
+            updateDistanceDuration();
+          }
         }
         
         // Run once on load
@@ -2306,26 +2305,28 @@
         }
 
         function updateDistanceDuration() {
-            const frequency = document.getElementById("frequency").value;
-            const container = document.getElementById("distanceDurationContainer");
+          const freq = document.getElementById("frequency").value;
+          const holder = document.getElementById("distanceDurationContainer");
+          if (!holder) return;
         
-            if (frequency === "daily") {
-                container.innerHTML = `
-                    <label>Duration (Days):</label>
-                    <input type="number" id="durationDays" min="1" value="7" required>
-                `;
-            } else if (frequency === "weekly") {
-                container.innerHTML = `
-                    <label>Duration (Weeks):</label>
-                    <input type="number" id="challengeDurationWeeks" min="1" value="4" required>
-                `;
-            } else {
-                // Weekend: no duration input
-                container.innerHTML = "";
-            }
+          if (freq === "daily") {
+            holder.innerHTML = `
+              <label>Duration (Days):</label>
+              <input type="number" id="durationDays" min="1" value="7" required>
+            `;
+          } else if (freq === "weekly") {
+            holder.innerHTML = `
+              <label>Duration (Weeks):</label>
+              <input type="number" id="challengeDurationWeeks" min="1" value="4" required>
+            `;
+          } else {
+            holder.innerHTML = `
+              <div class="hint" style="opacity:.8;font-size:12px;">
+                Covers the first Saturday & Sunday after your start date.
+              </div>
+            `;
+          }
         }
-
-
 
         function quitChallenge(challengeIndex) {
             let challenges = JSON.parse(localStorage.getItem("challenges")) || [];
