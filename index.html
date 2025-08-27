@@ -2206,7 +2206,16 @@
                     challenge.progress = Array(2).fill(0);
                 }
             }
-        
+
+            if (challenge.frequency === "daily") {
+                challenge.durationDays = +document.getElementById("durationDays").value;
+            } else if (challenge.frequency === "weekly") {
+                const weeks = +document.getElementById("challengeDurationWeeks").value;
+                challenge.durationDays = weeks * 7; // store as total days
+            } else if (challenge.frequency === "weekend") {
+                challenge.durationDays = 2; // Sat + Sun
+            }
+
             let challenges = JSON.parse(localStorage.getItem("challenges")) || [];
             challenges.push(challenge);
             localStorage.setItem("challenges", JSON.stringify(challenges));
@@ -2304,12 +2313,19 @@
             if (frequency === "daily") {
                 container.innerHTML = `
                     <label>Duration (Days):</label>
-                    <input type="number" id="durationDays" required>
+                    <input type="number" id="durationDays" min="1" value="7" required>
+                `;
+            } else if (frequency === "weekly") {
+                container.innerHTML = `
+                    <label>Duration (Weeks):</label>
+                    <input type="number" id="challengeDurationWeeks" min="1" value="4" required>
                 `;
             } else {
+                // Weekend: no duration input
                 container.innerHTML = "";
             }
         }
+
 
 
         function quitChallenge(challengeIndex) {
