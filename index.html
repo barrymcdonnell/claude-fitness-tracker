@@ -2265,6 +2265,9 @@
                             <strong>${c.title}</strong>
                             <button class="btn-quit" onclick="quitChallenge(${i})">Quit</button>
                         </div>
+                        <div class="challenge-progress-bar">
+                            <div class="challenge-progress-fill" style="width:${percent}%"></div>
+                        </div>
                         <div class="daily-distance-inputs">
                             ${c.progress.map((val, day) => `
                                 <div class="day-input">
@@ -2275,9 +2278,7 @@
                                 </div>
                             `).join("")}
                         </div>
-                        <div class="challenge-progress-bar">
-                            <div class="challenge-progress-fill" style="width:${percent}%"></div>
-                        </div>
+                        
                     </div>
                     `;
                 }
