@@ -602,10 +602,22 @@ body {
 /* Challenges */
 
 .challenge-item {
-  background: #2a2a2a;
-  padding: 0.75rem;
-  margin: 0.5rem 0;
-  border-radius: 6px;
+    margin-bottom: 20px;
+    padding: 10px;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    background: #fff;
+}
+
+.challenge-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 10px;
+}
+
+.challenge-header strong {
+    font-size: 16px;
 }
 
 .challenge-progress {
@@ -620,12 +632,10 @@ body {
 }
 
 .challenge-progress-bar {
-  width: 100%;
-  height: 10px; /* lower than before */
-  background-color: #e5e7eb; /* light gray background */
-  border-radius: 8px;
-  overflow: hidden;
-  margin-top: 8px;
+    background: #eee;
+    border-radius: 8px;
+    height: 12px;
+    overflow: hidden;
 }
 
 .challenge-progress-bar .progress {
@@ -635,11 +645,19 @@ body {
 }
 
 .challenge-progress-fill {
-  height: 100%;
-  width: 0%;
-  background: linear-gradient(135deg, #6366f1 0%, #8b5cf6 100%);
-  border-radius: 8px 0 0 8px;
-  transition: width 0.5s ease;
+    height: 16px;
+    width: 0%;
+    background: linear-gradient(135deg, #f97316 0%, #3b82f6 100%); /* orange to blue */
+    border-radius: 8px 0 0 8px;
+    transition: width 0.5s ease;
+}
+
+.pushup-progress label {
+    margin-right: 5px;
+}
+
+.day-input {
+    margin-bottom: 5px;
 }
 
 #challengeForm label {
@@ -663,19 +681,18 @@ body {
   margin-top: 15px;
 }
 
-.quit-btn {
-  margin-top: 10px;
-  padding: 6px 12px;
-  background-color: #d9534f; /* red */
-  color: white;
-  border: none;
-  border-radius: 6px;
-  cursor: pointer;
-  width: 100%;
+.btn-quit {
+    padding: 3px 8px;
+    font-size: 12px;
+    background: #ef4444; /* red */
+    color: white;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
 }
 
-.quit-btn:hover {
-  background-color: #c9302c;
+.btn-quit:hover {
+    background: #dc2626;
 }
 
 // *************************************
