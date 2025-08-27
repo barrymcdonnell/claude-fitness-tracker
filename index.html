@@ -2251,7 +2251,7 @@
                             <strong>${capitalizeWords(c.title)}</strong>
                             <div>Start Date: ${startDate}</div>
                             <div class="challenge-progress">${checkboxes}</div>
-                            <button class="btn btn-danger btn-small" onclick="quitChallenge(${challengeIndex})">Quit</button>
+                            <button class="btn-quit" onclick="quitChallenge(${challengeIndex})">Quit</button>
                         </div>
                     `;
                 } else {
@@ -2280,7 +2280,7 @@
                                 <div class="progress" style="width: ${progressPercent}%;"></div>
                             </div>
                             <div class="challenge-daily-inputs">${dailyInputs.join("")}</div>
-                            <button class="btn btn-danger btn-small" onclick="quitChallenge(${challengeIndex})">Quit</button>
+                            <button class="btn-quit" onclick="quitChallenge(${challengeIndex})">Quit</button>
                         </div>
                     `;
                 }
