@@ -517,7 +517,7 @@ body {
 }
 
 .chevron.open {
-  transform: rotate(90deg); /* ► becomes ▼ */
+  transform: rotate(180deg); /* ► becomes ▼ */
 }
 
 .workout-meta {
