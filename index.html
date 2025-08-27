@@ -2143,9 +2143,7 @@
                     <div id="distanceDurationContainer"></div>
                 `;
         
-                document.getElementById("frequency").addEventListener("change", updateDistanceDuration);
-                
-                document.getElementById("challengeFrequency").addEventListener("change", function () {
+                document.getElementById("frequency").addEventListener("change", function () {
                 document.getElementById("dailyDurationGroup").style.display = 
                     this.value === "daily" ? "block" : "none";
                 document.getElementById("weeklyDurationGroup").style.display = 
