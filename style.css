@@ -731,7 +731,22 @@ body {
     background: #dc2626;
 }
 
-// *************************************
+/* Confetti */
+@keyframes fall {
+  to { transform: translateY(100vh); }
+}
+
+/* Dashboard challenge reminder div */
+.reminder-box {
+  background: #fffae6;
+  border: 1px solid #ffc107;
+  padding: 10px;
+  margin-bottom: 15px;
+  border-radius: 6px;
+  font-size: 14px;
+}
+
+/*************************************/
 /* Schedule */
 .schedule-grid {
     display: grid;
