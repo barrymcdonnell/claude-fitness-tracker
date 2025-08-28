@@ -664,8 +664,31 @@ body {
 }
 
 .pushup-progress input[type="checkbox"] {
-    margin-right: 4px;
-    transform: scale(1.1); /* slightly bigger checkbox */
+    appearance: none;
+    -webkit-appearance: none;
+    width: 18px;
+    height: 18px;
+    border: 2px solid #ccc;
+    border-radius: 4px;
+    margin-right: 6px;
+    cursor: pointer;
+    position: relative;
+    background-color: #fff;
+    transition: all 0.2s ease-in-out;
+}
+
+.pushup-progress input[type="checkbox"]:checked {
+    background: linear-gradient(90deg, #ff7e5f, #feb47b); /* orange gradient */
+    border-color: #ff7e5f;
+}
+
+.pushup-progress input[type="checkbox"]:checked::after {
+    content: "✔";
+    color: #fff;
+    font-size: 12px;
+    position: absolute;
+    left: 2px;
+    top: -1px;
 }
 
 .day-input {
