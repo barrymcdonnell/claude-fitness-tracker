@@ -2300,6 +2300,7 @@
           let challenges = JSON.parse(localStorage.getItem("challenges")) || [];
           challenges[challengeIndex].progress[dayIndex] = checked;
           localStorage.setItem("challenges", JSON.stringify(challenges));
+          updateChallengeProgress(challenges[challengeIndex], challengeIndex);
           displayChallenges();
         }
         
@@ -2307,6 +2308,7 @@
             let challenges = JSON.parse(localStorage.getItem("challenges")) || [];
             challenges[challengeIndex].progress[dayIndex] = Number(value);
             localStorage.setItem("challenges", JSON.stringify(challenges));
+            updateChallengeProgress(challenges[challengeIndex], challengeIndex);
             displayChallenges();
         }
 
@@ -2332,6 +2334,7 @@
               </div>
             `;
           }
+            updateChallengeProgress(challenges[challengeIndex], challengeIndex);
         }
 
         function quitChallenge(index) {
@@ -2342,6 +2345,34 @@
                 displayChallenges();
             }
         }
+
+        function updateChallengeProgress(challenge) {
+            let progress = 0;
+            let total = 0;
+        
+            if (challenge.type === "pushups") {
+                total = challenge.durationDays;
+                progress = challenge.log.filter(Boolean).length;
+            } else {
+                total = (challenge.frequency === "daily" ? challenge.durationDays : challenge.durationWeeks);
+                progress = challenge.log.filter(v => v && v > 0).length;
+            }
+        
+            const percent = Math.min((progress / total) * 100, 100);
+        
+            const bar = document.getElementById(`progress-${challenge.id}`);
+            if (bar) {
+                bar.style.width = percent + "%";
+            }
+        
+            // Check for completion
+            if (progress >= total && !challenge.completed) {
+                challenge.completed = true;
+                moveToCompletedChallenges(challenge);
+                celebrateCompletion(challenge);
+            }
+        }
+
 
         // Move completed challenges to completed section
         function moveToCompletedChallenges(challenge) {
