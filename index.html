@@ -415,6 +415,12 @@
                 <h4>Active Challenges</h4>
                 <div id="challengesList"></div>
               </div>
+
+              <!-- Completed Challenges -->
+              <div class="card">
+                <h4>Completed Challenges</h4>
+                <div id="completedChallenges"></div>
+              </div>
             </div>
 
         </div>
@@ -2334,6 +2340,63 @@
             }
         }
 
+        // Move completed challenges to completed section
+        function moveToCompletedChallenges(challenge) {
+            // Remove from active list
+            const activeDiv = document.getElementById(`challenge-${challenge.id}`);
+            if (activeDiv) activeDiv.remove();
+        
+            // Add to completed section
+            const completedContainer = document.getElementById("completedChallenges");
+            const div = document.createElement("div");
+            div.className = "completed-challenge";
+            div.innerHTML = `
+                <strong>${challenge.type.toUpperCase()} Challenge Completed!</strong>
+                <p>🎉 Well done! You finished your challenge.</p>
+            `;
+            completedContainer.appendChild(div);
+        }
+
+        // Fun function to show the challenge is complete, with confetti
+        function celebrateCompletion(challenge) {
+            alert(`🎉 Congratulations! You completed your ${challenge.type} challenge! 🎉`);
+            
+            // Optional: simple confetti effect
+            const duration = 3 * 1000;
+            const end = Date.now() + duration;
+        
+            (function frame() {
+                const confetti = document.createElement("div");
+                confetti.textContent = "🎊";
+                confetti.style.position = "fixed";
+                confetti.style.left = Math.random() * 100 + "vw";
+                confetti.style.top = "-10px";
+                confetti.style.fontSize = "24px";
+                confetti.style.animation = "fall 3s linear";
+                document.body.appendChild(confetti);
+        
+                setTimeout(() => confetti.remove(), 3000);
+        
+                if (Date.now() < end) requestAnimationFrame(frame);
+            })();
+        }
+
+        // Show challenge reminder on dashboard screen
+        function showActiveChallengeReminder() {
+            const activeChallenges = challenges.filter(c => !c.completed);
+            const reminder = document.getElementById("challengeReminder");
+        
+            if (activeChallenges.length > 0) {
+                reminder.style.display = "block";
+                reminder.innerHTML = `
+                    <strong>Have you logged your active challenge today?</strong>
+                    <br>
+                    <a href="#challenges">Go to Challenges</a>
+                `;
+            } else {
+                reminder.style.display = "none";
+            }
+        }
 
         // ***********************************
         // Dashboard Updates
