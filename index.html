@@ -2343,8 +2343,8 @@
               </div>
             `;
           }
-            updateChallengeProgress(challenges[challengeIndex], challengeIndex);
         }
+
 
         function quitChallenge(index) {
             let challenges = JSON.parse(localStorage.getItem("challenges")) || [];
@@ -2370,57 +2370,35 @@
           }
         }
 
-
         function updateChallengeProgress(challenge, challengeIndex) {
-          let challenges = JSON.parse(localStorage.getItem("challenges")) || [];
-          let completedChallenges = JSON.parse(localStorage.getItem("completedChallenges")) || [];
+          const challenges = JSON.parse(localStorage.getItem("challenges") || "[]");
+          const completedChallenges = JSON.parse(localStorage.getItem("completedChallenges") || "[]");
         
           let isComplete = false;
         
-          if (challenge.type === "pushup") {
-            isComplete = challenge.progress.every(done => done);
+          if (challenge.type === "pushups") {
+            isComplete = challenge.progress.every(Boolean);
           } else if (challenge.type === "running" || challenge.type === "cycling") {
-            const totalLogged = challenge.progress.reduce((a, b) => a + (parseFloat(b) || 0), 0);
-            isComplete = totalLogged >= challenge.totalDistance;
+            const totalLogged = (challenge.progress || []).reduce((a, b) => a + (parseFloat(b) || 0), 0);
+            const totalTarget = Number(challenge.totalDistance || 0);
+            isComplete = totalLogged >= totalTarget && totalTarget > 0;
           }
         
           if (isComplete) {
-            showCompletionMessage(challenge.name);
-        
-            // Move challenge to completed
+            showCompletionMessage(challenge.name || challenge.title || "Challenge");
+            challenge.completedAt = new Date().toISOString();
             completedChallenges.push(challenge);
             challenges.splice(challengeIndex, 1);
-        
-            localStorage.setItem("challenges", JSON.stringify(challenges));
             localStorage.setItem("completedChallenges", JSON.stringify(completedChallenges));
+            localStorage.setItem("challenges", JSON.stringify(challenges));
           } else {
-            // Just update progress
             challenges[challengeIndex] = challenge;
             localStorage.setItem("challenges", JSON.stringify(challenges));
           }
         
           displayChallenges();
         }
-        
-          // Update the progress bar UI if it exists
-          const bar = document.querySelector(`#challenge-progress-${index} .progress-bar`);
-          if (bar) {
-            const percent = Math.min((progress / total) * 100, 100);
-            bar.style.width = percent + "%";
-            bar.innerText = Math.floor(percent) + "%";
-          }
-        
-          // If completed, celebrate 🎉
-          if (complete) {
-            showCompletionMessage(challenge.name);
-            moveChallengeToCompleted(challenge);
-
-            // Optionally: also remove from localStorage active list so it doesn't come back
-            let challenges = JSON.parse(localStorage.getItem("challenges")) || [];
-            challenges.splice(challengeIndex, 1);
-            localStorage.setItem("challenges", JSON.stringify(challenges));
-          }
-        
+      
 
         // Move completed challenges to completed section
         function moveToCompletedChallenges(challenge) {
