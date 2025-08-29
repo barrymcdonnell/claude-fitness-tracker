@@ -2197,18 +2197,21 @@
                 if (challenge.frequency === "daily") {
                     // User chooses number of days
                     challenge.durationDays = +document.getElementById("durationDays").value;
+                    challenge.totalDistance = challenge.distanceKm * challenge.durationDays;   // ✅ total goal
                     challenge.title = `${capitalizeWords(type)} ${challenge.distanceKm} KM Daily for ${challenge.durationDays} Days`;
                     challenge.progress = Array(challenge.durationDays).fill(0);
         
                 } else if (challenge.frequency === "weekly") {
-                    // User chooses number of weeks
-                    challenge.durationWeeks = +document.getElementById("challengeDurationWeeks").value;
-                    challenge.title = `${capitalizeWords(type)} ${challenge.distanceKm} KM Weekly for ${challenge.durationWeeks} Weeks`;
-                    challenge.progress = Array(challenge.durationWeeks).fill(0);
+                    const weeks = +document.getElementById("challengeDurationWeeks").value;
+                    challenge.durationDays = weeks * 7;
+                    challenge.totalDistance = challenge.distanceKm * weeks;   // ✅ total goal
+                    challenge.title = `${capitalizeWords(type)} ${challenge.distanceKm} KM Weekly for ${weeks} Weeks`;
+                    challenge.progress = Array(weeks).fill(0);
         
                 } else if (challenge.frequency === "weekend") {
-                    // Fixed 2 days
+                    // Fixed at 2 days
                     challenge.durationDays = 2;
+                    challenge.totalDistance = challenge.distanceKm * 2;   // ✅ total goal
                     challenge.title = `${capitalizeWords(type)} ${challenge.distanceKm} KM Weekend Challenge`;
                     challenge.progress = Array(2).fill(0);
                 }
@@ -2248,9 +2251,9 @@
             const div = document.createElement("div");
             div.className = "challenge";
         
-            if (challenge.type === "pushup") {
+            if (challenge.type === "pushups") {
               div.innerHTML = `
-                <strong>${challenge.name}</strong>
+                <strong>${challenge.title}</strong>
                 <div class="progress-container">
                   ${challenge.progress
                     .map(
@@ -2267,14 +2270,15 @@
               `;
             } else if (challenge.type === "running" || challenge.type === "cycling") {
               const totalLogged = challenge.progress.reduce((a, b) => a + (parseFloat(b) || 0), 0);
-              const percent = Math.min((totalLogged / challenge.totalDistance) * 100, 100);
-        
+              const target = challenge.distanceKm * (challenge.durationDays || challenge.durationWeeks || 1);
+              const percent = Math.min((totalLogged / target) * 100, 100);
+            
               div.innerHTML = `
-                <strong>${challenge.name}</strong>
+                <strong>${challenge.title}</strong>
                 <div class="progress-bar-wrapper">
                   <div class="progress-bar" style="width:${percent}%;"></div>
                 </div>
-                <p>${totalLogged.toFixed(1)} / ${challenge.totalDistance} km</p>
+                <p>${totalLogged.toFixed(1)} / ${target} km</p>
                 ${challenge.progress
                   .map(
                     (val, dayIndex) => `
@@ -2288,6 +2292,7 @@
                   .join("")}
               `;
             }
+
         
             activeContainer.appendChild(div);
           });
