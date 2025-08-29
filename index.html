@@ -2330,10 +2330,10 @@
         
                 if (challenge.type === "pushups") {
                     const totalPushups = challenge.repsPerDay * challenge.durationDays;
-                    summary = `You started the <strong>${challenge.title}</strong> on ${start.toLocaleDateString()} and finished it after <strong>${duration} day(s)</strong> on ${end.toLocaleDateString()}. You completed ${totalPushups} push-ups.`;
+                    summary = `You started the <strong>${challenge.title}</strong> on ${start.toLocaleDateString()} and finished it after <strong>${duration} day(s)</strong> on ${end.toLocaleDateString()}. You completed <strong>${totalPushups}</strong> push-ups.`;
                 } else if (challenge.type === "running" || challenge.type === "cycling") {
                     const totalKm = challenge.progress.reduce((a, b) => a + (parseFloat(b) || 0), 0);
-                    summary = `You started the <strong>${challenge.title}</strong> on ${start.toLocaleDateString()} and finished it after <strong>${duration} day(s)</strong> on ${end.toLocaleDateString()}. You completed ${totalKm.toFixed(1)} kilometres.`;
+                    summary = `You started the <strong>${challenge.title}</strong> on ${start.toLocaleDateString()} and finished it after <strong>${duration} day(s)</strong> on ${end.toLocaleDateString()}. You completed <strong>${totalKm.toFixed(1)}</strong> kilometres.`;
                 }
         
                 div.innerHTML = `<p>${summary}</p>`;
@@ -2481,13 +2481,18 @@
 
         // Show challenge reminder on dashboard screen
         function showActiveChallengeReminder() {
-            const activeChallenges = challenges.filter(c => !c.completed);
+            const challenges = JSON.parse(localStorage.getItem("challenges")) || [];
             const reminder = document.getElementById("challengeReminder");
         
-            if (activeChallenges.length > 0) {
+            if (challenges.length > 0) {
+                // Collect challenge titles
+                const titles = challenges.map(c => c.title).join(", ");
+        
                 reminder.style.display = "block";
                 reminder.innerHTML = `
                     <strong>Have you logged your active challenge today?</strong>
+                    <br>
+                    <em>${titles}</em>
                     <br>
                     <a href="#challenges">Go to Challenges</a>
                 `;
@@ -2495,6 +2500,7 @@
                 reminder.style.display = "none";
             }
         }
+
 
         // ***********************************
         // Dashboard Updates
