@@ -9,6 +9,7 @@
     <link rel="stylesheet" href="style.css">
     <script src="https://d3js.org/d3.v7.min.js"></script>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css">
+    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.9.3/dist/confetti.browser.min.js"></script>
     <script src="exercises.js"></script>
 </head>
 <body>
@@ -2345,6 +2346,21 @@
                 displayChallenges();
             }
         }
+
+        function showCompletionMessage(challenge) {
+          // Show a simple popup
+          alert(`🎉 Congratulations! You completed the "${challenge.name}" challenge!`);
+        
+          // Optional: add a confetti effect
+          if (typeof confetti === "function") {
+            confetti({
+              particleCount: 200,
+              spread: 100,
+              origin: { y: 0.6 }
+            });
+          }
+        }
+
 
         function updateChallengeProgress(challenge, index) {
           if (!challenge) return;
