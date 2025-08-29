@@ -2348,8 +2348,9 @@
         }
 
         function showCompletionMessage(challenge) {
+          let challengeName = challenge && challenge.name ? challenge.name : "your";
           // Show a simple popup
-          alert(`🎉 Congratulations! You completed the "${challenge.name}" challenge!`);
+          alert(`🎉 Congratulations! You completed the "${challengeName}" challenge!`);
         
           // Optional: add a confetti effect
           if (typeof confetti === "function") {
