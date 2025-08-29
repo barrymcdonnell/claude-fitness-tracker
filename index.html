@@ -2314,13 +2314,13 @@
               if (challenge.type === "pushups") {
                 const totalPushups = challenge.repsPerDay * challenge.durationDays;
                 summary = `You started the <strong>${challenge.title}</strong> on 
-                  ${start.toLocaleDateString()} and finished it after ${duration} days 
-                  on ${end.toLocaleDateString()}. You completed ${totalPushups} total push-ups.`;
+                  ${start.toLocaleDateString()} and finished it after <strong>${duration} days</strong> 
+                  on ${end.toLocaleDateString()}. You completed ${totalPushups} push-ups.`;
               } else if (challenge.type === "running" || challenge.type === "cycling") {
                 const totalKm = challenge.progress.reduce((a, b) => a + (parseFloat(b) || 0), 0);
                 summary = `You started the <strong>${challenge.title}</strong> on 
-                  ${start.toLocaleDateString()} and finished it after ${duration} days 
-                  on ${end.toLocaleDateString()}. You completed ${totalKm.toFixed(1)} total kilometres.`;
+                  ${start.toLocaleDateString()} and finished it after <strong>${duration} days</strong> 
+                  on ${end.toLocaleDateString()}. You completed ${totalKm.toFixed(1)} kilometres.`;
               }
             
               div.innerHTML = `<p>${summary}</p>`;
