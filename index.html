@@ -2234,67 +2234,75 @@
 
         // Display challenges
         function displayChallenges() {
-            const container = document.getElementById("challengesList");
-            let challenges = JSON.parse(localStorage.getItem("challenges")) || [];
+          let challenges = JSON.parse(localStorage.getItem("challenges")) || [];
+          let completedChallenges = JSON.parse(localStorage.getItem("completedChallenges")) || [];
         
-            if (!challenges.length) {
-                container.innerHTML = `<p class="empty-state">No challenges yet. Create one above!</p>`;
-                return;
+          const activeContainer = document.getElementById("activeChallenges");
+          const completedContainer = document.getElementById("completedChallenges");
+        
+          activeContainer.innerHTML = "";
+          completedContainer.innerHTML = "";
+        
+          // Render active challenges
+          challenges.forEach((challenge, index) => {
+            const div = document.createElement("div");
+            div.className = "challenge";
+        
+            if (challenge.type === "pushup") {
+              div.innerHTML = `
+                <strong>${challenge.name}</strong>
+                <div class="progress-container">
+                  ${challenge.progress
+                    .map(
+                      (done, dayIndex) => `
+                      <label style="display:inline-flex;align-items:center;margin-right:8px;">
+                        <input type="checkbox" 
+                               onchange="updatePushupProgress(${index}, ${dayIndex}, this.checked)" 
+                               ${done ? "checked" : ""}>
+                        <span style="margin-left:4px;">Day ${dayIndex + 1}</span>
+                      </label>`
+                    )
+                    .join("")}
+                </div>
+              `;
+            } else if (challenge.type === "running" || challenge.type === "cycling") {
+              const totalLogged = challenge.progress.reduce((a, b) => a + (parseFloat(b) || 0), 0);
+              const percent = Math.min((totalLogged / challenge.totalDistance) * 100, 100);
+        
+              div.innerHTML = `
+                <strong>${challenge.name}</strong>
+                <div class="progress-bar-wrapper">
+                  <div class="progress-bar" style="width:${percent}%;"></div>
+                </div>
+                <p>${totalLogged.toFixed(1)} / ${challenge.totalDistance} km</p>
+                ${challenge.progress
+                  .map(
+                    (val, dayIndex) => `
+                    <label>Day ${dayIndex + 1}:
+                      <input type="number" min="0" step="0.1"
+                             value="${val || ""}"
+                             onchange="updateDistanceProgress(${index}, ${dayIndex}, this.value)">
+                      km
+                    </label><br>`
+                  )
+                  .join("")}
+              `;
             }
         
-            container.innerHTML = challenges.map((c, i) => {
-                // PUSH-UP CHALLENGE
-                if (c.type === "pushups") {
-                    return `
-                    <div class="challenge-item">
-                        <div class="challenge-header">
-                            <strong>${c.title}</strong>
-                            <button class="btn-quit" onclick="quitChallenge(${i})">Quit</button>
-                        </div>
-                        <div class="challenge-progress pushup-progress">
-                            ${c.progress.map((done, day) => `
-                                <label>
-                                    <input type="checkbox" ${done ? "checked" : ""} 
-                                           onchange="updatePushupProgress(${i}, ${day}, this.checked)">
-                                    Day ${day + 1}
-                                </label>
-                            `).join("")}
-                        </div>
-                    </div>
-                    `;
-                } 
-                // RUNNING / CYCLING CHALLENGE
-                else {
-                    const totalCompleted = c.progress.reduce((sum, val) => sum + Number(val || 0), 0);
-                    const totalGoal = c.distanceKm * c.durationDays;
-                    const percent = Math.min((totalCompleted / totalGoal) * 100, 100);
+            activeContainer.appendChild(div);
+          });
         
-                    return `
-                    <div class="challenge-item">
-                        <div class="challenge-header">
-                            <strong>${c.title}</strong>
-                            <button class="btn-quit" onclick="quitChallenge(${i})">Quit</button>
-                        </div>
-                        <div class="challenge-progress-bar">
-                            <div class="challenge-progress-fill" style="width:${percent}%"></div>
-                        </div>
-                        <div class="daily-distance-inputs">
-                            ${c.progress.map((val, day) => `
-                                <div class="day-input">
-                                    <label>Day ${day + 1}:</label>
-                                    <input type="number" min="0" step="0.1" 
-                                           value="${val}" 
-                                           onchange="updateDistanceProgress(${i}, ${day}, this.value)"> / ${c.distanceKm} km
-                                </div>
-                            `).join("")}
-                        </div>
-                        
-                    </div>
-                    `;
-                }
-            }).join("");
+          // Render completed challenges
+          completedChallenges.forEach(challenge => {
+            const div = document.createElement("div");
+            div.className = "completed-challenge";
+            div.innerHTML = `
+              <strong>${challenge.name} (${challenge.type}) Completed!</strong>
+              <p>🎉 Well done! You finished your challenge.</p>
+            `;
+            completedContainer.appendChild(div);
+          });
         }
-
 
         
         function updatePushupProgress(challengeIndex, dayIndex, checked) {
@@ -2363,30 +2371,36 @@
         }
 
 
-        function updateChallengeProgress(challenge, index) {
-          if (!challenge) return;
+        function updateChallengeProgress(challenge, challengeIndex) {
+          let challenges = JSON.parse(localStorage.getItem("challenges")) || [];
+          let completedChallenges = JSON.parse(localStorage.getItem("completedChallenges")) || [];
         
-          let progress = 0;
-          let total = 1; // fallback to avoid divide by 0
-          let complete = false;
+          let isComplete = false;
         
-          if (challenge.type === "pushups") {
-            if (Array.isArray(challenge.progress)) {
-              total = challenge.progress.length;
-              progress = challenge.progress.filter(p => p).length;
-              complete = progress === total;
-            }
+          if (challenge.type === "pushup") {
+            isComplete = challenge.progress.every(done => done);
           } else if (challenge.type === "running" || challenge.type === "cycling") {
-            // For distance challenges, we might be tracking daily logs
-            if (Array.isArray(challenge.logs)) {
-              const target = challenge.distanceKm * (challenge.durationDays || 1);
-              const achieved = challenge.logs.reduce((sum, val) => sum + (parseFloat(val) || 0), 0);
-        
-              progress = achieved;
-              total = target;
-              complete = achieved >= target;
-            }
+            const totalLogged = challenge.progress.reduce((a, b) => a + (parseFloat(b) || 0), 0);
+            isComplete = totalLogged >= challenge.totalDistance;
           }
+        
+          if (isComplete) {
+            showCompletionMessage(challenge.name);
+        
+            // Move challenge to completed
+            completedChallenges.push(challenge);
+            challenges.splice(challengeIndex, 1);
+        
+            localStorage.setItem("challenges", JSON.stringify(challenges));
+            localStorage.setItem("completedChallenges", JSON.stringify(completedChallenges));
+          } else {
+            // Just update progress
+            challenges[challengeIndex] = challenge;
+            localStorage.setItem("challenges", JSON.stringify(challenges));
+          }
+        
+          displayChallenges();
+        }
         
           // Update the progress bar UI if it exists
           const bar = document.querySelector(`#challenge-progress-${index} .progress-bar`);
