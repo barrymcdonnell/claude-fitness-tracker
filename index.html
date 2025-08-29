@@ -2298,15 +2298,32 @@
           });
         
           // Render completed challenges
-          completedChallenges.forEach(challenge => {
-            const div = document.createElement("div");
-            div.className = "completed-challenge";
-            div.innerHTML = `
-              <strong>${challenge.title} (${challenge.type}) Completed!</strong>
-              <p>🎉 Well done! You finished your challenge.</p>
-            `;
-            completedContainer.appendChild(div);
-          });
+          completedChallenges.forEach((challenge) => {
+              const div = document.createElement("div");
+              div.className = "challenge completed";
+            
+              const start = new Date(challenge.startDate);
+              const end = challenge.endDate ? new Date(challenge.endDate) : new Date();
+              const duration =
+                Math.ceil((end - start) / (1000 * 60 * 60 * 24)) || 1;
+            
+              let summary = "";
+            
+              if (challenge.type === "pushups") {
+                const totalPushups = challenge.repsPerDay * challenge.durationDays;
+                summary = `You started the <strong>${challenge.title}</strong> on 
+                  ${start.toLocaleDateString()} and finished it after ${duration} days 
+                  on ${end.toLocaleDateString()}. You completed ${totalPushups} total push-ups.`;
+              } else if (challenge.type === "running" || challenge.type === "cycling") {
+                const totalKm = challenge.progress.reduce((a, b) => a + (parseFloat(b) || 0), 0);
+                summary = `You started the <strong>${challenge.title}</strong> on 
+                  ${start.toLocaleDateString()} and finished it after ${duration} days 
+                  on ${end.toLocaleDateString()}. You completed ${totalKm.toFixed(1)} total kilometres.`;
+              }
+            
+              div.innerHTML = `<p>${summary}</p>`;
+              completedContainer.appendChild(div);
+            });
         }
 
         
@@ -2407,6 +2424,7 @@
 
         // Move completed challenges to completed section
         function moveToCompletedChallenges(challenge) {
+            challenge.endDate = new Date().toISOString();
             // Remove from active list
             const activeDiv = document.getElementById(`challenge-${challenge.id}`);
             if (activeDiv) activeDiv.remove();
