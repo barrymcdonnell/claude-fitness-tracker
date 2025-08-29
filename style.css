@@ -606,7 +606,7 @@ body {
     padding: 10px;
     border: 1px solid #ddd;
     border-radius: 8px;
-    background: #f9fafb; /* match your card background */
+    background: rgba(255, 255, 255, 0.08) /* match your card background */
     color: #111; /* ensure text is visible */
 }
 
