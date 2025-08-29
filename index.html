@@ -2237,94 +2237,107 @@
 
         // Display challenges
         function displayChallenges() {
-          let challenges = JSON.parse(localStorage.getItem("challenges")) || [];
-          let completedChallenges = JSON.parse(localStorage.getItem("completedChallenges")) || [];
+            let challenges = JSON.parse(localStorage.getItem("challenges")) || [];
+            let completedChallenges = JSON.parse(localStorage.getItem("completedChallenges")) || [];
         
-          const activeContainer = document.getElementById("activeChallenges");
-          const completedContainer = document.getElementById("completedChallenges");
+            const activeContainer = document.getElementById("activeChallenges");
+            const completedContainer = document.getElementById("completedChallenges");
         
-          activeContainer.innerHTML = "";
-          completedContainer.innerHTML = "";
+            activeContainer.innerHTML = "";
+            completedContainer.innerHTML = "";
         
-          // Render active challenges
-          challenges.forEach((challenge, index) => {
-            const div = document.createElement("div");
-            div.className = "challenge";
-            div.id = `challenge-${challenge.id || index}`;
+            // Render active challenges
+            challenges.forEach((challenge, index) => {
+                const div = document.createElement("div");
+                div.className = "challenge-item";
+                div.id = `challenge-${challenge.id || index}`;
         
-            if (challenge.type === "pushups") {
-              div.innerHTML = `
-                <strong>${challenge.title}</strong>
-                <div class="progress-container">
-                  ${challenge.progress
-                    .map(
-                      (done, dayIndex) => `
-                      <label style="display:inline-flex;align-items:center;margin-right:8px;">
-                        <input type="checkbox" 
-                               onchange="updatePushupProgress(${index}, ${dayIndex}, this.checked)" 
-                               ${done ? "checked" : ""}>
-                        <span style="margin-left:4px;">Day ${dayIndex + 1}</span>
-                      </label>`
-                    )
-                    .join("")}
-                </div>
-                <button onclick="quitChallenge(${index})">Quit</button>
-              `;
-            } else if (challenge.type === "running" || challenge.type === "cycling") {
-              const totalLogged = challenge.progress.reduce((a, b) => a + (parseFloat(b) || 0), 0);
-              const target = challenge.distanceKm * (challenge.durationDays || challenge.durationWeeks || 1);
-              const percent = Math.min((totalLogged / target) * 100, 100);
-            
-              div.innerHTML = `
-                <strong>${challenge.title}</strong>
-                <div class="progress-bar-wrapper">
-                  <div class="progress-bar" style="width:${percent}%;"></div>
-                </div>
-                <p>${totalLogged.toFixed(1)} / ${target} km</p>
-                ${challenge.progress
-                  .map(
-                    (val, dayIndex) => `
-                    <label>Day ${dayIndex + 1}:
-                      <input type="number" min="0" step="0.1"
-                             value="${val || ""}"
-                             onchange="updateDistanceProgress(${index}, ${dayIndex}, this.value)">
-                      km
-                    </label><br>`
-                  )
-                  .join("")}
-                  <button onclick="quitChallenge(${index})">Quit</button>
-              `;
-            }
+                // Header with title + quit button
+                const header = document.createElement("div");
+                header.className = "challenge-header";
+                header.innerHTML = `
+                    <strong>${challenge.title}</strong>
+                    <button class="btn-quit" onclick="quitChallenge(${index})">Quit</button>
+                `;
+                div.appendChild(header);
         
-            activeContainer.appendChild(div);
-          });
+                if (challenge.type === "pushups") {
+                    // Push-up checkboxes
+                    const progressDiv = document.createElement("div");
+                    progressDiv.className = "challenge-progress pushup-progress";
+                    challenge.progress.forEach((done, dayIndex) => {
+                        const label = document.createElement("label");
+                        label.style = "display:inline-flex; align-items:center; margin-right:8px;";
+                        label.innerHTML = `
+                            <input type="checkbox" 
+                                   onchange="updatePushupProgress(${index}, ${dayIndex}, this.checked)" 
+                                   ${done ? "checked" : ""}>
+                            <span style="margin-left:4px;">Day ${dayIndex + 1}</span>
+                        `;
+                        progressDiv.appendChild(label);
+                    });
+                    div.appendChild(progressDiv);
+                } else if (challenge.type === "running" || challenge.type === "cycling") {
+                    const totalLogged = challenge.progress.reduce((a, b) => a + (parseFloat(b) || 0), 0);
+                    const target = challenge.distanceKm * (challenge.durationDays || challenge.durationWeeks || 1);
+                    const percent = Math.min((totalLogged / target) * 100, 100);
         
-          // Render completed challenges
-          completedChallenges.forEach((challenge) => {
-              const div = document.createElement("div");
-              div.className = "challenge completed";
-            
-              const start = new Date(challenge.startDate);
-              const end = challenge.endDate ? new Date(challenge.endDate) : new Date();
-              const duration =
-                Math.ceil((end - start) / (1000 * 60 * 60 * 24)) || 1;
-            
-              let summary = "";
-            
-              if (challenge.type === "pushups") {
-                const totalPushups = challenge.repsPerDay * challenge.durationDays;
-                summary = `You started the <strong>${challenge.title}</strong> on 
-                  ${start.toLocaleDateString()} and finished it after <strong>${duration} days</strong> 
-                  on ${end.toLocaleDateString()}. You completed ${totalPushups} push-ups.`;
-              } else if (challenge.type === "running" || challenge.type === "cycling") {
-                const totalKm = challenge.progress.reduce((a, b) => a + (parseFloat(b) || 0), 0);
-                summary = `You started the <strong>${challenge.title}</strong> on 
-                  ${start.toLocaleDateString()} and finished it after <strong>${duration} days</strong> 
-                  on ${end.toLocaleDateString()}. You completed ${totalKm.toFixed(1)} kilometres.`;
-              }
-            
-              div.innerHTML = `<p>${summary}</p>`;
-              completedContainer.appendChild(div);
+                    // Progress bar
+                    const barWrapper = document.createElement("div");
+                    barWrapper.className = "challenge-progress-bar";
+                    const bar = document.createElement("div");
+                    bar.className = "challenge-progress-fill";
+                    bar.style.width = percent + "%";
+                    barWrapper.appendChild(bar);
+                    div.appendChild(barWrapper);
+        
+                    // Progress text
+                    const progressText = document.createElement("p");
+                    progressText.className = "day-input";
+                    progressText.innerText = `${totalLogged.toFixed(1)} / ${target} km`;
+                    div.appendChild(progressText);
+        
+                    // Daily inputs
+                    const inputDiv = document.createElement("div");
+                    inputDiv.className = "challenge-progress";
+                    challenge.progress.forEach((val, dayIndex) => {
+                        const label = document.createElement("label");
+                        label.className = "day-input";
+                        label.innerHTML = `
+                            Day ${dayIndex + 1}:
+                            <input type="number" min="0" step="0.1" value="${val || ""}" 
+                                   onchange="updateDistanceProgress(${index}, ${dayIndex}, this.value)">
+                            km
+                        `;
+                        inputDiv.appendChild(label);
+                    });
+                    div.appendChild(inputDiv);
+                }
+        
+                activeContainer.appendChild(div);
+            });
+        
+            // Render completed challenges
+            completedChallenges.forEach((challenge) => {
+                const div = document.createElement("div");
+                div.className = "challenge-item completed";
+        
+                const start = new Date(challenge.startDate);
+                const end = challenge.endDate ? new Date(challenge.endDate) : new Date();
+                const duration = Math.ceil((end - start) / (1000 * 60 * 60 * 24)) || 1;
+        
+                let summary = "";
+        
+                if (challenge.type === "pushups") {
+                    const totalPushups = challenge.repsPerDay * challenge.durationDays;
+                    summary = `You started the <strong>${challenge.title}</strong> on ${start.toLocaleDateString()} and finished it after <strong>${duration} day(s)</strong> on ${end.toLocaleDateString()}. You completed ${totalPushups} push-ups.`;
+                } else if (challenge.type === "running" || challenge.type === "cycling") {
+                    const totalKm = challenge.progress.reduce((a, b) => a + (parseFloat(b) || 0), 0);
+                    summary = `You started the <strong>${challenge.title}</strong> on ${start.toLocaleDateString()} and finished it after <strong>${duration} day(s)</strong> on ${end.toLocaleDateString()}. You completed ${totalKm.toFixed(1)} kilometres.`;
+                }
+        
+                div.innerHTML = `<p>${summary}</p>`;
+                completedContainer.appendChild(div);
             });
         }
 
