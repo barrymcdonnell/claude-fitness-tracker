@@ -2551,6 +2551,8 @@
             document.getElementById('workoutProgress').style.width = progressPercent + '%';
             document.getElementById('workoutProgressText').textContent = 
                 `${workouts.length} workouts created`;
+
+            showActiveChallengeReminder();
         }
 
         // Greeting
