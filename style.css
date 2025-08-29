@@ -659,7 +659,7 @@ body {
     align-items: center; /* vertically align checkbox + text */
     margin-right: 10px;
     font-size: 14px;
-    color: #111;
+    color: #fff;
     cursor: pointer;
 }
 
@@ -693,7 +693,7 @@ body {
 
 .day-input {
     margin-bottom: 5px;
-    color: #111;
+    color: #fff;
 }
 
 #challengeForm label {
