@@ -2346,33 +2346,45 @@
             }
         }
 
-        function updateChallengeProgress(challenge) {
-            let progress = 0;
-            let total = 0;
+        function updateChallengeProgress(challenge, index) {
+          if (!challenge) return;
         
-            if (challenge.type === "pushups") {
-                total = challenge.durationDays;
-                progress = challenge.log.filter(Boolean).length;
-            } else {
-                total = (challenge.frequency === "daily" ? challenge.durationDays : challenge.durationWeeks);
-                progress = challenge.log.filter(v => v && v > 0).length;
+          let progress = 0;
+          let total = 1; // fallback to avoid divide by 0
+          let complete = false;
+        
+          if (challenge.type === "pushups") {
+            if (Array.isArray(challenge.progress)) {
+              total = challenge.progress.length;
+              progress = challenge.progress.filter(p => p).length;
+              complete = progress === total;
             }
+          } else if (challenge.type === "running" || challenge.type === "cycling") {
+            // For distance challenges, we might be tracking daily logs
+            if (Array.isArray(challenge.logs)) {
+              const target = challenge.distanceKm * (challenge.durationDays || 1);
+              const achieved = challenge.logs.reduce((sum, val) => sum + (parseFloat(val) || 0), 0);
         
+              progress = achieved;
+              total = target;
+              complete = achieved >= target;
+            }
+          }
+        
+          // Update the progress bar UI if it exists
+          const bar = document.querySelector(`#challenge-progress-${index} .progress-bar`);
+          if (bar) {
             const percent = Math.min((progress / total) * 100, 100);
+            bar.style.width = percent + "%";
+            bar.innerText = Math.floor(percent) + "%";
+          }
         
-            const bar = document.getElementById(`progress-${challenge.id}`);
-            if (bar) {
-                bar.style.width = percent + "%";
-            }
-        
-            // Check for completion
-            if (progress >= total && !challenge.completed) {
-                challenge.completed = true;
-                moveToCompletedChallenges(challenge);
-                celebrateCompletion(challenge);
-            }
+          // If completed, celebrate 🎉
+          if (complete) {
+            showCompletionMessage(challenge);
+            moveChallengeToCompleted(index);
+          }
         }
-
 
         // Move completed challenges to completed section
         function moveToCompletedChallenges(challenge) {
