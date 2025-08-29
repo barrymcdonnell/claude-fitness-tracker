@@ -2250,6 +2250,7 @@
           challenges.forEach((challenge, index) => {
             const div = document.createElement("div");
             div.className = "challenge";
+            div.id = `challenge-${challenge.id || index}`;
         
             if (challenge.type === "pushups") {
               div.innerHTML = `
@@ -2267,6 +2268,7 @@
                     )
                     .join("")}
                 </div>
+                <button onclick="quitChallenge(${index})">Quit</button>
               `;
             } else if (challenge.type === "running" || challenge.type === "cycling") {
               const totalLogged = challenge.progress.reduce((a, b) => a + (parseFloat(b) || 0), 0);
@@ -2290,9 +2292,9 @@
                     </label><br>`
                   )
                   .join("")}
+                  <button onclick="quitChallenge(${index})">Quit</button>
               `;
             }
-
         
             activeContainer.appendChild(div);
           });
