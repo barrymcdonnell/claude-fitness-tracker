@@ -2481,31 +2481,40 @@
 
         // Show challenge reminder on dashboard screen
         function showActiveChallengeReminder() {
-            const activeChallenges = challenges.filter(c => !c.completed);
+            // Ensure challenges is an array
+            const activeChallenges = Array.isArray(challenges) 
+                ? challenges.filter(c => !c.completed) 
+                : [];
+        
             const reminder = document.getElementById("challengeReminder");
         
             if (activeChallenges.length > 0) {
                 reminder.style.display = "block";
         
-                // Build clickable list of active challenges
                 const links = activeChallenges.map(c => 
                     `<li>
-                        <a href="#challenge-${c.id}" style="color: #3b82f6; text-decoration: underline;">
+                        <a href="#challenge-${c.id}" class="challenge-link">
                             ${c.title}
                         </a>
                     </li>`
                 ).join("");
         
                 reminder.innerHTML = `
-                    <strong>Have you logged your active challenge today?</strong>
-                    <ul style="margin-top: 8px; padding-left: 20px;">
-                        ${links}
-                    </ul>
+                    <div class="challenge-reminder-box">
+                        <strong>Have you logged your active challenge today?</strong>
+                        <ul>
+                            ${links}
+                        </ul>
+                            <div style="margin-top: 8px;">
+                                <a href="#challenges" class="challenge-link">Go to All Challenges</a>
+                            </div>
+                    </div>
                 `;
             } else {
                 reminder.style.display = "none";
             }
         }
+
 
 
 
