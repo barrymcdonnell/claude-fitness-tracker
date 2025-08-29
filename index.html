@@ -2398,8 +2398,13 @@
         
           // If completed, celebrate 🎉
           if (complete) {
-            showCompletionMessage(challenge);
-            moveChallengeToCompleted(index);
+            showCompletionMessage(challenge.name);
+            moveChallengeToCompleted(challenge);
+
+            // Optionally: also remove from localStorage active list so it doesn't come back
+            let challenges = JSON.parse(localStorage.getItem("challenges")) || [];
+            challenges.splice(challengeIndex, 1);
+            localStorage.setItem("challenges", JSON.stringify(challenges));
           }
         }
 
