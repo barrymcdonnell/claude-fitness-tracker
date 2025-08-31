@@ -2498,6 +2498,7 @@
         function showActiveChallengeReminder() {
             let challenges = JSON.parse(localStorage.getItem("challenges") || "[]");
         
+            // Ensure challenges is an array
             const activeChallenges = Array.isArray(challenges) 
                 ? challenges.filter(c => !c.completed) 
                 : [];
@@ -2507,32 +2508,33 @@
             if (activeChallenges.length > 0) {
                 reminder.style.display = "block";
         
-                const c = activeChallenges[0]; // just show the first active challenge
+                // Create a compact list of all active challenges
+                const list = activeChallenges.map(c => `
+                    <div class="reminder-sub">${c.title}</div>
+                `).join("");
         
                 reminder.innerHTML = `
                     <div class="reminder-card">
-                        <div class="reminder-title">Active Challenge</div>
-                        <div class="reminder-sub">${c.title}</div>
+                        <div class="reminder-title">Active Challenges</div>
+                        ${list}
                         <button class="reminder-btn" id="reminderOpen">
                             Go to All Challenges
                         </button>
                     </div>
                 `;
         
+                // Add button click handler
                 document.getElementById("reminderOpen").addEventListener("click", () => {
-                    const challengesSection = document.getElementById("challenges");
-                    if (challengesSection) {
-                        challengesSection.scrollIntoView({behavior: "smooth"});
-                    }
+                    // If you're using section navigation, just show the challenges section
+                    document.querySelector('[data-section="challenges"]').style.display = "block";
+                    document.querySelectorAll('[data-section]:not([data-section="challenges"])')
+                        .forEach(sec => sec.style.display = "none");
                 });
+        
             } else {
                 reminder.style.display = "none";
             }
         }
-
-
-
-
 
 
         // ***********************************
