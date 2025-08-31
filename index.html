@@ -2525,16 +2525,14 @@
                     <div class="reminder-title">Active Challenges</div>
                     ${list}
                     <button class="reminder-btn" id="reminderOpen">
-                        Go to All Challenges
+                        See The Challenges
                     </button>
                 `;
                 reminder.appendChild(challengeBox);
         
                 // Button handler
                 document.getElementById("reminderOpen").addEventListener("click", () => {
-                    document.querySelector('[data-section="challenges"]').style.display = "block";
-                    document.querySelectorAll('[data-section]:not([data-section="challenges"])')
-                        .forEach(sec => sec.style.display = "none");
+                    showSection("challenges", document.querySelector('button.nav-item[onclick*="challenges"]'));
                 });
             }
         
