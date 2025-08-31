@@ -2498,7 +2498,6 @@
         function showActiveChallengeReminder() {
             let challenges = JSON.parse(localStorage.getItem("challenges") || "[]");
         
-            // Ensure challenges is an array
             const activeChallenges = Array.isArray(challenges) 
                 ? challenges.filter(c => !c.completed) 
                 : [];
@@ -2508,49 +2507,29 @@
             if (activeChallenges.length > 0) {
                 reminder.style.display = "block";
         
-                // For now, show the *first* active challenge in the reminder
-                const c = activeChallenges[0];
-                const safePercent = c.progress && c.goal 
-                    ? Math.min(100, (c.progress / c.goal) * 100) 
-                    : 0;
-                const subline = c.type === "pushup" 
-                    ? `${c.progress}/${c.goal} pushups` 
-                    : `${c.progress || 0} / ${c.goal} km`;
+                const c = activeChallenges[0]; // just show the first active challenge
         
                 reminder.innerHTML = `
                     <div class="reminder-card">
-                        <div class="reminder-icon">🔥</div>
-                        <div class="reminder-content">
-                            <div class="reminder-title">Have you logged your active challenge today?</div>
-                            <div class="reminder-sub">${c.title}</div>
-                            <div class="mini-progress">
-                                <div class="mini-progress-bar" style="width:${safePercent}%"></div>
-                            </div>
-                            <div class="reminder-sub" style="margin-top:6px;">
-                                Progress: ${Math.floor(safePercent)}% — ${subline}
-                            </div>
-                            <div class="reminder-actions">
-                                <button class="btn-small btn-primary-small" id="reminderLog">Log Progress</button>
-                                <button class="btn-small btn-secondary-small" id="reminderOpen">Go to All Challenges</button>
-                            </div>
-                        </div>
+                        <div class="reminder-title">Active Challenge</div>
+                        <div class="reminder-sub">${c.title}</div>
+                        <button class="reminder-btn" id="reminderOpen">
+                            Go to All Challenges
+                        </button>
                     </div>
                 `;
         
-                // Hook up buttons
-                document.getElementById("reminderLog").addEventListener("click", () => {
-                    const target = document.getElementById(`challenge-${c.id}`);
-                    if (target) target.scrollIntoView({behavior: "smooth"});
-                });
                 document.getElementById("reminderOpen").addEventListener("click", () => {
                     const challengesSection = document.getElementById("challenges");
-                    if (challengesSection) challengesSection.scrollIntoView({behavior: "smooth"});
+                    if (challengesSection) {
+                        challengesSection.scrollIntoView({behavior: "smooth"});
+                    }
                 });
-        
             } else {
                 reminder.style.display = "none";
             }
         }
+
 
 
 
