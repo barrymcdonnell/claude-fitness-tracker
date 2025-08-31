@@ -746,6 +746,96 @@ body {
   font-size: 14px;
 }
 
+/* ******************************/
+/* Challenge reminder box */
+.reminder-card {
+  display: none;
+  background: #fef9c3; /* soft yellow background */
+  color: #1f2937; /* dark gray text */
+  padding: 16px;
+  border-radius: 12px;
+  border: 1px solid #facc15; /* accent yellow border */
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  display: flex;
+  align-items: flex-start;
+  gap: 16px;
+  margin-bottom: 20px;
+}
+
+.reminder-icon {
+  font-size: 28px;
+  line-height: 1;
+}
+
+.reminder-content {
+  flex: 1;
+}
+
+.reminder-title {
+  margin: 0 0 4px;
+  font-weight: 700;
+  font-size: 16px;
+}
+
+.reminder-sub {
+  margin: 0 0 8px;
+  font-size: 14px;
+  color: #374151;
+}
+
+.mini-progress {
+  height: 8px;
+  background: #e5e7eb; /* light gray track */
+  border-radius: 999px;
+  overflow: hidden;
+}
+
+.mini-progress-bar {
+  height: 100%;
+  width: 0;
+  background: linear-gradient(90deg, #10b981, #3b82f6); /* green → blue */
+  transition: width 0.4s ease;
+}
+
+.reminder-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-top: 10px;
+}
+
+/* Button styles */
+.btn-small {
+  width: auto !important;
+  padding: 8px 14px;
+  font-size: 14px;
+  margin-top: 0;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: background 0.2s ease;
+}
+
+.btn-primary-small {
+  background: #2563eb; /* blue */
+  color: white;
+  border: none;
+}
+
+.btn-primary-small:hover {
+  background: #1e40af;
+}
+
+.btn-secondary-small {
+  background: #facc15; /* yellow */
+  color: #1f2937;
+  border: none;
+}
+
+.btn-secondary-small:hover {
+  background: #eab308;
+}
+
+
 /*************************************/
 /* Schedule */
 .schedule-grid {
