@@ -441,6 +441,9 @@
         </div>
     </div>
 
+    // *******************************
+    //         JAVASCRIPT        
+    // *******************************
     <script>
         // Register service worker file
         if ('serviceWorker' in navigator) {
@@ -487,6 +490,15 @@
 
         let selectedExercises = [];
         let currentFilter = 'all';
+
+        // Allowing links to go to direct 'pages' using hash change
+        window.addEventListener("hashchange", () => {
+          const sec = location.hash.replace("#", "");
+          if (sec) {
+            const navBtn = document.querySelector(`.nav .nav-item[onclick*="${sec}"]`);
+            showSection(sec, navBtn);
+          }
+        });
 
         // Achievement definitions
         const achievementDefinitions = [
