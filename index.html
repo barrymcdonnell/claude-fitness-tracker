@@ -2505,36 +2505,65 @@
         
             const reminder = document.getElementById("challengeReminder");
         
-            if (activeChallenges.length > 0) {
-                reminder.style.display = "block";
+            // Reset reminder content
+            reminder.innerHTML = "";
         
-                // Create a compact list of all active challenges
+            let hasContent = false;
+        
+            // === Active Challenges Reminder ===
+            if (activeChallenges.length > 0) {
+                hasContent = true;
+        
                 const list = activeChallenges.map(c => `
                     <div class="reminder-sub">${c.title}</div>
                 `).join("");
         
-                reminder.innerHTML = `
-                    <div class="reminder-card">
-                        <div class="reminder-title">Active Challenges</div>
-                        ${list}
-                        <button class="reminder-btn" id="reminderOpen">
-                            Go to All Challenges
-                        </button>
-                    </div>
+                const challengeBox = document.createElement("div");
+                challengeBox.className = "reminder-card";
+                challengeBox.style.background = "#fff3cd"; // yellow
+                challengeBox.innerHTML = `
+                    <div class="reminder-title">Active Challenges</div>
+                    ${list}
+                    <button class="reminder-btn" id="reminderOpen">
+                        Go to All Challenges
+                    </button>
                 `;
+                reminder.appendChild(challengeBox);
         
-                // Add button click handler
+                // Button handler
                 document.getElementById("reminderOpen").addEventListener("click", () => {
-                    // If you're using section navigation, just show the challenges section
                     document.querySelector('[data-section="challenges"]').style.display = "block";
                     document.querySelectorAll('[data-section]:not([data-section="challenges"])')
                         .forEach(sec => sec.style.display = "none");
                 });
-        
-            } else {
-                reminder.style.display = "none";
             }
+        
+            // === Yoga/Stretching Reminder ===
+            const today = new Date().toISOString().split("T")[0]; // YYYY-MM-DD
+            const yogaDone = localStorage.getItem("yogaDoneDate") === today;
+        
+            if (!yogaDone) {
+                hasContent = true;
+        
+                const yogaBox = document.createElement("div");
+                yogaBox.className = "reminder-card";
+                yogaBox.style.background = "#d4edda"; // light green
+                yogaBox.innerHTML = `
+                    <div class="reminder-title">Have you done your yoga and stretching today?</div>
+                    <button class="reminder-btn" id="yogaYes">Yes</button>
+                `;
+                reminder.appendChild(yogaBox);
+        
+                document.getElementById("yogaYes").addEventListener("click", () => {
+                    localStorage.setItem("yogaDoneDate", today);
+                    yogaBox.style.display = "none"; // hide after confirming
+                });
+            }
+        
+            // Hide container if nothing to show
+            reminder.style.display = hasContent ? "block" : "none";
         }
+
 
 
         // ***********************************
