@@ -2103,10 +2103,8 @@
         // Calculate BMI for the badge on dashboard
         function updateBMIBadge() {
             const height = parseFloat(localStorage.getItem("fittrack-height"));
-            const latest = measurements.length > 0 ? measurements[0] : null;
-        
+            const latest = measurements.length > 0 ? measurements[0] : null;  
             const badge = document.getElementById("bmiBadge");
-        
             if (!badge) return;
         
             if (!height || !latest || !latest.weight) {
@@ -2116,30 +2114,15 @@
             }
         
             const bmi = (latest.weight / ((height / 100) ** 2)).toFixed(1);
-        
-            let status = "";
             let color = "";
         
-            if (bmi < 18.5) {
-                status = "Underweight";
-                color = "#3498db"; // blue
-            } else if (bmi < 25) {
-                status = "Healthy";
-                color = "#27ae60"; // green
-            } else if (bmi < 30) {
-                status = "Overweight";
-                color = "#f39c12"; // orange
-            } else {
-                status = "Obese";
-                color = "#e74c3c"; // red
-            }
+            if (bmi < 18.5) color = "#3498db";      // blue
+            else if (bmi < 25) color = "#27ae60";   // green
+            else if (bmi < 30) color = "#f39c12";   // orange
+            else color = "#e74c3c";                 // red
         
-            badge.innerText = `BMI: ${bmi} (${status})`;
+            badge.innerText = `BMI: ${bmi}`;
             badge.style.background = color;
-            badge.style.color = "white";
-            badge.style.padding = "3px 8px";
-            badge.style.borderRadius = "6px";
-            badge.style.marginTop = "6px";
             badge.style.display = "inline-block";
         }
 
