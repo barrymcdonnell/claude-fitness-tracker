@@ -52,6 +52,7 @@
                     <div class="stat-card">
                         <div class="stat-value" id="currentWeight">0</div>
                         <div class="stat-label">Weight (kg)</div>
+                        <div id="bmiBadge"></div>
                     </div>
                     <div class="stat-card">
                         <div class="stat-value" id="weightChange">0</div>
@@ -2024,18 +2025,22 @@
 
         // Measurements Management
         function saveMeasurements() {
-            // Always reload from localStorage first
             let weightValue = document.getElementById('weight').value;
             let weight = weightValue !== "" ? parseFloat(weightValue) : null;
-            
+        
+            // Save height separately as a global value
+            let heightValue = document.getElementById("height").value;
+            if (heightValue !== "") {
+                localStorage.setItem("fittrack-height", parseFloat(heightValue));
+            }
+        
             const measurement = {
                 id: Date.now(),
                 date: document.getElementById('measurementDate').value,
                 weight: weight,
                 bodyFat: parseFloat(document.getElementById('bodyFat').value) || null,
                 muscleMass: parseFloat(document.getElementById('muscleMass').value) || null,
-                waist: parseFloat(document.getElementById('waist').value) || null,
-                height: = parseFloat(document.getElementById("height").value) || null;
+                waist: parseFloat(document.getElementById('waist').value) || null
             };
         
             if (!measurement.date) {
@@ -2055,12 +2060,11 @@
             // Update the global variable
             window.measurements = measurements;
         
-            // Clear the form
+            // Clear the form (except height, since it’s global)
             document.getElementById('weight').value = '';
             document.getElementById('bodyFat').value = '';
             document.getElementById('muscleMass').value = '';
             document.getElementById('waist').value = '';
-            document.getElementById('height').value = '';
         
             // Refresh displays
             updateProgressHistory();
@@ -2068,6 +2072,7 @@
         
             alert('Measurements saved!');
         }
+
 
         function deleteMeasurement(id) {
             if (confirm('Are you sure you want to delete this measurement?')) {
@@ -2094,6 +2099,50 @@
                 }
             }
         }
+
+        // Calculate BMI for the badge on dashboard
+        function updateBMIBadge() {
+            const height = parseFloat(localStorage.getItem("fittrack-height"));
+            const latest = measurements.length > 0 ? measurements[0] : null;
+        
+            const badge = document.getElementById("bmiBadge");
+        
+            if (!badge) return;
+        
+            if (!height || !latest || !latest.weight) {
+                badge.innerText = "";
+                badge.style.display = "none";
+                return;
+            }
+        
+            const bmi = (latest.weight / ((height / 100) ** 2)).toFixed(1);
+        
+            let status = "";
+            let color = "";
+        
+            if (bmi < 18.5) {
+                status = "Underweight";
+                color = "#3498db"; // blue
+            } else if (bmi < 25) {
+                status = "Healthy";
+                color = "#27ae60"; // green
+            } else if (bmi < 30) {
+                status = "Overweight";
+                color = "#f39c12"; // orange
+            } else {
+                status = "Obese";
+                color = "#e74c3c"; // red
+            }
+        
+            badge.innerText = `BMI: ${bmi} (${status})`;
+            badge.style.background = color;
+            badge.style.color = "white";
+            badge.style.padding = "3px 8px";
+            badge.style.borderRadius = "6px";
+            badge.style.marginTop = "6px";
+            badge.style.display = "inline-block";
+        }
+
 
         function updateProgressHistory() {
             const container = document.getElementById('progressHistory');
@@ -2621,6 +2670,7 @@
                 `${workouts.length} workouts created`;
 
             showActiveChallengeReminder();
+            updateBMIBadge();
         }
 
         // Greeting
