@@ -370,6 +370,10 @@
                             <label>Waist (cm)</label>
                             <input type="number" id="waist" placeholder="80" step="0.5">
                         </div>
+                        <div class="input-group">
+                            <label>Height (cm)</label>
+                            <input type="number" id="height" placeholder="175" step="0.5">
+                        </div>
                     </div>
                     <button class="btn-save" onclick="saveMeasurements()">Save Measurements</button>
                 </div>
@@ -2030,7 +2034,8 @@
                 weight: weight,
                 bodyFat: parseFloat(document.getElementById('bodyFat').value) || null,
                 muscleMass: parseFloat(document.getElementById('muscleMass').value) || null,
-                waist: parseFloat(document.getElementById('waist').value) || null
+                waist: parseFloat(document.getElementById('waist').value) || null,
+                height: = parseFloat(document.getElementById("height").value) || null;
             };
         
             if (!measurement.date) {
@@ -2055,6 +2060,7 @@
             document.getElementById('bodyFat').value = '';
             document.getElementById('muscleMass').value = '';
             document.getElementById('waist').value = '';
+            document.getElementById('height').value = '';
         
             // Refresh displays
             updateProgressHistory();
