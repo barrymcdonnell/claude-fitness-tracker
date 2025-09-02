@@ -352,6 +352,17 @@ input, textarea {
            color: #fff;
            font-weight: 500;
        }
+
+/* BMI Badge */
+#bmiBadge {
+  display: inline-block;
+  margin-top: 6px;
+  padding: 4px 10px;
+  border-radius: 12px;
+  font-size: 0.85rem;
+  font-weight: bold;
+  color: #fff;
+}
        
        /* Example color coding */
        .equipment-badge.bodyweight {
