@@ -355,14 +355,16 @@ input, textarea {
 
 /* BMI Badge */
 #bmiBadge {
-  display: inline-block;
-  margin-top: 6px;
-  padding: 4px 10px;
-  border-radius: 12px;
-  font-size: 0.85rem;
-  font-weight: bold;
-  color: #fff;
+    display: inline-block;
+    padding: 4px 12px;
+    border-radius: 999px; /* makes it pill-shaped */
+    font-weight: bold;
+    color: #fff;
+    font-size: 0.9rem;
+    min-width: auto;
+    text-align: center;
 }
+
        
        /* Example color coding */
        .equipment-badge.bodyweight {
