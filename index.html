@@ -2394,27 +2394,49 @@
 
         
             // Render completed challenges
-            completedChallenges.forEach((challenge) => {
+            completedChallenges.forEach((challenge, index) => {
                 const div = document.createElement("div");
-                div.className = "challenge-item completed";
-        
+                div.className = "completed-challenge-item";
+            
+                // Header with title + badge
+                const header = document.createElement("div");
+                header.className = "completed-header";
+                header.innerHTML = `
+                    <span class="completed-title">${challenge.title}</span>
+                    <span class="completed-badge">✅ Completed</span>
+                `;
+                div.appendChild(header);
+            
+                // Dates
+                const dates = document.createElement("div");
+                dates.className = "completed-dates";
                 const start = new Date(challenge.startDate);
-                const end = challenge.endDate ? new Date(challenge.endDate) : new Date();
-                const duration = Math.ceil((end - start) / (1000 * 60 * 60 * 24)) || 1;
-        
-                let summary = "";
-        
+                const end = new Date(challenge.endDate);
+                dates.innerHTML = `
+                    <span>Start: ${start.toLocaleDateString()}</span>
+                    <span class="end-date">End: ${end.toLocaleDateString()}</span>
+                `;
+                div.appendChild(dates);
+            
+                // Details
+                const details = document.createElement("div");
+                details.className = "completed-details";
+            
                 if (challenge.type === "pushups") {
-                    const totalPushups = challenge.repsPerDay * challenge.durationDays;
-                    summary = `You started the <strong>${challenge.title}</strong> on ${start.toLocaleDateString()} and finished it after <strong>${duration} day(s)</strong> on ${end.toLocaleDateString()}. You completed <strong>${totalPushups}</strong> push-ups.`;
+                    const totalDays = challenge.progress.length;
+                    const totalPushups = challenge.progress.filter(Boolean).length;
+                    details.innerText = `${totalDays} days • ${totalPushups} push-ups logged`;
                 } else if (challenge.type === "running" || challenge.type === "cycling") {
-                    const totalKm = challenge.progress.reduce((a, b) => a + (parseFloat(b) || 0), 0);
-                    summary = `You started the <strong>${challenge.title}</strong> on ${start.toLocaleDateString()} and finished it after <strong>${duration} day(s)</strong> on ${end.toLocaleDateString()}. You completed <strong>${totalKm.toFixed(1)}</strong> kilometres.`;
+                    const totalDays = challenge.progress.length;
+                    const totalDistance = challenge.progress.reduce((a, b) => a + (parseFloat(b) || 0), 0).toFixed(1);
+                    details.innerText = `${totalDays} days • ${totalDistance} km`;
                 }
-        
-                div.innerHTML = `<p>${summary}</p>`;
+            
+                div.appendChild(details);
+            
                 completedContainer.appendChild(div);
             });
+
         }
 
         
