@@ -444,6 +444,13 @@ input, textarea {
           font-size: 14px;
         }
 
+/* Exercise count */
+.exercise-count {
+  font-size: 14px;
+  color: #aaa;
+  margin-left: 8px;
+}
+
 /* Workout tabs */
 .tabs {
   display: flex;
