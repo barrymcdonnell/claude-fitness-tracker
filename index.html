@@ -2318,23 +2318,23 @@
                 if (challenge.startDate) {
                     const start = new Date(challenge.startDate);
                     const end = new Date(start);
-            
+                
                     // Use durationDays if present, otherwise weeks
                     if (challenge.durationDays) {
                         end.setDate(start.getDate() + challenge.durationDays);
                     } else if (challenge.durationWeeks) {
                         end.setDate(start.getDate() + (challenge.durationWeeks * 7));
                     }
-            
+                
                     const datesDiv = document.createElement("div");
                     datesDiv.className = "challenge-dates";
                     datesDiv.innerHTML = `
-                        <small>Start: ${start.toLocaleDateString()}</small><br>
-                        <small>End: ${end.toLocaleDateString()}</small>
+                        <span>Start: ${start.toLocaleDateString()}</span>
+                        <span class="end-date">End: ${end.toLocaleDateString()}</span>
                     `;
                     div.appendChild(datesDiv);
                 }
-            
+
                 if (challenge.type === "pushups") {
                     // Push-up checkboxes
                     const progressDiv = document.createElement("div");
