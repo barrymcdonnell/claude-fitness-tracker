@@ -789,6 +789,7 @@ input, textarea {
   font-size: 11px;
   padding: 2px 8px;
   border-radius: 12px;
+  font-weight: bold;
 }
 
 .completed-dates {
