@@ -2403,18 +2403,19 @@
                 header.className = "completed-header";
                 header.innerHTML = `
                     <span class="completed-title">${challenge.title}</span>
-                    <span class="completed-badge">✅ Completed</span>
+                    <span class="completed-badge">✓ Completed</span>
                 `;
                 div.appendChild(header);
             
                 // Dates
                 const dates = document.createElement("div");
                 dates.className = "completed-dates";
-                const start = new Date(challenge.startDate);
-                const end = new Date(challenge.endDate);
+                const start = challenge.startDate ? new Date(challenge.startDate) : null;
+                const end = challenge.endDate ? new Date(challenge.endDate) : null;
+                
                 dates.innerHTML = `
-                    <span>Start: ${start.toLocaleDateString()}</span>
-                    <span class="end-date">End: ${end.toLocaleDateString()}</span>
+                    <span>Start: ${start ? start.toLocaleDateString() : "Unknown"}</span>
+                    <span class="end-date">End: ${end ? end.toLocaleDateString() : "Unknown"}</span>
                 `;
                 div.appendChild(dates);
             
