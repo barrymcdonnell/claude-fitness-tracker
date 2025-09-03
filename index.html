@@ -1802,110 +1802,94 @@
         
         // Charting Functions
         function generateChart(containerId, data, goal, yMin = 0, barColor = '#3b82f6') {
-        const container = document.getElementById(containerId);
-        if (!container) return;
-    
-        if (!data || data.length === 0) {
-            container.innerHTML = `<div class="empty-state">
-                <h4>No data yet</h4>
-                <p>Start tracking to see your progress chart</p>
-            </div>`;
-            return;
-        }
-    
-        const margin = { top: 20, right: 20, bottom: 30, left: 40 };
-        const width = container.clientWidth - margin.left - margin.right;
-        const height = 200 - margin.top - margin.bottom;
-    
-        container.innerHTML = '';
-    
-        const svg = d3.select(container)
-            .append('svg')
-            .attr('width', width + margin.left + margin.right)
-            .attr('height', height + margin.top + margin.bottom)
-            .append('g')
-            .attr('transform', `translate(${margin.left},${margin.top})`);
-    
-        const dataMax = Math.max(...data.filter(d => !isNaN(d) && d !== null));
-        const goalMax = goal || 0;
-        const yMax = Math.max(dataMax, goalMax) * 1.1;
-    
-        const xScale = d3.scaleBand()
-            .domain(data.map((d, i) => i))
-            .range([0, width])
-            .padding(0.3);
-    
-        const yScale = d3.scaleLinear()
-            .domain([yMin, yMax])
-            .range([height, 0]);
-    
-        // Y-axis
-        const yTicks = d3.axisLeft(yScale)
-            .ticks(5)
-            .tickFormat(d => {
-                const num = Math.round(d);
-                return num > 1000 ? `${num / 1000}k` : num;
-            });
-    
-        svg.append('g').attr('class', 'chart-axis').call(yTicks);
-    
-        // X-axis line
-        svg.append('line')
-            .attr('class', 'chart-axis')
-            .attr('x1', 0)
-            .attr('y1', height)
-            .attr('x2', width)
-            .attr('y2', height);
-    
-        // Bars
-        const barWidth = xScale.bandwidth();
-        svg.selectAll('.chart-bar')
-            .data(data)
-            .enter().append('rect')
-            .attr('class', 'chart-bar')
-            .attr('x', (d, i) => xScale(i))
-            .attr('y', d => yScale(d))
-            .attr('width', barWidth)
-            .attr('height', d => height - yScale(d))
-            .attr('fill', barColor)
-            .attr('rx', barWidth / 2)   // rounded corners
-            .attr('ry', barWidth / 2)
-            .attr('clip-path', `url(#clip-${containerId})`);
-    
-        // Clip path to make only top rounded
-        svg.append('clipPath')
-            .attr('id', `clip-${containerId}`)
-            .append('rect')
-            .attr('x', 0)
-            .attr('y', 0)
-            .attr('width', barWidth)
-            .attr('height', height)
-            .attr('rx', barWidth / 2)
-            .attr('ry', barWidth / 2);
-    
-        // Goal line (draw last so it’s on top)
-        if (goal) {
+            const container = document.getElementById(containerId);
+            if (!container) return;
+        
+            if (!data || data.length === 0) {
+                container.innerHTML = `<div class="empty-state">
+                    <h4>No data yet</h4>
+                    <p>Start tracking to see your progress chart</p>
+                </div>`;
+                return;
+            }
+        
+            const margin = { top: 20, right: 20, bottom: 30, left: 40 };
+            const width = container.clientWidth - margin.left - margin.right;
+            const height = 200 - margin.top - margin.bottom;
+        
+            container.innerHTML = '';
+        
+            const svg = d3.select(container)
+                .append('svg')
+                .attr('width', width + margin.left + margin.right)
+                .attr('height', height + margin.top + margin.bottom)
+                .append('g')
+                .attr('transform', `translate(${margin.left},${margin.top})`);
+        
+            const dataMax = Math.max(...data.filter(d => !isNaN(d) && d !== null));
+            const goalMax = goal || 0;
+            const yMax = Math.max(dataMax, goalMax) * 1.1;
+        
+            const xScale = d3.scaleBand()
+                .domain(data.map((d, i) => i))
+                .range([0, width])
+                .padding(0.3);
+        
+            const yScale = d3.scaleLinear()
+                .domain([yMin, yMax])
+                .range([height, 0]);
+        
+            // Y-axis
+            const yTicks = d3.axisLeft(yScale)
+                .ticks(5)
+                .tickFormat(d => (d > 1000 ? `${d / 1000}k` : d));
+        
+            svg.append('g').attr('class', 'chart-axis').call(yTicks);
+        
+            // X-axis line
             svg.append('line')
-                .attr('class', 'goal-line')
+                .attr('class', 'chart-axis')
                 .attr('x1', 0)
+                .attr('y1', height)
                 .attr('x2', width)
-                .attr('y1', yScale(goal))
-                .attr('y2', yScale(goal))
-                .attr('stroke', '#ff3b3b')
-                .attr('stroke-dasharray', '4,2')
-                .attr('stroke-width', 2);
-    
-            svg.append('text')
-                .attr('x', width - 5)
-                .attr('y', yScale(goal) - 5)
-                .attr('text-anchor', 'end')
-                .attr('fill', '#ff3b3b')
-                .attr('font-size', '12px')
-                .attr('font-weight', 'bold')
-                .text(`Goal: ${goal}`);
+                .attr('y2', height);
+        
+            // Draw bars
+            svg.selectAll('.chart-bar')
+                .data(data)
+                .enter()
+                .append('rect')
+                .attr('class', 'chart-bar')
+                .attr('x', (d, i) => xScale(i))
+                .attr('y', d => yScale(d))
+                .attr('width', xScale.bandwidth())
+                .attr('height', d => height - yScale(d))
+                .attr('fill', barColor)
+                .attr('rx', xScale.bandwidth() / 2)   // only affects top corners visually
+                .attr('ry', xScale.bandwidth() / 2);
+        
+            // Goal line (draw last so it's on top)
+            if (goal) {
+                svg.append('line')
+                    .attr('class', 'goal-line')
+                    .attr('x1', 0)
+                    .attr('x2', width)
+                    .attr('y1', yScale(goal))
+                    .attr('y2', yScale(goal))
+                    .attr('stroke', '#ff3b3b')
+                    .attr('stroke-dasharray', '4,2')
+                    .attr('stroke-width', 2);
+        
+                svg.append('text')
+                    .attr('x', width - 5)
+                    .attr('y', yScale(goal) - 5)
+                    .attr('text-anchor', 'end')
+                    .attr('fill', '#ff3b3b')
+                    .attr('font-size', '12px')
+                    .attr('font-weight', 'bold')
+                    .text(`Goal: ${goal}`);
+            }
         }
-    }
-
 
         // Different colours for different charts
         generateChart('weightChart', weightData, weightGoal, 0, '#3b82f6'); // blue
