@@ -756,6 +756,7 @@ input, textarea {
 }
 
 .challenge-dates .end-date {
+  margin-left: auto;
   text-align: right;
 }
 
