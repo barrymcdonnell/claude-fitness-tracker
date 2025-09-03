@@ -763,6 +763,48 @@ input, textarea {
   text-align: right;
 }
 
+.completed-challenge-item {
+  background: #222;
+  border-radius: 8px;
+  padding: 12px;
+  margin-bottom: 10px;
+  color: #eee;
+}
+
+.completed-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 4px;
+}
+
+.completed-title {
+  font-weight: bold;
+  font-size: 14px;
+}
+
+.completed-badge {
+  background: #27ae60; /* green */
+  color: #fff;
+  font-size: 11px;
+  padding: 2px 8px;
+  border-radius: 12px;
+}
+
+.completed-dates {
+  display: flex;
+  justify-content: space-between;
+  font-size: 12px;
+  color: #aaa;
+  margin-bottom: 6px;
+}
+
+.completed-details {
+  font-size: 13px;
+  color: #ccc;
+}
+
+
 /* Confetti */
 @keyframes fall {
   to { transform: translateY(100vh); }
