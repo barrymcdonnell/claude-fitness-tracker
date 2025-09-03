@@ -1801,7 +1801,7 @@
 
         
         // Charting Functions
-        function generateChart(containerId, data, goal, yMin = 0) {
+        function generateChart(containerId, data, goal, yMin = 0, barColor = "#3b82f6") {
             const container = document.getElementById(containerId);
             if (!container) return;
             if (!data || data.length === 0) {
@@ -1831,14 +1831,16 @@
             const goalMax = goal || 0;
             const yMax = Math.max(dataMax, goalMax) * 1.1;
         
-            const xScale = d3.scalePoint()
+            const xScale = d3.scaleBand()
                 .domain(data.map((d, i) => i))
-                .range([0, width]);
+                .range([0, width])
+                .padding(0.2);
         
             const yScale = d3.scaleLinear()
                 .domain([yMin, yMax])
                 .range([height, 0]);
         
+            // Y-axis
             const yTicks = d3.axisLeft(yScale)
                 .ticks(5)
                 .tickFormat(d => {
@@ -1846,7 +1848,6 @@
                     return num > 1000 ? `${num / 1000}k` : num;
                 });
         
-            // Y-axis
             svg.append('g')
                 .attr('class', 'chart-axis')
                 .call(yTicks);
@@ -1861,43 +1862,36 @@
         
             // Goal Line
             if (goal) {
-                // Draw the goal line
                 svg.append('line')
                     .attr('class', 'goal-line')
                     .attr('x1', 0)
                     .attr('x2', width)
                     .attr('y1', yScale(goal))
                     .attr('y2', yScale(goal));
-            
-                // Add the label inside the chart
+        
                 svg.append('text')
-                    .attr('x', width - 5) // 5px padding from right edge
-                    .attr('y', yScale(goal) - 5) // 5px above the line
-                    .attr('text-anchor', 'end') // align text to the right
+                    .attr('x', width - 5)
+                    .attr('y', yScale(goal) - 5)
+                    .attr('text-anchor', 'end')
                     .attr('class', 'goal-label')
                     .text(`Goal: ${goal}`);
             }
-
         
-            // Data Line
-            const line = d3.line()
-                .x((d, i) => xScale(i))
-                .y(d => yScale(d));
-        
-            svg.append('path')
-                .datum(data)
-                .attr('class', 'chart-line data-line')
-                .attr('d', line);
-        
-            // Data points
-            svg.selectAll('.chart-dot')
+            // Bars
+            svg.selectAll('.bar')
                 .data(data)
-                .enter().append('circle')
-                .attr('class', d => `chart-dot ${d >= goal ? 'above-goal' : 'below-goal'}`)
-                .attr('cx', (d, i) => xScale(i))
-                .attr('cy', d => yScale(d))
-                .attr('r', 4);
+                .enter()
+                .append('rect')
+                .attr('class', 'bar')
+                .attr('x', (d, i) => xScale(i))
+                .attr('y', d => yScale(d))
+                .attr('width', xScale.bandwidth())
+                .attr('height', d => height - yScale(d))
+                .attr('fill', barColor)
+                .attr('rx', 6) // Rounded top corners
+                .attr('ry', 6);
         }
+
 
         function showWorkoutReminder() {
             const today = new Date();
