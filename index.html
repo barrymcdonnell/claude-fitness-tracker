@@ -86,7 +86,7 @@
             <div id="exercises" class="section">
                 <div class="card">
                     <h3>💪 Exercise Library</h3>
-                    <p id="exerciseCount"></p>
+                    <p id="exerciseCount" class="exercise-count"></p>
                     <div id="exerciseLibrary"></div>
                 </div>
             </div>
@@ -660,7 +660,7 @@
             document.getElementById('measurementDate').value = today;
             document.getElementById('scheduleStartDate').value = today;
             // Run after exercises.js is loaded
-            document.getElementById("exerciseCount").textContent = `(${exercises.length})`;
+            document.getElementById("exerciseCount").textContent = `${exercises.length} exercises to choose from`;
 
             
             //exercises = exerciseDatabase; no longer needed; exercises now coming from exercises.js file
