@@ -755,6 +755,10 @@ input, textarea {
   margin: 4px 0 8px 0;
 }
 
+.challenge-dates .end-date {
+  text-align: right;
+}
+
 /* Confetti */
 @keyframes fall {
   to { transform: translateY(100vh); }
