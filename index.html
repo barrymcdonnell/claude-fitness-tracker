@@ -1854,21 +1854,33 @@
                 .attr('x2', width)
                 .attr('y2', height);
         
-            // Draw bars
+            // Bars with ONLY rounded tops
             svg.selectAll('.chart-bar')
                 .data(data)
                 .enter()
-                .append('rect')
+                .append('path')
                 .attr('class', 'chart-bar')
-                .attr('x', (d, i) => xScale(i))
-                .attr('y', d => yScale(d))
-                .attr('width', xScale.bandwidth())
-                .attr('height', d => height - yScale(d))
-                .attr('fill', barColor)
-                .attr('rx', xScale.bandwidth() / 2)   // only affects top corners visually
-                .attr('ry', xScale.bandwidth() / 2);
+                .attr('d', (d, i) => {
+                    const x = xScale(i);
+                    const barWidth = xScale.bandwidth();
+                    const y = yScale(d);
+                    const barHeight = height - y;
+                    const r = Math.min(barWidth / 2, 10); // rounded top radius
         
-            // Goal line (draw last so it's on top)
+                    // Path for rectangle with only top rounded
+                    return `
+                        M${x},${y + r}
+                        Q${x},${y} ${x + r},${y}
+                        H${x + barWidth - r}
+                        Q${x + barWidth},${y} ${x + barWidth},${y + r}
+                        V${y + barHeight}
+                        H${x}
+                        Z
+                    `;
+                })
+                .attr('fill', barColor);
+        
+            // Goal line (draw last so it’s on top)
             if (goal) {
                 svg.append('line')
                     .attr('class', 'goal-line')
@@ -1890,6 +1902,7 @@
                     .text(`Goal: ${goal}`);
             }
         }
+
 
         // Different colours for different charts
         generateChart('weightChart', weightData, weightGoal, 0, '#3b82f6'); // blue
