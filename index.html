@@ -2026,7 +2026,9 @@
                 return;
             }
 
-            container.innerHTML = tracking.map(entry => `
+            const reversed = [...tracking].sort((a, b) => new Date(b.date) - new Date(a.date));
+
+            container.innerHTML = reversed.map(entry => `
                 <div class="workout-item">
                     <div class="workout-header">
                         <div>
