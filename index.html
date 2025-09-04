@@ -1851,7 +1851,25 @@
                 .attr('x2', width)
                 .attr('y2', height);
         
-            // Bars with rounded (semi-circle) tops
+            // ---- Gradient definition ----
+            const gradientId = `${containerId}-gradient`;
+            const defs = svg.append("defs");
+            const gradient = defs.append("linearGradient")
+                .attr("id", gradientId)
+                .attr("x1", "0%")
+                .attr("y1", "0%")
+                .attr("x2", "0%")
+                .attr("y2", "100%");
+        
+            gradient.append("stop")
+                .attr("offset", "0%")
+                .attr("stop-color", d3.color(barColor).brighter(1));
+        
+            gradient.append("stop")
+                .attr("offset", "100%")
+                .attr("stop-color", d3.color(barColor).darker(1));
+        
+            // ---- Bars with semi-circle tops ----
             svg.selectAll('.bar')
                 .data(data)
                 .enter().append('path')
@@ -1863,7 +1881,6 @@
         
                     const radius = Math.min(barWidth / 2, barHeight);
         
-                    // Rectangle + semi-circle top
                     return `
                         M${x},${y + radius}
                         v${barHeight - radius}
@@ -1873,9 +1890,9 @@
                         Z
                     `;
                 })
-                .attr('fill', barColor);
+                .attr('fill', `url(#${gradientId})`);
         
-            // Goal Line (put AFTER bars so it sits on top)
+            // ---- Goal line + label (always on top) ----
             if (goal) {
                 svg.append('line')
                     .attr('class', 'goal-line')
@@ -1892,6 +1909,7 @@
                     .text(`Goal: ${goal}`);
             }
         }
+
 
         // Show workout reminder on dashboard page
         function showWorkoutReminder() {
