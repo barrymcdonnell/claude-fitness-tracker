@@ -1762,15 +1762,15 @@
         }
 
         function updateStepsChart(data, goal) {
-            generateChart('stepsChart', data, goal);
+            generateChart('stepsChart', data, goal, 0, '#10b981');
         }
         
         function updateWaterChart(data, goal) {
-            generateChart('waterChart', data, goal);
+            generateChart('waterChart', data, goal, 0, '#06b6d4');
         }
         
         function updateCaloriesChart(data, goal) {
-            generateChart('caloriesChart', data, goal);
+            generateChart('caloriesChart', data, goal, 0, '#f97316');
         }
         
         function updateWeightChart() {
@@ -1780,7 +1780,7 @@
             const sortedMeasurements = [...measurements].sort((a, b) => new Date(a.date) - new Date(b.date));
             const data = sortedMeasurements.map(m => m.weight);
             
-            generateChart('weightChart', data, goals.weight, 60);
+            generateChart('weightChart', data, goals.weight, 60, '#3b82f6');
         }
 
         function getLast14DaysData(field) {
@@ -1801,10 +1801,9 @@
 
         
         // Charting Functions
-        function generateChart(containerId, data, goal, yMin = 0, barColor = '#3b82f6') {
+        function generateChart(containerId, data, goal, yMin = 0, barColor = "#3b82f6") {
             const container = document.getElementById(containerId);
             if (!container) return;
-        
             if (!data || data.length === 0) {
                 container.innerHTML = `<div class="empty-state">
                     <h4>No data yet</h4>
@@ -1833,18 +1832,16 @@
             const xScale = d3.scaleBand()
                 .domain(data.map((d, i) => i))
                 .range([0, width])
-                .padding(0.3);
+                .padding(0.2);
         
             const yScale = d3.scaleLinear()
                 .domain([yMin, yMax])
                 .range([height, 0]);
         
             // Y-axis
-            const yTicks = d3.axisLeft(yScale)
-                .ticks(5)
-                .tickFormat(d => (d > 1000 ? `${d / 1000}k` : d));
-        
-            svg.append('g').attr('class', 'chart-axis').call(yTicks);
+            svg.append('g')
+                .attr('class', 'chart-axis')
+                .call(d3.axisLeft(yScale).ticks(5));
         
             // X-axis line
             svg.append('line')
@@ -1854,51 +1851,44 @@
                 .attr('x2', width)
                 .attr('y2', height);
         
-            // Bars with ONLY rounded tops
-            svg.selectAll('.chart-bar')
+            // Bars with rounded (semi-circle) tops
+            svg.selectAll('.bar')
                 .data(data)
-                .enter()
-                .append('path')
-                .attr('class', 'chart-bar')
+                .enter().append('path')
                 .attr('d', (d, i) => {
                     const x = xScale(i);
                     const barWidth = xScale.bandwidth();
+                    const barHeight = height - yScale(d);
                     const y = yScale(d);
-                    const barHeight = height - y;
-                    const r = Math.min(barWidth / 2, 10); // rounded top radius
         
-                    // Path for rectangle with only top rounded
+                    const radius = Math.min(barWidth / 2, barHeight);
+        
+                    // Rectangle + semi-circle top
                     return `
-                        M${x},${y + r}
-                        Q${x},${y} ${x + r},${y}
-                        H${x + barWidth - r}
-                        Q${x + barWidth},${y} ${x + barWidth},${y + r}
-                        V${y + barHeight}
-                        H${x}
+                        M${x},${y + radius}
+                        v${barHeight - radius}
+                        h${barWidth}
+                        v${- (barHeight - radius)}
+                        a${radius},${radius} 0 0 0 -${barWidth},0
                         Z
                     `;
                 })
                 .attr('fill', barColor);
         
-            // Goal line (draw last so it’s on top)
+            // Goal Line (put AFTER bars so it sits on top)
             if (goal) {
                 svg.append('line')
                     .attr('class', 'goal-line')
                     .attr('x1', 0)
                     .attr('x2', width)
                     .attr('y1', yScale(goal))
-                    .attr('y2', yScale(goal))
-                    .attr('stroke', '#ff3b3b')
-                    .attr('stroke-dasharray', '4,2')
-                    .attr('stroke-width', 2);
+                    .attr('y2', yScale(goal));
         
                 svg.append('text')
                     .attr('x', width - 5)
                     .attr('y', yScale(goal) - 5)
                     .attr('text-anchor', 'end')
-                    .attr('fill', '#ff3b3b')
-                    .attr('font-size', '12px')
-                    .attr('font-weight', 'bold')
+                    .attr('class', 'goal-label')
                     .text(`Goal: ${goal}`);
             }
         }
