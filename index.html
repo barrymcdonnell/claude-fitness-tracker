@@ -1893,12 +1893,7 @@
             }
         }
 
-
-        // Different colours for different charts
-        generateChart('weightChart', weightData, weightGoal, 0, '#3b82f6'); // blue
-        generateChart('stepsChart', stepsData, stepsGoal, 0, '#10b981');   // green
-        generateChart('bmiChart', bmiData, bmiGoal, 0, '#f97316');         // orange
-
+        // Show workout reminder on dashboard page
         function showWorkoutReminder() {
             const today = new Date();
             const dayNames = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
