@@ -177,6 +177,17 @@ input, textarea {
     margin-left: 20px;
 }
 
+.month-totals-bubble {
+    background: #f0f4ff;
+    border: 1px solid #cbd5e1;
+    border-radius: 12px;
+    padding: 8px 12px;
+    margin: 6px 0 12px 24px;
+    font-size: 14px;
+    color: #1e293b;
+}
+
+
 /* Buttons */
 .btn {
     background: linear-gradient(135deg, #6366f1 0%, #8b5cf6 100%);
