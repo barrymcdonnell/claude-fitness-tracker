@@ -144,13 +144,42 @@ input, textarea {
        transition: all 0.2s ease;
 }
 
-       /* Greeting */
-       .greeting h5 {
-           font-size: 1em;
-           margin-bottom: 5px;
-           margin-top: 5px;
-           color: #fff;
-       }
+/* Greeting */
+.greeting h5 {
+       font-size: 1em;
+       margin-bottom: 5px;
+       margin-top: 5px;
+       color: #fff;
+}
+
+/* Daily Tracking History */
+.month-header {
+    display: flex;
+    justify-content: space-between;
+    background: #f3f4f6;
+    padding: 8px 12px;
+    border-radius: 6px;
+    cursor: pointer;
+    margin-top: 12px;
+}
+
+.month-header:hover {
+    background: #e5e7eb;
+}
+
+.toggle-indicator {
+    font-size: 14px;
+    transition: transform 0.2s;
+}
+
+.month-header.open .toggle-indicator {
+    transform: rotate(180deg);
+}
+
+.month-entries.hidden {
+    display: none;
+}
+
 
 /* Buttons */
 .btn {
