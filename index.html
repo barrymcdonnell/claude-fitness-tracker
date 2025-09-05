@@ -2013,9 +2013,11 @@
             
             alert('Daily data saved!');
         }
+
+        // Update Daily Tracking Section
         function updateDailyTrackingHistory() {
             const container = document.getElementById('dailyTrackingHistory');
-            
+        
             if (tracking.length === 0) {
                 container.innerHTML = `
                     <div class="empty-state">
@@ -2025,22 +2027,69 @@
                 `;
                 return;
             }
-
-            const reversed = [...tracking].sort((a, b) => new Date(b.date) - new Date(a.date));
-
-            container.innerHTML = reversed.map(entry => `
-                <div class="workout-item">
-                    <div class="workout-header">
-                        <div>
-                            <div class="workout-name">${new Date(entry.date).toLocaleDateString()}</div>
-                            <div class="workout-exercises">
-                                🔥 ${entry.calories} cal • 🥩 ${entry.protein}g protein • 💧 ${entry.water}L water • 👟 ${entry.steps.toLocaleString()} steps
+        
+            // Group by month-year
+            const grouped = {};
+            tracking.forEach(entry => {
+                const date = new Date(entry.date);
+                const key = date.toLocaleString('default', { month: 'long', year: 'numeric' });
+                if (!grouped[key]) grouped[key] = [];
+                grouped[key].push(entry);
+            });
+        
+            // Sort months newest first
+            const sortedMonths = Object.keys(grouped).sort((a, b) => {
+                const aDate = new Date(a);
+                const bDate = new Date(b);
+                return bDate - aDate; // newest first
+            });
+        
+            // Render
+            container.innerHTML = sortedMonths.map(monthKey => {
+                const entries = grouped[monthKey]
+                    .sort((a, b) => new Date(b.date) - new Date(a.date)) // newest first in month
+                    .map(entry => `
+                        <div class="workout-item">
+                            <div class="workout-header">
+                                <div>
+                                    <div class="workout-name">${new Date(entry.date).toLocaleDateString()}</div>
+                                    <div class="workout-exercises">
+                                        🔥 ${entry.calories} cal • 🥩 ${entry.protein}g protein • 💧 ${entry.water}L water • 👟 ${entry.steps.toLocaleString()} steps
+                                    </div>
+                                </div>
                             </div>
                         </div>
+                    `).join('');
+        
+                return `
+                    <div class="month-group">
+                        <div class="month-header" onclick="this.classList.toggle('collapsed')">
+                            <span class="arrow">▶</span> ${monthKey}
+                        </div>
+                        <div class="month-entries">${entries}</div>
                     </div>
-                </div>
-            `).join('');
+                `;
+            }).join('');
+        
+            // Add arrow toggle behavior
+            document.querySelectorAll('.month-header').forEach(header => {
+                header.addEventListener('click', () => {
+                    header.classList.toggle('collapsed');
+                    const arrow = header.querySelector('.arrow');
+                    if (arrow) arrow.style.transform = header.classList.contains('collapsed')
+                        ? 'rotate(0deg)'
+                        : 'rotate(90deg)';
+                    
+                    const entriesDiv = header.nextElementSibling;
+                    if (entriesDiv) {
+                        entriesDiv.style.display = header.classList.contains('collapsed')
+                            ? 'none'
+                            : 'block';
+                    }
+                });
+            });
         }
+
 
         // Measurements Management
         function saveMeasurements() {
