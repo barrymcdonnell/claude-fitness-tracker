@@ -2028,7 +2028,6 @@
                 return;
             }
         
-            // Group by month-year
             const grouped = {};
             tracking.forEach(entry => {
                 const date = new Date(entry.date);
@@ -2037,7 +2036,6 @@
                 grouped[key].push(entry);
             });
         
-            // Sort months newest first
             const sortedMonths = Object.keys(grouped).sort((a, b) => {
                 const aDate = new Date(a);
                 const bDate = new Date(b);
@@ -2048,7 +2046,6 @@
                 const entries = grouped[monthKey]
                     .sort((a, b) => new Date(b.date) - new Date(a.date));
         
-                // Calculate totals for the month
                 const totals = entries.reduce((acc, e) => {
                     acc.calories += e.calories || 0;
                     acc.protein += e.protein || 0;
@@ -2070,7 +2067,7 @@
                     </div>
                 `).join('');
         
-                const collapsed = i === 0 ? "" : "collapsed"; // first expanded
+                const collapsed = i === 0 ? "" : "collapsed";
                 const displayStyle = i === 0 ? "block" : "none";
                 const arrowRotation = i === 0 ? "rotate(90deg)" : "rotate(0deg)";
         
@@ -2079,19 +2076,18 @@
                         <div class="month-header ${collapsed}">
                             <span class="arrow" style="transform:${arrowRotation}">▶</span>
                             <strong>${monthKey}</strong>
-                            <span class="month-totals">
-                                🔥 ${totals.calories.toLocaleString()} cal • 
-                                🥩 ${totals.protein.toLocaleString()}g protein • 
-                                💧 ${totals.water.toLocaleString()}L water • 
-                                👟 ${totals.steps.toLocaleString()} steps
-                            </span>
+                        </div>
+                        <div class="month-totals-bubble">
+                            🔥 ${totals.calories.toLocaleString()} cal • 
+                            🥩 ${totals.protein.toLocaleString()}g protein • 
+                            💧 ${totals.water.toLocaleString()}L water • 
+                            👟 ${totals.steps.toLocaleString()} steps
                         </div>
                         <div class="month-entries" style="display:${displayStyle}">${entriesHtml}</div>
                     </div>
                 `;
             }).join('');
         
-            // Toggle expand/collapse
             document.querySelectorAll('.month-header').forEach(header => {
                 header.addEventListener('click', () => {
                     header.classList.toggle('collapsed');
@@ -2100,7 +2096,7 @@
                         ? 'rotate(0deg)'
                         : 'rotate(90deg)';
         
-                    const entriesDiv = header.nextElementSibling;
+                    const entriesDiv = header.parentElement.querySelector('.month-entries');
                     if (entriesDiv) {
                         entriesDiv.style.display = header.classList.contains('collapsed')
                             ? 'none'
@@ -2109,6 +2105,7 @@
                 });
             });
         }
+
 
         // Measurements Management
         function saveMeasurements() {
