@@ -154,32 +154,28 @@ input, textarea {
 
 /* Daily Tracking History */
 .month-header {
-    display: flex;
-    justify-content: space-between;
-    background: #f3f4f6;
-    padding: 8px 12px;
-    border-radius: 6px;
     cursor: pointer;
-    margin-top: 12px;
+    font-weight: bold;
+    margin: 10px 0;
+    display: flex;
+    align-items: center;
+    user-select: none;
 }
 
-.month-header:hover {
-    background: #e5e7eb;
+.month-header .arrow {
+    display: inline-block;
+    margin-right: 6px;
+    transition: transform 0.2s ease;
+    transform: rotate(90deg); /* start expanded */
 }
 
-.toggle-indicator {
-    font-size: 14px;
-    transition: transform 0.2s;
+.month-header.collapsed .arrow {
+    transform: rotate(0deg);
 }
 
-.month-header.open .toggle-indicator {
-    transform: rotate(180deg);
+.month-entries {
+    margin-left: 20px;
 }
-
-.month-entries.hidden {
-    display: none;
-}
-
 
 /* Buttons */
 .btn {
