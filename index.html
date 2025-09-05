@@ -2063,7 +2063,7 @@
         
                 return `
                     <div class="month-group">
-                        <div class="month-header" onclick="this.classList.toggle('collapsed')">
+                        <div class="month-header">
                             <span class="arrow">▶</span> ${monthKey}
                         </div>
                         <div class="month-entries">${entries}</div>
@@ -2079,7 +2079,7 @@
                     if (arrow) arrow.style.transform = header.classList.contains('collapsed')
                         ? 'rotate(0deg)'
                         : 'rotate(90deg)';
-                    
+        
                     const entriesDiv = header.nextElementSibling;
                     if (entriesDiv) {
                         entriesDiv.style.display = header.classList.contains('collapsed')
@@ -2089,7 +2089,6 @@
                 });
             });
         }
-
 
         // Measurements Management
         function saveMeasurements() {
