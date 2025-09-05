@@ -2044,8 +2044,8 @@
                 return bDate - aDate; // newest first
             });
         
-            // Render
-            container.innerHTML = sortedMonths.map(monthKey => {
+            // Render (expand first month only)
+            container.innerHTML = sortedMonths.map((monthKey, i) => {
                 const entries = grouped[monthKey]
                     .sort((a, b) => new Date(b.date) - new Date(a.date)) // newest first in month
                     .map(entry => `
@@ -2061,12 +2061,16 @@
                         </div>
                     `).join('');
         
+                const collapsed = i === 0 ? "" : "collapsed"; // first = expanded, others collapsed
+                const displayStyle = i === 0 ? "block" : "none";
+                const arrowRotation = i === 0 ? "rotate(90deg)" : "rotate(0deg)";
+        
                 return `
                     <div class="month-group">
-                        <div class="month-header">
-                            <span class="arrow">▶</span> ${monthKey}
+                        <div class="month-header ${collapsed}">
+                            <span class="arrow" style="transform:${arrowRotation}">▶</span> ${monthKey}
                         </div>
-                        <div class="month-entries">${entries}</div>
+                        <div class="month-entries" style="display:${displayStyle}">${entries}</div>
                     </div>
                 `;
             }).join('');
