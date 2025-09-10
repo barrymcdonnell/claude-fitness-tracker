@@ -1033,24 +1033,59 @@
 
         // Start workout
         let activeWorkout = null;
-
+        let workoutTimerInterval;
+        
         function startWorkout(workoutId) {
-          const workout = workouts.find(w => w.id === workoutId);
-          if (!workout) return;
+            const workout = workouts.find(w => w.id === workoutId);
+            if (!workout) return;
         
-          activeWorkout = {
-            ...workout,
-            startTime: new Date(),
-            endTime: null
-          };
+            activeWorkout = {
+                ...workout,
+                startTime: new Date(),
+                endTime: null
+            };
         
-          // Navigate or render workout-in-progress view
-          renderActiveWorkout();
+            renderActiveWorkout();
+        
+            // Reset & start timer ⏱
+            clearInterval(workoutTimerInterval);
+            updateTimer(); // draw immediately
+            workoutTimerInterval = setInterval(updateTimer, 1000);
+        }
+
+        // Workout timer
+        function updateTimer() {
+            if (!activeWorkout?.startTime) return;
+        
+            const now = new Date();
+            const diff = Math.floor((now - activeWorkout.startTime) / 1000);
+        
+            const minutes = String(Math.floor(diff / 60)).padStart(2, '0');
+            const seconds = String(diff % 60).padStart(2, '0');
+        
+            const timerEl = document.getElementById("workoutTimer");
+            if (timerEl) timerEl.innerText = `${minutes}:${seconds}`;
+        }
+
+        // Update timer
+        function updateTimer() {
+            if (!activeWorkout?.startTime) return;
+            const now = new Date();
+            const diff = Math.floor((now - activeWorkout.startTime) / 1000);
+        
+            const minutes = String(Math.floor(diff / 60)).padStart(2, '0');
+            const seconds = String(diff % 60).padStart(2, '0');
+        
+            const timerEl = document.getElementById("workoutTimer");
+            if (timerEl) timerEl.innerText = `${minutes}:${seconds}`;
         }
 
         // Finish workout
         function finishWorkout() {
               if (!activeWorkout) return;
+
+              // stop timer
+              clearInterval(workoutTimerInterval);
             
               activeWorkout.endTime = new Date();
               activeWorkout.duration =
@@ -1098,29 +1133,33 @@
 
         // Render active workouts
         function renderActiveWorkout() {
-              const container = document.getElementById("activeWorkoutContainer");
-            
-              container.innerHTML = `
-                <h3>Active Workout: ${activeWorkout.name}</h3>
-                <p>Started at: ${activeWorkout.startTime.toLocaleTimeString()}</p>
-                <div class="exercise-list">
-                  ${activeWorkout.exercises.map((ex, i) => `
-                    <div class="exercise-block">
-                      <h5>${ex.name}</h5>
-                      ${Array.from({ length: ex.sets }).map((_, setIndex) => `
-                        <div class="set-row">
-                          <label>
-                            <input type="checkbox" onchange="toggleSetComplete(${i}, ${setIndex})">
-                            Set ${setIndex + 1}: ${ex.reps} reps @ ${ex.weight || '-'} kg
-                          </label>
-                        </div>
-                      `).join("")}
-                    </div>
-                  `).join("")}
-                </div>
-                <button class="btn-delete" onclick="finishWorkout()">Finish ⏹</button>
-              `;
+            const container = document.getElementById("activeWorkoutContainer");
+          
+            container.innerHTML = `
+              <h3>Active Workout: ${activeWorkout.name}</h3>
+              <p>Started at: ${activeWorkout.startTime.toLocaleTimeString()}</p>
+              <div class="workout-timer">
+                ⏱ <span id="workoutTimer">00:00</span>
+              </div>
+              <div class="exercise-list">
+                ${activeWorkout.exercises.map((ex, i) => `
+                  <div class="exercise-block">
+                    <h5>${ex.name}</h5>
+                    ${Array.from({ length: ex.sets }).map((_, setIndex) => `
+                      <div class="set-row">
+                        <label>
+                          <input type="checkbox" onchange="toggleSetComplete(${i}, ${setIndex})">
+                          Set ${setIndex + 1}: ${ex.reps} reps @ ${ex.weight || '-'} kg
+                        </label>
+                      </div>
+                    `).join("")}
+                  </div>
+                `).join("")}
+              </div>
+              <button class="btn-delete" onclick="finishWorkout()">Finish ⏹</button>
+            `;
         }
+
 
         // Display Completed Workouts
         function displayCompletedWorkouts() {
