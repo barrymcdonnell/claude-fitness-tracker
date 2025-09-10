@@ -480,6 +480,18 @@ input, textarea {
           font-size: 14px;
         }
 
+/* Workout timer */
+.timer-container {
+    font-size: 1.4rem;
+    font-weight: bold;
+    margin: 12px 0;
+    text-align: center;
+    background: #0f172a;
+    border-radius: 8px;
+    padding: 6px 10px;
+    color: #fff;
+}
+
 /* Exercise count */
 .exercise-count {
   font-size: 14px;
