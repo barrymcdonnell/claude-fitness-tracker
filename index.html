@@ -1160,6 +1160,12 @@
                   <button class="btn-finish" onclick="finishWorkout()">Finish ⏹</button>
               </div>
             `;
+            
+            // ⬇️ Smoothly scroll to the new active workout card
+              document.getElementById("activeWorkoutCard").scrollIntoView({
+                behavior: "smooth",
+                block: "start"
+              });
         }
 
 
