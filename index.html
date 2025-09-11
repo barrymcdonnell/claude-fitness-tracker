@@ -1136,27 +1136,29 @@
             const container = document.getElementById("activeWorkoutContainer");
           
             container.innerHTML = `
-              <h3>Active Workout: ${activeWorkout.name}</h3>
-              <p>Started at: ${activeWorkout.startTime.toLocaleTimeString()}</p>
-              <div class="workout-timer">
-                ⏱ <span id="workoutTimer">00:00</span>
-              </div>
-              <div class="exercise-list">
-                ${activeWorkout.exercises.map((ex, i) => `
-                  <div class="exercise-block">
-                    <h5>${ex.name}</h5>
-                    ${Array.from({ length: ex.sets }).map((_, setIndex) => `
-                      <div class="set-row">
-                        <label>
-                          <input type="checkbox" onchange="toggleSetComplete(${i}, ${setIndex})">
-                          Set ${setIndex + 1}: ${ex.reps} reps @ ${ex.weight || '-'} kg
-                        </label>
+              <div class="active-workout-card">
+                  <h3>Active Workout: ${activeWorkout.name}</h3>
+                  <p>Started at: ${activeWorkout.startTime.toLocaleTimeString()}</p>
+                  <div class="workout-timer">
+                    ⏱ <span id="workoutTimer">00:00</span>
+                  </div>
+                  <div class="exercise-list">
+                    ${activeWorkout.exercises.map((ex, i) => `
+                      <div class="exercise-block">
+                        <h5>${ex.name}</h5>
+                        ${Array.from({ length: ex.sets }).map((_, setIndex) => `
+                          <div class="set-row">
+                            <label>
+                              <input type="checkbox" onchange="toggleSetComplete(${i}, ${setIndex})">
+                              Set ${setIndex + 1}: ${ex.reps} reps @ ${ex.weight || '-'} kg
+                            </label>
+                          </div>
+                        `).join("")}
                       </div>
                     `).join("")}
                   </div>
-                `).join("")}
+                  <button class="btn-delete" onclick="finishWorkout()">Finish ⏹</button>
               </div>
-              <button class="btn-delete" onclick="finishWorkout()">Finish ⏹</button>
             `;
         }
 
