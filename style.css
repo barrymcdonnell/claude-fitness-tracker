@@ -482,12 +482,46 @@ input, textarea {
 
 /* Active workout styling */
 .active-workout-card {
-    background: #1e293b;
-    color: white;
-    padding: 16px;
-    border-radius: 12px;
-    box-shadow: 0 4px 10px rgba(0,0,0,0.2);
-    margin: 10px 0;
+  background: #ffffff;
+  color: #111;
+  padding: 16px;
+  border-radius: 12px;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.15);
+  margin: 10px 0;
+}
+
+.active-workout-card h3 {
+  font-size: 1.25rem;
+  margin-bottom: 8px;
+  color: #333;
+}
+
+.active-workout-card p {
+  margin: 4px 0;
+  font-size: 0.9rem;
+  color: #555;
+}
+
+.workout-timer {
+  font-weight: bold;
+  margin: 10px 0;
+  font-size: 1.1rem;
+  color: #2563eb; /* blue accent */
+}
+
+.exercise-block {
+  margin-bottom: 12px;
+}
+
+.exercise-block h5 {
+  margin-bottom: 6px;
+  font-size: 1rem;
+  color: #111;
+}
+
+.set-row {
+  margin: 4px 0;
+  font-size: 0.9rem;
 }
 
 .btn-finish {
