@@ -480,6 +480,31 @@ input, textarea {
           font-size: 14px;
         }
 
+/* Active workout styling */
+.active-workout-card {
+    background: #1e293b;
+    color: white;
+    padding: 16px;
+    border-radius: 12px;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+    margin: 10px 0;
+}
+
+.btn-finish {
+    background: #ef4444;
+    border: none;
+    padding: 10px 16px;
+    border-radius: 6px;
+    color: white;
+    cursor: pointer;
+    font-size: 1rem;
+    margin-top: 10px;
+}
+
+.btn-finish:hover {
+    background: #dc2626;
+}
+
 /* Workout timer */
 .timer-container {
     font-size: 1.4rem;
