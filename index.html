@@ -1162,10 +1162,15 @@
             `;
             
             // ⬇️ Smoothly scroll to the new active workout card
-              document.getElementById("activeWorkoutCard").scrollIntoView({
-                behavior: "smooth",
-                block: "start"
-              });
+           setTimeout(() => {
+              const card = document.getElementById("activeWorkoutCard");
+              if (card) {
+                card.scrollIntoView({
+                  behavior: "smooth",
+                  block: "start"
+                });
+              }
+            }, 50); // 50ms delay to ensure DOM updates
         }
 
 
