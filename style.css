@@ -275,119 +275,124 @@ input, textarea {
 }
 
 .btn-save:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 4px 10px rgba(249, 115, 22, 0.4);
+       transform: translateY(-2px);
+       box-shadow: 0 4px 10px rgba(249, 115, 22, 0.4);
+}
+
+.finish-button-container {
+       text-align: center;
+       margin-top: 1rem;
 }
 
 
 
-       /* Stats */
-       .stats-grid {
-           display: grid;
-           grid-template-columns: 1fr 1fr;
-           gap: 12px;
-           margin-bottom: 20px;
-       }
+/* Stats */
+.stats-grid {
+       display: grid;
+       grid-template-columns: 1fr 1fr;
+       gap: 12px;
+       margin-bottom: 20px;
+}
 
-       .stat-card {
-           background: rgba(255, 255, 255, 0.05);
-           padding: 16px;
-            border-radius: 8px;
-            text-align: center;
-            border: 1px solid rgba(255, 255, 255, 0.1);
-        }
+.stat-card {
+       background: rgba(255, 255, 255, 0.05);
+       padding: 16px;
+       border-radius: 8px;
+       text-align: center;
+       border: 1px solid rgba(255, 255, 255, 0.1);
+}
 
-        .stat-value {
-            font-size: 24px;
-            font-weight: 700;
-            color: #6366f1;
-            margin-bottom: 4px;
-        }
+.stat-value {
+       font-size: 24px;
+       font-weight: 700;
+       color: #6366f1;
+       margin-bottom: 4px;
+}
 
-        .stat-label {
-            font-size: 12px;
-            opacity: 0.7;
-            text-transform: uppercase;
-            letter-spacing: 0.5px;
-        }
+.stat-label {
+       font-size: 12px;
+       opacity: 0.7;
+       text-transform: uppercase;
+       letter-spacing: 0.5px;
+}
 
-        .exercise-item {
-            background: rgba(255, 255, 255, 0.05);
-            padding: 12px;
-            border-radius: 8px;
-            margin-bottom: 8px;
-            display: flex;
-            flex-direction: column;   /* stack name/delete row + inputs row */
-            cursor: pointer;
-            transition: background 0.2s ease;
-        }
+.exercise-item {
+       background: rgba(255, 255, 255, 0.05);
+       padding: 12px;
+       border-radius: 8px;
+       margin-bottom: 8px;
+       display: flex;
+       flex-direction: column;   /* stack name/delete row + inputs row */
+       cursor: pointer;
+       transition: background 0.2s ease;
+}
        
-        .exercise-item:hover {
-            background: rgba(255, 255, 255, 0.1);
-        }
+.exercise-item:hover {
+       background: rgba(255, 255, 255, 0.1);
+}
        
-        .exercise-item.selected {
-            background: rgba(99, 102, 241, 0.2);
-            border: 1px solid rgba(99, 102, 241, 0.4);
-        }
+.exercise-item.selected {
+       background: rgba(99, 102, 241, 0.2);
+       border: 1px solid rgba(99, 102, 241, 0.4);
+}
 
-        .exercise-details {
-            flex: 1;
-        }
+.exercise-details {
+       flex: 1;
+}
 
-        .exercise-name {
-            font-weight: 600;
-            margin-bottom: 4px;
-        }
+.exercise-name {
+       font-weight: 600;
+       margin-bottom: 4px;
+}
 
-        .exercise-muscle {
-            font-size: 12px;
-            opacity: 0.7;
-        }
+.exercise-muscle {
+       font-size: 12px;
+       opacity: 0.7;
+}
        
-        .set-inputs {
-            margin-top: 6px;
-            display: flex;
-            gap: 8px;
-        }
+.set-inputs {
+       margin-top: 6px;
+       display: flex;
+       gap: 8px;
+}
        
-        .set-inputs input {
-            width: 70px;      /* keeps them neat */
-            padding: 4px 6px;
-            border-radius: 4px;
-            border: 1px solid rgba(255, 255, 255, 0.2);
-            background: rgba(255, 255, 255, 0.05);
-            color: #fff;
-        }
+.set-inputs input {
+       width: 70px;      /* keeps them neat */
+       padding: 4px 6px;
+       border-radius: 4px;
+       border: 1px solid rgba(255, 255, 255, 0.2);
+       background: rgba(255, 255, 255, 0.05);
+       color: #fff;
+}
 
-        .exercise-header {
-           display: flex;
-           justify-content: space-between;
-           align-items: center;
-           margin-bottom: 4px;
-       }
+.exercise-header {
+       display: flex;
+       justify-content: space-between;
+       align-items: center;
+       margin-bottom: 4px;
+}
 
-       .delete-btn {
-         margin-left: auto; /* pushes it to the right */
-         display: flex;
-         align-items: center;
-         justify-content: center;
-         width: 32px;
-         height: 32px;
-         padding: 0;
-       }
+.delete-btn {
+       margin-left: auto; /* pushes it to the right */
+       display: flex;
+       align-items: center;
+       justify-content: center;
+       width: 32px;
+       height: 32px;
+       padding: 0;
+}
        
-       .delete-btn:hover {
-         color: #c53030;
-       }
+.delete-btn:hover {
+       color: #c53030;
+}
        
-       .equipment-badge {
-           font-size: 12px;
-           padding: 2px 8px;
-           border-radius: 12px;
-           color: #fff;
-           font-weight: 500;
-       }
+.equipment-badge {
+       font-size: 12px;
+       padding: 2px 8px;
+       border-radius: 12px;
+       color: #fff;
+       font-weight: 500;
+}
 
 /* BMI Badge */
 #bmiBadge {
