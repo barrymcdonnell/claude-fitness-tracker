@@ -514,12 +514,23 @@ input, textarea {
   margin-top: 16px;
 }
 
+/* Workout timer */
 .workout-timer {
-  font-weight: bold;
-  margin: 10px 0;
-  font-size: 1.1rem;
-  color: #2563eb; /* blue accent */
+  text-align: center;
+  margin: 1rem 0;
 }
+
+#workoutTimer {
+  display: inline-block;
+  background: #f1f5f9;
+  color: #111827;
+  padding: 0.5rem 1rem;
+  border-radius: 999px;
+  font-size: 1.5rem;
+  font-weight: bold;
+  letter-spacing: 1px;
+}
+
 
 .exercise-block {
   margin-bottom: 12px;
