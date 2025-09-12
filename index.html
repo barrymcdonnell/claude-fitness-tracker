@@ -1189,9 +1189,10 @@
         
               <!-- Timer -->
               <div class="workout-timer-container">
-                <div id="workoutTimerWrapper" class="workout-timer">
-                  ⏱ <span id="workoutTimer">00:00</span>
+                <div class="workout-timer ${activeWorkout.paused ? 'paused' : 'running'}">
+                   ⏱ <span id="workoutTimer">00:00</span>
                 </div>
+
                 <div class="timer-controls">
                   <button id="pauseResumeBtn" class="btn-pause" onclick="togglePauseWorkout()">⏸ Pause</button>
                 </div>
