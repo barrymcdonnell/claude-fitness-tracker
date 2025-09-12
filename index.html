@@ -12,8 +12,6 @@
     <link rel="icon" href="images/favicon.png" type="image/png">
     <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.9.3/dist/confetti.browser.min.js"></script>
     <script src="exercises.js"></script>
-    
-
 </head>
 <body>
     <div class="container">
@@ -454,18 +452,18 @@
         </div>
     </div>
 
-    <!-- *******************************
-    //         JAVASCRIPT        
-    // ******************************* -->
-    <script>
-        // Register service worker file
-        if ('serviceWorker' in navigator) {
-            window.addEventListener('load', () => {
-                navigator.serviceWorker.register('/claude-fitness-tracker/sw.js')
-                    .then(registration => {
-                        console.log('Service Worker registered with scope:', registration.scope);
+<!-- *******************************
+//         JAVASCRIPT        
+// ******************************* -->
+<script>
+    // Register service worker file
+    if ('serviceWorker' in navigator) {
+        window.addEventListener('load', () => {
+            navigator.serviceWorker.register('/claude-fitness-tracker/sw.js')
+                .then(registration => {
+                         console.log('Service Worker registered with scope:', registration.scope);
         
-                        // This event fires when an update is found on the server
+                    // This event fires when an update is found on the server
                         registration.onupdatefound = () => {
                             const installingWorker = registration.installing;
                             if (installingWorker) {
@@ -1053,6 +1051,28 @@
             workoutTimerInterval = setInterval(updateTimer, 1000);
         }
 
+        function togglePauseWorkout() {
+          if (!activeWorkout) return;
+        
+          const btn = document.getElementById("pauseResumeBtn");
+        
+          if (activeWorkout.isPaused) {
+            // Resume
+            const pausedDuration = new Date() - workoutPausedAt;
+            activeWorkout.startTime = new Date(activeWorkout.startTime.getTime() + pausedDuration);
+            activeWorkout.isPaused = false;
+            document.getElementById("workoutTimer").parentElement.classList.remove("paused");
+            if (btn) btn.innerText = "⏸ Pause";
+          } else {
+            // Pause
+            activeWorkout.isPaused = true;
+            workoutPausedAt = new Date();
+            document.getElementById("workoutTimer").parentElement.classList.add("paused");
+            if (btn) btn.innerText = "▶ Resume";
+          }
+        }
+
+
         // Workout timer
         function updateTimer() {
             if (!activeWorkout?.startTime) return;
@@ -1126,9 +1146,18 @@
             <div class="active-workout-card" id="activeWorkoutCard">
               <h3>Active Workout: ${activeWorkout.name}</h3>
               <p>Started at: ${activeWorkout.startTime.toLocaleTimeString()}</p>
-              <div class="workout-timer">
-                ⏱ <span id="workoutTimer">00:00</span>
+        
+              <!-- Timer -->
+              <div class="workout-timer-container">
+                <div id="workoutTimerWrapper" class="workout-timer">
+                  ⏱ <span id="workoutTimer">00:00</span>
+                </div>
+                <div class="timer-controls">
+                  <button id="pauseResumeBtn" class="btn-pause" onclick="togglePauseWorkout()">⏸ Pause</button>
+                </div>
               </div>
+        
+              <!-- Exercises -->
               <div class="exercise-list">
                 ${activeWorkout.exercises.map((ex, i) => `
                   <div class="exercise-block">
@@ -1144,7 +1173,9 @@
                   </div>
                 `).join("")}
               </div>
-              <div class="finish-button-container">
+        
+              <!-- Finish button -->
+              <div class="finish-controls">
                 <button class="btn-finish" onclick="finishWorkout()">Finish ⏹</button>
               </div>
             </div>
