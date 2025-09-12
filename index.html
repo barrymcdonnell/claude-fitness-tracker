@@ -1067,19 +1067,6 @@
             if (timerEl) timerEl.innerText = `${minutes}:${seconds}`;
         }
 
-        // Update timer
-        function updateTimer() {
-            if (!activeWorkout?.startTime) return;
-            const now = new Date();
-            const diff = Math.floor((now - activeWorkout.startTime) / 1000);
-        
-            const minutes = String(Math.floor(diff / 60)).padStart(2, '0');
-            const seconds = String(diff % 60).padStart(2, '0');
-        
-            const timerEl = document.getElementById("workoutTimer");
-            if (timerEl) timerEl.innerText = `${minutes}:${seconds}`;
-        }
-
         // Finish workout
         function finishWorkout() {
               if (!activeWorkout) return;
@@ -1162,7 +1149,10 @@
               </div>
             </div>
           `;
-        
+
+          if (workoutTimerInterval) clearInterval(workoutTimerInterval);
+            workoutTimerInterval = setInterval(updateTimer, 1000);
+          
           // ✅ Scroll into view once the card exists
           const card = document.getElementById("activeWorkoutCard");
           if (card) {
