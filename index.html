@@ -1120,62 +1120,68 @@
 
         // Finish workout
         function finishWorkout() {
-              if (!activeWorkout) return;
-
-              // stop timer
-              stopTimer();
-            
-              activeWorkout.endTime = new Date();
-              activeWorkout.duration =
-                Math.round((activeWorkout.endTime - activeWorkout.startTime) / 1000 / 60);
-            
-              // Calculate per-exercise volume
-              activeWorkout.exercises.forEach(ex => {
-                const setsCompleted = ex.completedSets ? ex.completedSets.length : 0;
-                const reps = parseInt(ex.reps) || 0;
-                const weight = parseFloat(ex.weight) || 0;
-            
-                ex.setsCompleted = setsCompleted;
-                ex.volume = setsCompleted * reps * weight;
-              });
-            
-              // Workout total volume
-              activeWorkout.totalVolume = activeWorkout.exercises.reduce(
-                (sum, ex) => sum + (ex.volume || 0),
-                0
-              );
-            
-              // Save workout
-              let completed = JSON.parse(localStorage.getItem("completedWorkouts") || "[]");
-              completed.push(activeWorkout);
-              localStorage.setItem("completedWorkouts", JSON.stringify(completed));
-            
-              // 📊 Save volume log
-              let volumeLog = JSON.parse(localStorage.getItem("workoutVolumeLog") || "[]");
-              volumeLog.push({
-                date: activeWorkout.endTime,
-                volume: activeWorkout.totalVolume
-              });
-              localStorage.setItem("workoutVolumeLog", JSON.stringify(volumeLog));
-            
-              activeWorkout = null;
-              pausedElapsed = 0;
-            
-              document.getElementById("activeWorkoutContainer").innerHTML = "";
-              alert("Workout completed!");
-
-              const container = document.getElementById('activeWorkoutContainer');
-              if (container) container.innerHTML = '';
-            
-              displayCompletedWorkouts();
-              displayVolumeStats(); // ⬅ show updated totals
-
-              // ✅ Switch to Completed tab safely
-              const completedTab = document.querySelector('[data-tab="completed"]');
-              if (completedTab) {
-                switchWorkoutTab({ target: completedTab });
-              }
+          if (!activeWorkout) return;
+        
+          // stop timer
+          stopTimer();
+        
+          const end = new Date(); // real Date object
+          activeWorkout.endTime = end.toISOString();
+        
+          // Ensure startTime is parsed correctly
+          const start = new Date(activeWorkout.startTime);
+        
+          // Duration in minutes
+          activeWorkout.duration =
+            Math.round((end - start) / 1000 / 60);
+        
+          // Calculate per-exercise volume
+          activeWorkout.exercises.forEach(ex => {
+            const setsCompleted = ex.completedSets ? ex.completedSets.length : 0;
+            const reps = parseInt(ex.reps) || 0;
+            const weight = parseFloat(ex.weight) || 0;
+        
+            ex.setsCompleted = setsCompleted;
+            ex.volume = setsCompleted * reps * weight;
+          });
+        
+          // Workout total volume
+          activeWorkout.totalVolume = activeWorkout.exercises.reduce(
+            (sum, ex) => sum + (ex.volume || 0),
+            0
+          );
+        
+          // Save workout to completed list
+          let completed = JSON.parse(localStorage.getItem("completedWorkouts") || "[]");
+          completed.push(activeWorkout);
+          localStorage.setItem("completedWorkouts", JSON.stringify(completed));
+        
+          // 📊 Save volume log
+          let volumeLog = JSON.parse(localStorage.getItem("workoutVolumeLog") || "[]");
+          volumeLog.push({
+            date: activeWorkout.endTime, // ISO string (safe for storage)
+            volume: activeWorkout.totalVolume
+          });
+          localStorage.setItem("workoutVolumeLog", JSON.stringify(volumeLog));
+        
+          // Reset state
+          activeWorkout = null;
+          pausedElapsed = 0;
+          document.getElementById("activeWorkoutContainer").innerHTML = "";
+        
+          alert("Workout completed!");
+        
+          // Refresh UI
+          displayCompletedWorkouts();
+          displayVolumeStats();
+        
+          // ✅ Switch to Completed tab safely
+          const completedTab = document.querySelector('[data-tab="completed"]');
+          if (completedTab) {
+            switchWorkoutTab({ target: completedTab });
+          }
         }
+
 
 
         // Render active workouts
