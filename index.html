@@ -1170,8 +1170,11 @@
               displayCompletedWorkouts();
               displayVolumeStats(); // ⬅ show updated totals
 
-              // After saving and calling displayCompletedWorkouts();
-              switchWorkoutTab({ target: document.querySelector('[data-tab="completed"]') });
+              // ✅ Switch to Completed tab safely
+              const completedTab = document.querySelector('[data-tab="completed"]');
+              if (completedTab) {
+                switchWorkoutTab({ target: completedTab });
+              }
         }
 
 
