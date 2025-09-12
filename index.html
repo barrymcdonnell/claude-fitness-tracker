@@ -1032,7 +1032,44 @@
         let activeWorkout = null;
         let workoutTimerInterval = null;
         let pausedElapsed = 0;
+
+        // Reset & start timer ⏱
+        function startTimer() {
+            clearInterval(workoutTimerInterval);
+            workoutTimerInterval = setInterval(updateTimer, 1000);
+        }
+
+        // Stop the timer interval
+        function stopTimer() {
+          clearInterval(workoutTimerInterval);
+          workoutTimerInterval = null;
+        }
     
+        // Workout timer
+        function updateTimer() {
+          if (!activeWorkout) return;
+        
+          // elapsed seconds = already paused time + (now - startTime) if running
+          const now = new Date();
+          const runningSeconds = activeWorkout.startTime ? Math.floor((now - new Date(activeWorkout.startTime)) / 1000) : 0;
+          const elapsed = pausedElapsed + (activeWorkout.paused ? 0 : runningSeconds);
+        
+          const minutes = String(Math.floor(elapsed / 60)).padStart(2, '0');
+          const seconds = String(elapsed % 60).padStart(2, '0');
+        
+          const timerEl = document.getElementById('workoutTimer');
+          if (timerEl) timerEl.innerText = `${minutes}:${seconds}`;
+        
+          // Keep pill class and button label in sync (safe even if element missing)
+          const wrapper = document.getElementById('workoutTimerWrapper');
+          if (wrapper) {
+            wrapper.classList.toggle('paused', !!activeWorkout.paused);
+            wrapper.classList.toggle('running', !activeWorkout.paused);
+          }
+          const btn = document.getElementById('pauseResumeBtn');
+          if (btn) btn.innerText = activeWorkout.paused ? '▶ Resume' : '⏸ Pause';
+        }
+
         // Start workout
         function startWorkout(workoutId) {
             const workout = workouts.find(w => w.id === workoutId);
@@ -1047,49 +1084,38 @@
             pausedElapsed = 0;
         
             renderActiveWorkout();
-            startTimer();
-        
-            // Reset & start timer ⏱
-            function startTimer() {
-              clearInterval(workoutTimerInterval);
-              workoutTimerInterval = setInterval(updateTimer, 1000);
-            }
+            startTimer();  
         }
 
         function togglePauseWorkout() {
           if (!activeWorkout) return;
         
           if (activeWorkout.paused) {
-            // Resume
+            // --- RESUME ---
             activeWorkout.paused = false;
-            activeWorkout.startTime = new Date(); // reset base start time
+        
+            // set new base start time (elapsed preserved in pausedElapsed)
+            activeWorkout.startTime = new Date();
+        
+            // re-render UI so button/pill are correct, then restart timer
+            renderActiveWorkout();
             startTimer();
           } else {
-            // Pause
+            // --- PAUSE ---
             activeWorkout.paused = true;
-            clearInterval(workoutTimerInterval);
         
-            // Save elapsed time so far
+            // capture elapsed seconds so far and stop interval
             const now = new Date();
-            pausedElapsed += Math.floor((now - activeWorkout.startTime) / 1000);
+            if (activeWorkout.startTime) {
+              pausedElapsed += Math.floor((now - new Date(activeWorkout.startTime)) / 1000);
+            }
+        
+            stopTimer();
+        
+            // re-render UI so button/pill are correct and show paused time
+            renderActiveWorkout();
+            updateTimer(); // ensure display shows final paused value
           }
-        
-          renderActiveWorkout();
-        }
-
-
-        // Workout timer
-        function updateTimer() {
-          if (!activeWorkout?.startTime || activeWorkout.paused) return;
-        
-          const now = new Date();
-          const diff = Math.floor((now - activeWorkout.startTime) / 1000) + pausedElapsed;
-        
-          const minutes = String(Math.floor(diff / 60)).padStart(2, '0');
-          const seconds = String(diff % 60).padStart(2, '0');
-        
-          const timerEl = document.getElementById("workoutTimer");
-          if (timerEl) timerEl.innerText = `${minutes}:${seconds}`;
         }
 
         // Finish workout
@@ -1097,7 +1123,7 @@
               if (!activeWorkout) return;
 
               // stop timer
-              clearInterval(workoutTimerInterval);
+              stopTimer();
             
               activeWorkout.endTime = new Date();
               activeWorkout.duration =
@@ -1133,8 +1159,14 @@
               localStorage.setItem("workoutVolumeLog", JSON.stringify(volumeLog));
             
               activeWorkout = null;
+              pausedElapsed = 0;
+            
               document.getElementById("activeWorkoutContainer").innerHTML = "";
               alert("Workout completed!");
+
+              const container = document.getElementById('activeWorkoutContainer');
+              if (container) container.innerHTML = '';
+            
               displayCompletedWorkouts();
               displayVolumeStats(); // ⬅ show updated totals
 
