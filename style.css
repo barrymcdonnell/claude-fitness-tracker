@@ -516,20 +516,27 @@ input, textarea {
 
 /* Workout timer */
 .workout-timer {
-  text-align: center;
+  display: inline-flex;
+  align-items: center;
+  background: #3b82f6; /* blue pill */
+  color: white;
+  padding: 0.5rem 1.2rem;
+  border-radius: 999px; /* fully rounded pill */
+  font-size: 1.25rem;
+  font-weight: 500;
   margin: 1rem 0;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.15);
+  gap: 0.5rem;
 }
 
+/* The digits inside the workout timer*/
 #workoutTimer {
-  display: inline-block;
-  background: #f1f5f9;
-  color: #111827;
-  padding: 0.5rem 1rem;
-  border-radius: 999px;
-  font-size: 1.5rem;
-  font-weight: bold;
-  letter-spacing: 1px;
+  font-size: 1.5rem;     /* larger than container text */
+  font-weight: 700;      /* bolder */
+  letter-spacing: 1px;   /* spaced out digits */
+  color: #fff;           /* keep digits pure white */
 }
+
 
 
 .exercise-block {
