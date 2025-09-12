@@ -1161,16 +1161,76 @@
               </div>
             `;
             
-            // ⬇️ Smoothly scroll to the new active workout card
-           setTimeout(() => {
-              const card = document.getElementById("activeWorkoutCard");
-              if (card) {
-                card.scrollIntoView({
-                  behavior: "smooth",
-                  block: "start"
-                });
-              }
-            }, 50); // 50ms delay to ensure DOM updates
+           // helper: find first scrollable ancestor (vertical)
+                function findScrollableAncestor(el) {
+                  let parent = el.parentElement;
+                  while (parent) {
+                    const style = getComputedStyle(parent);
+                    const overflowY = style.overflowY;
+                    if ((overflowY === 'auto' || overflowY === 'scroll') && parent.scrollHeight > parent.clientHeight) {
+                      return parent;
+                    }
+                    parent = parent.parentElement;
+                  }
+                  return null;
+                }
+                
+                // helper: scroll element into view inside nearest scrollable ancestor or viewport
+                function scrollIntoViewSmart(elem, options = { behavior: 'smooth', block: 'center' }) {
+                  if (!elem) return;
+                  const ancestor = findScrollableAncestor(elem);
+                  if (ancestor) {
+                    // compute top relative to ancestor and center it
+                    const ancestorRect = ancestor.getBoundingClientRect();
+                    const elemRect = elem.getBoundingClientRect();
+                    const offset = elemRect.top - ancestorRect.top;
+                    const targetScroll = Math.max(0, ancestor.scrollTop + offset - (ancestor.clientHeight / 2) + (elemRect.height / 2));
+                    ancestor.scrollTo({ top: targetScroll, behavior: options.behavior });
+                  } else {
+                    // fallback to normal scrollIntoView
+                    elem.scrollIntoView({ behavior: options.behavior, block: options.block });
+                  }
+                }
+                
+                // call this after you render the active workout card (insert in renderActiveWorkout after container.innerHTML)
+                setTimeout(() => {
+                  const card = document.getElementById('activeWorkoutCard'); // ensure your rendered card has this id
+                  if (!card) return;
+                
+                  // If card is not visible because its section is hidden, attempt to show the section:
+                  if (card.offsetParent === null) {
+                    // try to find containing section and open it
+                    const section = card.closest('.section');
+                    if (section) {
+                      // If your app has showSection(sectionName, btn) we try to click the corresponding nav item
+                      // (this is defensive — it looks for a nav-item whose onclick mentions the section id)
+                      const id = section.id;
+                      if (id) {
+                        // try to find a nav item whose onclick contains the section id
+                        let navBtn = Array.from(document.querySelectorAll('.nav-item')).find(n => {
+                          const on = n.getAttribute('onclick') || '';
+                          return on.includes(`'${id}'`) || on.includes(`"${id}"`) || on.includes(id);
+                        });
+                        if (navBtn) {
+                          // trigger navigation (this should make the section visible)
+                          navBtn.click();
+                        } else if (typeof showSection === 'function') {
+                          // fallback: call showSection directly if available
+                          try { showSection(id); } catch (e) { /* ignore */ }
+                        } else {
+                          // last resort: add active class (may not match your app)
+                          section.classList.add('active');
+                        }
+                      }
+                    }
+                  }
+                
+                  // Give layout a little time to update, then scroll smartly
+                  setTimeout(() => {
+                    const cardNow = document.getElementById('activeWorkoutCard');
+                    if (cardNow) scrollIntoViewSmart(cardNow, { behavior: 'smooth', block: 'center' });
+                  }, 120);
+                }, 30);
         }
 
 
