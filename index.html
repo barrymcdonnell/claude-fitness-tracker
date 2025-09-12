@@ -1029,10 +1029,11 @@
             `).join('');
         }
 
-        // Start workout
         let activeWorkout = null;
-        let workoutTimerInterval;
-        
+        let workoutTimerInterval = null;
+        let pausedElapsed = 0;
+    
+        // Start workout
         function startWorkout(workoutId) {
             const workout = workouts.find(w => w.id === workoutId);
             if (!workout) return;
@@ -1040,51 +1041,55 @@
             activeWorkout = {
                 ...workout,
                 startTime: new Date(),
-                endTime: null
+                endTime: null,
+                paused: false
             };
+            pausedElapsed = 0;
         
             renderActiveWorkout();
+            startTimer();
         
             // Reset & start timer ⏱
-            clearInterval(workoutTimerInterval);
-            updateTimer(); // draw immediately
-            workoutTimerInterval = setInterval(updateTimer, 1000);
+            function startTimer() {
+              clearInterval(workoutTimerInterval);
+              workoutTimerInterval = setInterval(updateTimer, 1000);
+            }
         }
 
-        function togglePauseWorkout() {
+        function togglePause() {
           if (!activeWorkout) return;
         
-          const btn = document.getElementById("pauseResumeBtn");
-        
-          if (activeWorkout.isPaused) {
+          if (activeWorkout.paused) {
             // Resume
-            const pausedDuration = new Date() - workoutPausedAt;
-            activeWorkout.startTime = new Date(activeWorkout.startTime.getTime() + pausedDuration);
-            activeWorkout.isPaused = false;
-            document.getElementById("workoutTimer").parentElement.classList.remove("paused");
-            if (btn) btn.innerText = "⏸ Pause";
+            activeWorkout.paused = false;
+            activeWorkout.startTime = new Date(); // reset base start time
+            startTimer();
           } else {
             // Pause
-            activeWorkout.isPaused = true;
-            workoutPausedAt = new Date();
-            document.getElementById("workoutTimer").parentElement.classList.add("paused");
-            if (btn) btn.innerText = "▶ Resume";
+            activeWorkout.paused = true;
+            clearInterval(workoutTimerInterval);
+        
+            // Save elapsed time so far
+            const now = new Date();
+            pausedElapsed += Math.floor((now - activeWorkout.startTime) / 1000);
           }
+        
+          renderActiveWorkout();
         }
 
 
         // Workout timer
         function updateTimer() {
-            if (!activeWorkout?.startTime) return;
+          if (!activeWorkout?.startTime || activeWorkout.paused) return;
         
-            const now = new Date();
-            const diff = Math.floor((now - activeWorkout.startTime) / 1000);
+          const now = new Date();
+          const diff = Math.floor((now - activeWorkout.startTime) / 1000) + pausedElapsed;
         
-            const minutes = String(Math.floor(diff / 60)).padStart(2, '0');
-            const seconds = String(diff % 60).padStart(2, '0');
+          const minutes = String(Math.floor(diff / 60)).padStart(2, '0');
+          const seconds = String(diff % 60).padStart(2, '0');
         
-            const timerEl = document.getElementById("workoutTimer");
-            if (timerEl) timerEl.innerText = `${minutes}:${seconds}`;
+          const timerEl = document.getElementById("workoutTimer");
+          if (timerEl) timerEl.innerText = `${minutes}:${seconds}`;
         }
 
         // Finish workout
