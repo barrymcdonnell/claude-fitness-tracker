@@ -633,6 +633,17 @@ input, textarea {
   font-size: 0.9rem;
 }
 
+/* In the completed workouts tab */
+.workout-group-header {
+  margin: 1.5rem 0 0.5rem;
+  font-size: 1.2rem;
+  font-weight: bold;
+  color: #374151; /* neutral dark gray */
+  border-bottom: 1px solid #e5e7eb;
+  padding-bottom: 0.2rem;
+}
+
+
 
 /* Exercise count */
 .exercise-count {
