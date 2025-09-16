@@ -1243,18 +1243,18 @@
         
           let completed = JSON.parse(localStorage.getItem("completedWorkouts")) || [];
         
-          // ✅ sort newest → oldest
+          // ✅ Sort newest → oldest
           completed.sort((a, b) => {
             const aDate = new Date(a.endTime || a.startTime).getTime();
             const bDate = new Date(b.endTime || b.startTime).getTime();
             return bDate - aDate;
           });
         
-          // 🗓 group workouts into buckets
+          // 🗓 Groups
           const groups = {
             Today: [],
             Yesterday: [],
-            Earlier: []
+            Months: {} // dynamic months go here
           };
         
           const today = new Date();
@@ -1274,67 +1274,92 @@
             } else if (dateStr === yesterdayStr) {
               groups.Yesterday.push(workout);
             } else {
-              groups.Earlier.push(workout);
+              // 🗓 Month-Year key
+              const monthKey = dateObj.toLocaleDateString(undefined, {
+                month: "long",
+                year: "numeric"
+              });
+              if (!groups.Months[monthKey]) {
+                groups.Months[monthKey] = [];
+              }
+              groups.Months[monthKey].push(workout);
             }
           });
         
-          // 🏷️ Render each group
-          Object.entries(groups).forEach(([label, workouts]) => {
-            if (workouts.length === 0) return;
+          // 🏷️ Render "Today" and "Yesterday"
+          ["Today", "Yesterday"].forEach(label => {
+            if (groups[label].length > 0) {
+              renderWorkoutGroup(container, label, groups[label]);
+            }
+          });
         
-            const header = document.createElement("h3");
-            header.textContent = label;
-            header.classList.add("workout-group-header");
-            container.appendChild(header);
-        
-            workouts.forEach((workout, index) => {
-              const card = document.createElement("div");
-              card.classList.add("workout-card");
-        
-              const rawDate = workout.endTime || workout.startTime;
-              const date = rawDate
-                ? new Date(rawDate).toLocaleDateString(undefined, {
-                    year: "numeric",
-                    month: "short",
-                    day: "numeric"
-                  })
-                : "Unknown";
-        
-              card.innerHTML = `
-                <div class="workout-header">
-                  <div class="workout-title">
-                    <span class="chevron">▶</span>
-                    <span>${workout.name}</span>
-                  </div>
-                  <span class="workout-date">${date}</span>
-                </div>
-                <div class="workout-details" id="workoutDetails-${label}-${index}">
-                  <div class="workout-meta">
-                    <span><strong>Time:</strong> ${workout.duration ? workout.duration + " mins" : "N/A"}</span>
-                    <span><strong>Weight:</strong> ${workout.totalVolume || 0} kg</span>
-                  </div>
-                  <ul class="exercise-list">
-                    ${workout.exercises.map(ex =>
-                      `<li>${ex.name}: ${ex.setsCompleted} sets, ${ex.volume} kg</li>`
-                    ).join("")}
-                  </ul>
-                </div>
-              `;
-        
-              const headerEl = card.querySelector(".workout-header");
-              const chevron = card.querySelector(".chevron");
-              const details = card.querySelector(".workout-details");
-        
-              headerEl.addEventListener("click", () => {
-                const isOpen = details.style.display === "block";
-                details.style.display = isOpen ? "none" : "block";
-                chevron.classList.toggle("open", !isOpen);
-              });
-        
-              container.appendChild(card);
+          // 🏷️ Render each month (sorted newest → oldest)
+          Object.keys(groups.Months)
+            .sort((a, b) => {
+              const aDate = new Date(a);
+              const bDate = new Date(b);
+              return bDate - aDate;
+            })
+            .forEach(monthKey => {
+              renderWorkoutGroup(container, monthKey, groups.Months[monthKey]);
             });
+        }
+        
+        // 🔧 Helper to render one group
+        function renderWorkoutGroup(container, label, workouts) {
+          const header = document.createElement("h3");
+          header.textContent = label;
+          header.classList.add("workout-group-header");
+          container.appendChild(header);
+        
+          workouts.forEach((workout, index) => {
+            const card = document.createElement("div");
+            card.classList.add("workout-card");
+        
+            const rawDate = workout.endTime || workout.startTime;
+            const date = rawDate
+              ? new Date(rawDate).toLocaleDateString(undefined, {
+                  year: "numeric",
+                  month: "short",
+                  day: "numeric"
+                })
+              : "Unknown";
+        
+            card.innerHTML = `
+              <div class="workout-header">
+                <div class="workout-title">
+                  <span class="chevron">▶</span>
+                  <span>${workout.name}</span>
+                </div>
+                <span class="workout-date">${date}</span>
+              </div>
+              <div class="workout-details" id="workoutDetails-${label}-${index}">
+                <div class="workout-meta">
+                  <span><strong>Time:</strong> ${workout.duration ? workout.duration + " mins" : "N/A"}</span>
+                  <span><strong>Weight:</strong> ${workout.totalVolume || 0} kg</span>
+                </div>
+                <ul class="exercise-list">
+                  ${workout.exercises.map(ex =>
+                    `<li>${ex.name}: ${ex.setsCompleted} sets, ${ex.volume} kg</li>`
+                  ).join("")}
+                </ul>
+              </div>
+            `;
+        
+            const headerEl = card.querySelector(".workout-header");
+            const chevron = card.querySelector(".chevron");
+            const details = card.querySelector(".workout-details");
+        
+            headerEl.addEventListener("click", () => {
+              const isOpen = details.style.display === "block";
+              details.style.display = isOpen ? "none" : "block";
+              chevron.classList.toggle("open", !isOpen);
+            });
+        
+            container.appendChild(card);
           });
         }
+
 
 
 
