@@ -1261,13 +1261,9 @@
             yesterday.setDate(today.getDate() - 1);
         
             let label;
-            if (
-              d.toDateString() === today.toDateString()
-            ) {
+            if (d.toDateString() === today.toDateString()) {
               label = "Today";
-            } else if (
-              d.toDateString() === yesterday.toDateString()
-            ) {
+            } else if (d.toDateString() === yesterday.toDateString()) {
               label = "Yesterday";
             } else {
               label = d.toLocaleString("default", { month: "long", year: "numeric" });
@@ -1277,15 +1273,24 @@
             groups[label].push(workout);
           });
         
-          // Render groups in order (Today → Yesterday → months)
-          ["Today", "Yesterday"].forEach(key => {
-            if (groups[key]) {
-              renderWorkoutGroup(container, key, groups[key]);
-              delete groups[key];
-            }
+          // ✅ Render in correct order
+          if (groups["Today"]) {
+            renderWorkoutGroup(container, "Today", groups["Today"]);
+            delete groups["Today"];
+          }
+          if (groups["Yesterday"]) {
+            renderWorkoutGroup(container, "Yesterday", groups["Yesterday"]);
+            delete groups["Yesterday"];
+          }
+        
+          // For months → sort newest first
+          const monthKeys = Object.keys(groups).sort((a, b) => {
+            const da = new Date(a);
+            const db = new Date(b);
+            return db - da;
           });
         
-          Object.keys(groups).forEach(label => {
+          monthKeys.forEach(label => {
             renderWorkoutGroup(container, label, groups[label]);
           });
         }
