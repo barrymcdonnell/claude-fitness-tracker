@@ -1254,7 +1254,7 @@
           const groups = {
             Today: [],
             Yesterday: [],
-            Months: {} // dynamic months go here
+            Months: {}
           };
         
           const today = new Date();
@@ -1274,7 +1274,6 @@
             } else if (dateStr === yesterdayStr) {
               groups.Yesterday.push(workout);
             } else {
-              // 🗓 Month-Year key
               const monthKey = dateObj.toLocaleDateString(undefined, {
                 month: "long",
                 year: "numeric"
@@ -1305,12 +1304,20 @@
             });
         }
         
-        // 🔧 Helper to render one group
+        // 🔧 Helper to render one group (collapsible)
         function renderWorkoutGroup(container, label, workouts) {
-          const header = document.createElement("h3");
-          header.textContent = label;
+          const section = document.createElement("div");
+          section.classList.add("workout-group");
+        
+          const header = document.createElement("div");
           header.classList.add("workout-group-header");
-          container.appendChild(header);
+          header.innerHTML = `
+            <span class="group-chevron">▶</span>
+            <span>${label}</span>
+          `;
+        
+          const content = document.createElement("div");
+          content.classList.add("workout-group-content");
         
           workouts.forEach((workout, index) => {
             const card = document.createElement("div");
@@ -1356,8 +1363,19 @@
               chevron.classList.toggle("open", !isOpen);
             });
         
-            container.appendChild(card);
+            content.appendChild(card);
           });
+        
+          // Toggle whole group
+          header.addEventListener("click", () => {
+            const isOpen = content.style.display === "block";
+            content.style.display = isOpen ? "none" : "block";
+            header.querySelector(".group-chevron").classList.toggle("open", !isOpen);
+          });
+        
+          section.appendChild(header);
+          section.appendChild(content);
+          container.appendChild(section);
         }
 
 
