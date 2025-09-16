@@ -1236,8 +1236,6 @@
           }
         }
 
-
-
         // Display Completed Workouts
         function displayCompletedWorkouts() {
           const container = document.getElementById("completedWorkoutsList");
@@ -1249,7 +1247,15 @@
             const card = document.createElement("div");
             card.classList.add("workout-card");
         
-            const date = new Date(workout.date || Date.now()).toLocaleDateString();
+            // ✅ use stored endTime, fallback to startTime if needed
+            const rawDate = workout.endTime || workout.startTime;
+            const date = rawDate
+              ? new Date(rawDate).toLocaleDateString(undefined, {
+                  year: "numeric",
+                  month: "short",
+                  day: "numeric"
+                })
+              : "Unknown";
         
             card.innerHTML = `
               <div class="workout-header">
@@ -1271,21 +1277,21 @@
                 </ul>
               </div>
             `;
-            
+        
             const header = card.querySelector(".workout-header");
             const chevron = card.querySelector(".chevron");
             const details = card.querySelector(".workout-details");
-            
+        
             header.addEventListener("click", () => {
               const isOpen = details.style.display === "block";
               details.style.display = isOpen ? "none" : "block";
               chevron.classList.toggle("open", !isOpen);
             });
-            
+        
             container.appendChild(card);
-
           });
         }
+
 
 
         document.addEventListener("DOMContentLoaded", () => {
