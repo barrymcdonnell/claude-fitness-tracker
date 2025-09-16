@@ -1241,68 +1241,55 @@
           const container = document.getElementById("completedWorkoutsList");
           container.innerHTML = "";
         
-          let completed = JSON.parse(localStorage.getItem("completedWorkouts")) || [];
+          const completed = JSON.parse(localStorage.getItem("completedWorkouts")) || [];
+        
+          if (!completed.length) {
+            container.innerHTML = "<p>No completed workouts yet.</p>";
+            return;
+          }
         
           // ✅ Sort newest → oldest
-          completed.sort((a, b) => {
-            const aDate = new Date(a.endTime || a.startTime).getTime();
-            const bDate = new Date(b.endTime || b.startTime).getTime();
-            return bDate - aDate;
-          });
+          completed.sort((a, b) => new Date(b.endTime || b.startTime) - new Date(a.endTime || a.startTime));
         
-          // 🗓 Groups
-          const groups = {
-            Today: [],
-            Yesterday: [],
-            Months: {}
-          };
-        
-          const today = new Date();
-          const todayStr = today.toDateString();
-        
-          const yesterday = new Date(today);
-          yesterday.setDate(today.getDate() - 1);
-          const yesterdayStr = yesterday.toDateString();
+          const groups = {};
         
           completed.forEach(workout => {
             const rawDate = workout.endTime || workout.startTime;
-            const dateObj = new Date(rawDate);
-            const dateStr = dateObj.toDateString();
+            const d = new Date(rawDate);
+            const today = new Date();
+            const yesterday = new Date();
+            yesterday.setDate(today.getDate() - 1);
         
-            if (dateStr === todayStr) {
-              groups.Today.push(workout);
-            } else if (dateStr === yesterdayStr) {
-              groups.Yesterday.push(workout);
+            let label;
+            if (
+              d.toDateString() === today.toDateString()
+            ) {
+              label = "Today";
+            } else if (
+              d.toDateString() === yesterday.toDateString()
+            ) {
+              label = "Yesterday";
             } else {
-              const monthKey = dateObj.toLocaleDateString(undefined, {
-                month: "long",
-                year: "numeric"
-              });
-              if (!groups.Months[monthKey]) {
-                groups.Months[monthKey] = [];
-              }
-              groups.Months[monthKey].push(workout);
+              label = d.toLocaleString("default", { month: "long", year: "numeric" });
+            }
+        
+            if (!groups[label]) groups[label] = [];
+            groups[label].push(workout);
+          });
+        
+          // Render groups in order (Today → Yesterday → months)
+          ["Today", "Yesterday"].forEach(key => {
+            if (groups[key]) {
+              renderWorkoutGroup(container, key, groups[key]);
+              delete groups[key];
             }
           });
         
-          // 🏷️ Render "Today" and "Yesterday"
-          ["Today", "Yesterday"].forEach(label => {
-            if (groups[label].length > 0) {
-              renderWorkoutGroup(container, label, groups[label]);
-            }
+          Object.keys(groups).forEach(label => {
+            renderWorkoutGroup(container, label, groups[label]);
           });
-        
-          // 🏷️ Render each month (sorted newest → oldest)
-          Object.keys(groups.Months)
-            .sort((a, b) => {
-              const aDate = new Date(a);
-              const bDate = new Date(b);
-              return bDate - aDate;
-            })
-            .forEach(monthKey => {
-              renderWorkoutGroup(container, monthKey, groups.Months[monthKey]);
-            });
         }
+
         
         // 🔧 Helper to render one group (collapsible)
         function renderWorkoutGroup(container, label, workouts) {
@@ -1319,7 +1306,7 @@
           const content = document.createElement("div");
           content.classList.add("workout-group-content");
         
-          // ✅ Expanded for Today & Yesterday, collapsed otherwise
+          // ✅ Expand Today + Yesterday by default
           const shouldExpand = label === "Today" || label === "Yesterday";
           content.style.display = shouldExpand ? "block" : "none";
           if (shouldExpand) {
@@ -1364,7 +1351,6 @@
             const chevron = card.querySelector(".chevron");
             const details = card.querySelector(".workout-details");
         
-            // ⬅ collapsible workout details
             headerEl.addEventListener("click", () => {
               const isOpen = details.style.display === "block";
               details.style.display = isOpen ? "none" : "block";
@@ -1374,7 +1360,7 @@
             content.appendChild(card);
           });
         
-          // ⬅ collapsible group
+          // Collapsible group toggle
           header.addEventListener("click", () => {
             const isOpen = content.style.display === "block";
             content.style.display = isOpen ? "none" : "block";
@@ -1385,6 +1371,7 @@
           section.appendChild(content);
           container.appendChild(section);
         }
+
 
 
 
