@@ -1319,6 +1319,13 @@
           const content = document.createElement("div");
           content.classList.add("workout-group-content");
         
+          // ✅ Expanded for Today & Yesterday, collapsed otherwise
+          const shouldExpand = label === "Today" || label === "Yesterday";
+          content.style.display = shouldExpand ? "block" : "none";
+          if (shouldExpand) {
+            header.querySelector(".group-chevron").classList.add("open");
+          }
+        
           workouts.forEach((workout, index) => {
             const card = document.createElement("div");
             card.classList.add("workout-card");
@@ -1340,7 +1347,7 @@
                 </div>
                 <span class="workout-date">${date}</span>
               </div>
-              <div class="workout-details" id="workoutDetails-${label}-${index}">
+              <div class="workout-details" id="workoutDetails-${label}-${index}" style="display: none;">
                 <div class="workout-meta">
                   <span><strong>Time:</strong> ${workout.duration ? workout.duration + " mins" : "N/A"}</span>
                   <span><strong>Weight:</strong> ${workout.totalVolume || 0} kg</span>
@@ -1357,6 +1364,7 @@
             const chevron = card.querySelector(".chevron");
             const details = card.querySelector(".workout-details");
         
+            // ⬅ collapsible workout details
             headerEl.addEventListener("click", () => {
               const isOpen = details.style.display === "block";
               details.style.display = isOpen ? "none" : "block";
@@ -1366,7 +1374,7 @@
             content.appendChild(card);
           });
         
-          // Toggle whole group
+          // ⬅ collapsible group
           header.addEventListener("click", () => {
             const isOpen = content.style.display === "block";
             content.style.display = isOpen ? "none" : "block";
@@ -1377,6 +1385,7 @@
           section.appendChild(content);
           container.appendChild(section);
         }
+
 
 
 
