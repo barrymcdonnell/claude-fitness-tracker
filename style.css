@@ -670,6 +670,26 @@ input, textarea {
   display: block; /* default expanded */
 }
 
+.workout-meta-actions {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.delete-btn {
+  background: none;
+  border: none;
+  color: #d33;
+  font-size: 16px;
+  cursor: pointer;
+  transition: color 0.2s;
+}
+
+.delete-btn:hover {
+  color: #a00;
+}
+
+
 /* Exercise count */
 .exercise-count {
   font-size: 14px;
