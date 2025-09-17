@@ -1163,6 +1163,17 @@
             volume: activeWorkout.totalVolume
           });
           localStorage.setItem("workoutVolumeLog", JSON.stringify(volumeLog));
+
+          // ✅ Clear completedSets so future runs start fresh
+          workouts = workouts.map(w => {
+            if (w.id === activeWorkout.id) {
+              return {
+                ...w,
+                exercises: w.exercises.map(ex => ({ ...ex, completedSets: [] }))
+              };
+            }
+            return w;
+          });
         
           // Reset state
           activeWorkout = null;
