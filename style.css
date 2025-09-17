@@ -635,25 +635,27 @@ input, textarea {
 
 /* In the completed workouts tab */
 .workout-group-header {
-  margin: 1.5rem 0 0.5rem;
-  font-size: 1.2rem;
+  background: #f0f0f0;   /* light gray background */
+  color: #333;           /* dark text color */
   font-weight: bold;
-  color: #374151; /* neutral dark gray */
-  border-bottom: 1px solid #e5e7eb;
-  padding-bottom: 0.2rem;
-}
-
-.workout-group-header {
-  margin: 1.2rem 0 0.5rem;
-  font-size: 1.2rem;
-  font-weight: bold;
-  color: #374151;
-  border-bottom: 1px solid #e5e7eb;
-  padding: 0.3rem 0;
+  padding: 8px 12px;
+  margin-top: 10px;
+  border-radius: 6px;
   cursor: pointer;
   display: flex;
   align-items: center;
-  gap: 0.5rem;
+  justify-content: flex-start;
+}
+
+/* Add spacing for the chevron */
+.workout-group-header .group-chevron {
+  margin-right: 6px;
+  transition: transform 0.2s;
+}
+
+/* Rotate chevron when open */
+.workout-group-header .group-chevron.open {
+  transform: rotate(90deg);
 }
 
 .group-chevron {
@@ -667,9 +669,6 @@ input, textarea {
 .workout-group-content {
   display: block; /* default expanded */
 }
-
-
-
 
 /* Exercise count */
 .exercise-count {
