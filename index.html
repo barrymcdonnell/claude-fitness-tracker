@@ -1337,7 +1337,10 @@
                   <span class="chevron">▶</span>
                   <span>${workout.name}</span>
                 </div>
-                <span class="workout-date">${date}</span>
+                <div class="workout-meta-actions">
+                  <span class="workout-date">${date}</span>
+                  <button class="delete-btn" title="Delete Workout">🗑</button>
+                </div>
               </div>
               <div class="workout-details" id="workoutDetails-${label}-${index}" style="display: none;">
                 <div class="workout-meta">
@@ -1352,7 +1355,8 @@
               </div>
             `;
         
-            const headerEl = card.querySelector(".workout-header");
+            // Toggle details
+            const headerEl = card.querySelector(".workout-title");
             const chevron = card.querySelector(".chevron");
             const details = card.querySelector(".workout-details");
         
@@ -1360,6 +1364,18 @@
               const isOpen = details.style.display === "block";
               details.style.display = isOpen ? "none" : "block";
               chevron.classList.toggle("open", !isOpen);
+            });
+        
+            // Delete button handler
+            const deleteBtn = card.querySelector(".delete-btn");
+            deleteBtn.addEventListener("click", (e) => {
+              e.stopPropagation(); // don’t toggle the details
+              if (confirm("Delete this workout?")) {
+                let completed = JSON.parse(localStorage.getItem("completedWorkouts")) || [];
+                completed = completed.filter(w => !(w.startTime === workout.startTime && w.name === workout.name));
+                localStorage.setItem("completedWorkouts", JSON.stringify(completed));
+                displayCompletedWorkouts(); // refresh
+              }
             });
         
             content.appendChild(card);
@@ -1376,11 +1392,6 @@
           section.appendChild(content);
           container.appendChild(section);
         }
-
-
-
-
-
 
         document.addEventListener("DOMContentLoaded", () => {
           displayCompletedWorkouts();
