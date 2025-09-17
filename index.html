@@ -1196,9 +1196,11 @@
                 <div class="workout-timer ${activeWorkout.paused ? 'paused' : 'running'}">
                    ⏱ <span id="workoutTimer">00:00</span>
                 </div>
-
+        
                 <div class="timer-controls">
-                  <button id="pauseResumeBtn" class="btn-pause" onclick="togglePauseWorkout()">⏸ Pause</button>
+                  <button id="pauseResumeBtn" class="btn-pause" onclick="togglePauseWorkout()">
+                    ${activeWorkout.paused ? "▶ Resume" : "⏸ Pause"}
+                  </button>
                 </div>
               </div>
         
@@ -1207,14 +1209,20 @@
                 ${activeWorkout.exercises.map((ex, i) => `
                   <div class="exercise-block">
                     <h5>${ex.name}</h5>
-                    ${Array.from({ length: ex.sets }).map((_, setIndex) => `
-                      <div class="set-row">
-                        <label>
-                          <input type="checkbox" onchange="toggleSetComplete(${i}, ${setIndex})">
-                          Set ${setIndex + 1}: ${ex.reps} reps @ ${ex.weight || '-'} kg
-                        </label>
-                      </div>
-                    `).join("")}
+                    ${Array.from({ length: ex.sets }).map((_, setIndex) => {
+                      const isChecked =
+                        ex.completedSets && ex.completedSets.includes(setIndex)
+                          ? "checked"
+                          : "";
+                      return `
+                        <div class="set-row">
+                          <label>
+                            <input type="checkbox" ${isChecked} onchange="toggleSetComplete(${i}, ${setIndex})">
+                            Set ${setIndex + 1}: ${ex.reps} reps @ ${ex.weight || '-'} kg
+                          </label>
+                        </div>
+                      `;
+                    }).join("")}
                   </div>
                 `).join("")}
               </div>
@@ -1225,16 +1233,17 @@
               </div>
             </div>
           `;
-
+        
           if (workoutTimerInterval) clearInterval(workoutTimerInterval);
-            workoutTimerInterval = setInterval(updateTimer, 1000);
-          
+          workoutTimerInterval = setInterval(updateTimer, 1000);
+        
           // ✅ Scroll into view once the card exists
           const card = document.getElementById("activeWorkoutCard");
           if (card) {
             card.scrollIntoView({ behavior: "smooth", block: "start" });
           }
         }
+
 
         // Display Completed Workouts
         function displayCompletedWorkouts() {
