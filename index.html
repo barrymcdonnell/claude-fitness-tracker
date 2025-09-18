@@ -1149,8 +1149,7 @@
           const start = new Date(activeWorkout.startTime);
         
           // Duration in minutes
-          activeWorkout.duration =
-            Math.round((end - start) / 1000 / 60);
+          activeWorkout.duration = Math.round((end - start) / 1000 / 60);
         
           // Calculate per-exercise volume
           activeWorkout.exercises.forEach(ex => {
@@ -1168,6 +1167,18 @@
             0
           );
         
+          // 👉 Instead of saving here, show feedback modal
+          document.getElementById("feedbackModal").style.display = "flex";
+        }
+        
+        function submitFeedback() {
+          const rpe = document.getElementById("rpeInput").value;
+          const notes = document.getElementById("notesInput").value;
+        
+          // Attach feedback
+          activeWorkout.rpe = rpe;
+          activeWorkout.notes = notes;
+        
           // Save workout to completed list
           let completed = JSON.parse(localStorage.getItem("completedWorkouts") || "[]");
           completed.push(activeWorkout);
@@ -1176,11 +1187,11 @@
           // 📊 Save volume log
           let volumeLog = JSON.parse(localStorage.getItem("workoutVolumeLog") || "[]");
           volumeLog.push({
-            date: activeWorkout.endTime, // ISO string (safe for storage)
+            date: activeWorkout.endTime,
             volume: activeWorkout.totalVolume
           });
           localStorage.setItem("workoutVolumeLog", JSON.stringify(volumeLog));
-
+        
           // ✅ Clear completedSets so future runs start fresh
           workouts = workouts.map(w => {
             if (w.id === activeWorkout.id) {
@@ -1197,7 +1208,8 @@
           pausedElapsed = 0;
           document.getElementById("activeWorkoutContainer").innerHTML = "";
         
-          alert("Workout completed!");
+          // Hide modal
+          closeFeedbackModal();
         
           // Refresh UI
           displayCompletedWorkouts();
@@ -1209,6 +1221,7 @@
             switchWorkoutTab({ target: completedTab });
           }
         }
+
 
         // Render active workouts
         function renderActiveWorkout() {
