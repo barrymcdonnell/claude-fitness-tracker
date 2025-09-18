@@ -1396,6 +1396,8 @@
                 <div class="workout-meta">
                   <span><strong>Time:</strong> ${workout.duration ? workout.duration + " mins" : "N/A"}</span>
                   <span><strong>Weight:</strong> ${workout.totalVolume || 0} kg</span>
+                  ${workout.rpe ? `<span><strong>RPE:</strong> ${workout.rpe}</span>` : ""}
+                  ${workout.notes ? `<span><strong>Notes:</strong> ${workout.notes}</span>` : ""}
                 </div>
                 <ul class="exercise-list">
                   ${workout.exercises.map(ex =>
