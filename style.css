@@ -633,6 +633,22 @@ input, textarea {
   font-size: 0.9rem;
 }
 
+/* Feedback modal after a workout */
+.modal-overlay {
+  position: fixed;
+  top: 0; left: 0;
+  width: 100%; height: 100%;
+  background: rgba(0,0,0,0.6);
+  display: flex; align-items: center; justify-content: center;
+}
+
+.modal-content {
+  background: #fff;
+  padding: 1rem;
+  border-radius: 8px;
+  width: 300px;
+}
+
 /* In the completed workouts tab */
 .workout-group-header {
   background: #f0f0f0;   /* light gray background */
