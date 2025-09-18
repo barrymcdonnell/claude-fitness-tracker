@@ -139,24 +139,6 @@
                 
                 <!-- Container for active workouts -->
                 <div id="activeWorkoutContainer"></div>
-
-                <!-- Feedback modal after a workout - hidden until called -->
-                <div id="feedbackModal" class="modal-overlay" style="display: none;">
-                  <div class="modal-content">
-                    <h3>Workout Feedback</h3>
-                    <label for="rpeInput">RPE (1–10):</label>
-                    <input type="number" id="rpeInput" min="1" max="10">
-                
-                    <label for="notesInput">Notes:</label>
-                    <textarea id="notesInput" rows="3" placeholder="How did the workout feel?"></textarea>
-                
-                    <div class="modal-actions">
-                      <button onclick="submitFeedback()">Save</button>
-                      <button onclick="closeFeedbackModal()">Cancel</button>
-                    </div>
-                  </div>
-                </div>
-
             </div>
 
             <!-- Plans Section -->
@@ -455,6 +437,23 @@
               </div>
             </div>
 
+        </div>
+
+        <!-- Feedback modal after a workout - hidden until called -->
+        <div id="feedbackModal" class="modal-overlay" style="display: none;">
+            <div class="modal-content">
+            <h3>Workout Feedback</h3>
+            <label for="rpeInput">RPE (1–10):</label>
+            <input type="number" id="rpeInput" min="1" max="10">
+                
+            <label for="notesInput">Notes:</label>
+            <textarea id="notesInput" rows="3" placeholder="How did the workout feel?"></textarea>
+                
+            <div class="modal-actions">
+                <button onclick="submitFeedback()">Save</button>
+                <button onclick="closeFeedbackModal()">Cancel</button>
+            </div>
+            </div>
         </div>
     </div>
 
