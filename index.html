@@ -456,7 +456,7 @@
         
             <div class="modal-actions">
               <button class="btn btn-secondary" onclick="closeFeedbackModal()">Cancel</button>
-              <button class="btn btn-save" onclick="saveFeedback()">Save</button>
+              <button class="btn btn-save" onclick="submitFeedback()">Save</button>
             </div>
           </div>
         </div>
@@ -3175,6 +3175,13 @@
 
         // Event Listeners
         document.getElementById('planToSchedule').addEventListener('change', generateWeeklySchedule);
+        // Close modal if user clicks outside the modal content
+        window.addEventListener("click", (e) => {
+          const modal = document.getElementById("feedbackModal");
+          if (e.target === modal) {
+            closeFeedbackModal();
+          }
+        });
     </script>
 </body>
 </html>
