@@ -1231,30 +1231,7 @@
           document.getElementById("feedbackModal").style.display = "none";
         }
 
-        function saveFeedback() {
-          const rpe = document.getElementById("rpeInput").value.trim();
-          const notes = document.getElementById("notesInput").value.trim();
         
-          // Load existing completed workouts
-          let completed = JSON.parse(localStorage.getItem("completedWorkouts")) || [];
-          if (completed.length > 0) {
-            // Attach feedback to the most recent workout (last pushed)
-            completed[completed.length - 1].rpe = rpe || null;
-            completed[completed.length - 1].notes = notes || "";
-          }
-        
-          // Save back
-          localStorage.setItem("completedWorkouts", JSON.stringify(completed));
-        
-          // Refresh UI
-          displayCompletedWorkouts();
-        
-          // Close modal
-          closeFeedbackModal();
-        }
-
-
-
         // Render active workouts
         function renderActiveWorkout() {
           const container = document.getElementById("activeWorkoutContainer");
