@@ -3091,13 +3091,6 @@
                 document.getElementById('weightChange').textContent = '0';
             }
 
-        
-            // Update weekly progress (simplified)
-            const progressPercent = Math.min((workouts.length * 10), 100);
-            document.getElementById('workoutProgress').style.width = progressPercent + '%';
-            document.getElementById('workoutProgressText').textContent = 
-                `${workouts.length} workouts created`;
-
             showActiveChallengeReminder();
             updateBMIBadge();
         }
