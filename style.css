@@ -713,15 +713,6 @@ input, textarea {
   background: #e0e0e0;
 }
 
-.btn-save {
-  background: #4CAF50;
-  color: white;
-}
-
-.btn-save:hover {
-  background: #45a049;
-}
-
 /* Animation */
 @keyframes fadeIn {
   from { opacity: 0; transform: translateY(-10px); }
