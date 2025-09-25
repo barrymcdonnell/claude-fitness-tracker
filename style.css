@@ -24,11 +24,12 @@ body {
 
 /* Header */
 h1 {
-  font-variant: small-caps;
-  letter-spacing: 3px;
-  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 6px;
+  font-size: 2.2rem;
+  font-weight: 800;
+  color: #0d6efd; /* Bootstrap blue, or your brand color */
 }
-
 
 .header {
        background: linear-gradient(135deg, #6366f1 0%, #8b5cf6 100%);
