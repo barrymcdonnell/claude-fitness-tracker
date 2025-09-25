@@ -23,6 +23,13 @@ body {
 }
 
 /* Header */
+h1 {
+  text-transform: uppercase;
+  letter-spacing: 4px;
+  font-weight: 700;
+  font-size: 2rem; /* tweak size to suit */
+}
+
 .header {
        background: linear-gradient(135deg, #6366f1 0%, #8b5cf6 100%);
        padding: 20px;
