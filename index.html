@@ -449,33 +449,37 @@
             </div>
           </div>
         </div>
+
+        
         <!-- Bottom Navigation -->
         <nav class="bottom-nav">
-          <button class="nav-item active" data-tab="home">
+          <button class="nav-item active" onclick="showSection('dashboard', this)">
             <i class="fas fa-home"></i>
             <span>Home</span>
           </button>
-          <button class="nav-item" data-tab="workouts">
+          <button class="nav-item" onclick="showSection('workouts', this)">
             <i class="fas fa-dumbbell"></i>
             <span>Workouts</span>
           </button>
-          <button class="nav-item" data-tab="tracking">
+          <button class="nav-item" onclick="showSection('tracking', this)">
             <i class="fas fa-chart-line"></i>
             <span>Tracking</span>
           </button>
-          <button class="nav-item" data-tab="more">
+          <button class="nav-item" id="moreButton">
             <i class="fas fa-ellipsis-h"></i>
             <span>More</span>
           </button>
         </nav>
+
         
-        <!-- More Menu -->
+        <!-- More Menu in Bottom Nav -->
         <div id="moreMenu" class="more-menu">
-          <button onclick="switchTab('exercises')"><i class="fas fa-running"></i> Exercises</button>
-          <button onclick="switchTab('challenges')"><i class="fas fa-trophy"></i> Challenges</button>
-          <button onclick="switchTab('plans')"><i class="fas fa-calendar-alt"></i> Plans</button>
-          <button onclick="switchTab('settings')"><i class="fas fa-cog"></i> Settings</button>
+          <button onclick="showSection('exercises', this)"><i class="fas fa-running"></i> Exercises</button>
+          <button onclick="showSection('challenges', this)"><i class="fas fa-trophy"></i> Challenges</button>
+          <button onclick="showSection('plans', this)"><i class="fas fa-calendar-alt"></i> Plans</button>
+          <button onclick="showSection('settings', this)"><i class="fas fa-cog"></i> Settings</button>
         </div>
+
     </div>
     <!-- End content -->
 
@@ -786,63 +790,27 @@
             } else if (sectionName === 'challenges') {
                 displayChallenges();
             }
+            // Close "More" menu if open
+            const moreMenu = document.getElementById("moreMenu");
+            if (moreMenu) moreMenu.classList.remove("show");
+
         }
 
         // === Bottom Navigation Logic ===
-        document.querySelectorAll('.bottom-nav .nav-item').forEach(btn => {
-          btn.addEventListener('click', e => {
-            const tab = btn.getAttribute('data-tab');
-        
-            // Toggle active state
-            document.querySelectorAll('.bottom-nav .nav-item').forEach(b => b.classList.remove('active'));
-            btn.classList.add('active');
-        
-            if (tab === 'more') {
-              // Toggle More Menu
-              document.getElementById('moreMenu').classList.toggle('show');
-              return;
-            }
-        
-            // Close More Menu if open
-            document.getElementById('moreMenu').classList.remove('show');
-        
-            // Switch to tab
-            switchTab(tab);
-          });
+        // More Menu toggle logic
+        document.getElementById("moreButton").addEventListener("click", () => {
+          const menu = document.getElementById("moreMenu");
+          menu.classList.toggle("show");
         });
         
-        // Hide more menu if clicking outside
-        document.addEventListener('click', (e) => {
-          const menu = document.getElementById('moreMenu');
-          const isMoreButton = e.target.closest('[data-tab="more"]');
-          if (!isMoreButton && !menu.contains(e.target)) {
-            menu.classList.remove('show');
+        // Hide More menu when clicking outside
+        document.addEventListener("click", (e) => {
+          const menu = document.getElementById("moreMenu");
+          const moreBtn = document.getElementById("moreButton");
+          if (!menu.contains(e.target) && e.target !== moreBtn && !moreBtn.contains(e.target)) {
+            menu.classList.remove("show");
           }
         });
-
-
-        function switchTab(tab) {
-          // Hide all sections
-          document.querySelectorAll('.tab-section').forEach(section => {
-            section.style.display = 'none';
-          });
-        
-          // Map old sections to new structure
-          const tabMap = {
-            home: 'dashboardSection',
-            workouts: 'workoutsSection',
-            tracking: 'trackingSection',
-            exercises: 'exercisesSection',
-            challenges: 'challengesSection',
-            plans: 'plansSection',
-            settings: 'settingsSection'
-          };
-        
-          const sectionId = tabMap[tab];
-          if (sectionId) {
-            document.getElementById(sectionId).style.display = 'block';
-          }
-        }
 
     
         // Exercise Library Functions
