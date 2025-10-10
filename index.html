@@ -449,9 +449,37 @@
             </div>
           </div>
         </div>
-
+        <!-- Bottom Navigation -->
+        <nav class="bottom-nav">
+          <button class="nav-item active" data-tab="home">
+            <i class="fas fa-home"></i>
+            <span>Home</span>
+          </button>
+          <button class="nav-item" data-tab="workouts">
+            <i class="fas fa-dumbbell"></i>
+            <span>Workouts</span>
+          </button>
+          <button class="nav-item" data-tab="tracking">
+            <i class="fas fa-chart-line"></i>
+            <span>Tracking</span>
+          </button>
+          <button class="nav-item" data-tab="more">
+            <i class="fas fa-ellipsis-h"></i>
+            <span>More</span>
+          </button>
+        </nav>
+        
+        <!-- More Menu -->
+        <div id="moreMenu" class="more-menu">
+          <button onclick="switchTab('exercises')"><i class="fas fa-running"></i> Exercises</button>
+          <button onclick="switchTab('challenges')"><i class="fas fa-trophy"></i> Challenges</button>
+          <button onclick="switchTab('plans')"><i class="fas fa-calendar-alt"></i> Plans</button>
+          <button onclick="switchTab('settings')"><i class="fas fa-cog"></i> Settings</button>
+        </div>
     </div>
+    <!-- End content -->
 
+    <!-- the below modal is outside the main content div as it appears above it -->
     <!-- Exercise Selection Modal -->
     <div id="exerciseModal" class="modal">
         <div class="modal-content">
@@ -463,33 +491,7 @@
         </div>
     </div>
 
-    <!-- Bottom Navigation -->
-    <nav class="bottom-nav">
-      <button class="nav-item active" data-tab="home">
-        <i class="fas fa-home"></i>
-        <span>Home</span>
-      </button>
-      <button class="nav-item" data-tab="workouts">
-        <i class="fas fa-dumbbell"></i>
-        <span>Workouts</span>
-      </button>
-      <button class="nav-item" data-tab="tracking">
-        <i class="fas fa-chart-line"></i>
-        <span>Tracking</span>
-      </button>
-      <button class="nav-item" data-tab="more">
-        <i class="fas fa-ellipsis-h"></i>
-        <span>More</span>
-      </button>
-    </nav>
     
-    <!-- More Menu -->
-    <div id="moreMenu" class="more-menu">
-      <button onclick="switchTab('exercises')"><i class="fas fa-running"></i> Exercises</button>
-      <button onclick="switchTab('challenges')"><i class="fas fa-trophy"></i> Challenges</button>
-      <button onclick="switchTab('plans')"><i class="fas fa-calendar-alt"></i> Plans</button>
-      <button onclick="switchTab('settings')"><i class="fas fa-cog"></i> Settings</button>
-    </div>
 
 
 <!-- *******************************
