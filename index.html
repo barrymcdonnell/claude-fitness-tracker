@@ -786,6 +786,63 @@
             }
         }
 
+        // === Bottom Navigation Logic ===
+        document.querySelectorAll('.bottom-nav .nav-item').forEach(btn => {
+          btn.addEventListener('click', e => {
+            const tab = btn.getAttribute('data-tab');
+        
+            // Toggle active state
+            document.querySelectorAll('.bottom-nav .nav-item').forEach(b => b.classList.remove('active'));
+            btn.classList.add('active');
+        
+            if (tab === 'more') {
+              // Toggle More Menu
+              document.getElementById('moreMenu').classList.toggle('show');
+              return;
+            }
+        
+            // Close More Menu if open
+            document.getElementById('moreMenu').classList.remove('show');
+        
+            // Switch to tab
+            switchTab(tab);
+          });
+        });
+        
+        // Hide more menu if clicking outside
+        document.addEventListener('click', (e) => {
+          const menu = document.getElementById('moreMenu');
+          const isMoreButton = e.target.closest('[data-tab="more"]');
+          if (!isMoreButton && !menu.contains(e.target)) {
+            menu.classList.remove('show');
+          }
+        });
+
+
+        function switchTab(tab) {
+          // Hide all sections
+          document.querySelectorAll('.tab-section').forEach(section => {
+            section.style.display = 'none';
+          });
+        
+          // Map old sections to new structure
+          const tabMap = {
+            home: 'dashboardSection',
+            workouts: 'workoutsSection',
+            tracking: 'trackingSection',
+            exercises: 'exercisesSection',
+            challenges: 'challengesSection',
+            plans: 'plansSection',
+            settings: 'settingsSection'
+          };
+        
+          const sectionId = tabMap[tab];
+          if (sectionId) {
+            document.getElementById(sectionId).style.display = 'block';
+          }
+        }
+
+    
         // Exercise Library Functions
         function displayExerciseLibrary() {
             const container = document.getElementById('exerciseLibrary');
