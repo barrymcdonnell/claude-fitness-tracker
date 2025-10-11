@@ -452,7 +452,7 @@
             <i class="fas fa-chart-line"></i>
             <span>Tracking</span>
           </button>
-          <button class="nav-item" id="moreButton">
+          <button class="nav-item" onclick="toggleMoreMenu()">
             <i class="fas fa-ellipsis-h"></i>
             <span>More</span>
           </button>
@@ -803,7 +803,14 @@
           }
         });
 
-    
+        // Allowing the 'more' menu to slide up and fade in
+        function toggleMoreMenu() {
+          const menu = document.getElementById("moreMenu");
+          menu.classList.toggle("show");
+        }
+
+
+        // **************************
         // Exercise Library Functions
         function displayExerciseLibrary() {
             const container = document.getElementById('exerciseLibrary');
