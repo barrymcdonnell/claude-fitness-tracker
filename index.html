@@ -808,6 +808,32 @@
           const menu = document.getElementById("moreMenu");
           menu.classList.toggle("show");
         }
+        
+        // Close More menu when clicking outside or selecting an item
+        document.addEventListener("click", function (event) {
+          const menu = document.getElementById("moreMenu");
+          const moreButton = document.querySelector(".nav-item[data-tab='more']") || document.querySelector(".nav-item:has(.fa-ellipsis-h)");
+        
+          if (!menu) return;
+        
+          // If menu is open
+          if (menu.classList.contains("show")) {
+            const clickedInsideMenu = menu.contains(event.target);
+            const clickedMoreButton = moreButton && moreButton.contains(event.target);
+        
+            // Close if clicked outside both the menu and the button
+            if (!clickedInsideMenu && !clickedMoreButton) {
+              menu.classList.remove("show");
+            }
+          }
+        });
+        
+        // Also close when clicking one of the menu items
+        document.querySelectorAll("#moreMenu button").forEach(btn => {
+          btn.addEventListener("click", () => {
+            document.getElementById("moreMenu").classList.remove("show");
+          });
+        });
 
 
         // **************************
