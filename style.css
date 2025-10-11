@@ -87,6 +87,7 @@ h1 {
 }
 
 /* More Menu */
+/* More Menu */
 .more-menu {
   position: fixed;
   bottom: 60px;
@@ -98,28 +99,43 @@ h1 {
   display: none;
   flex-direction: column;
   z-index: 999;
+  transform: translateY(20px);
+  opacity: 0;
+  transition: transform 0.3s ease, opacity 0.3s ease;
+  align-items: flex-end; /* right align */
+  text-align: right;
 }
 
 .more-menu.show {
   display: flex;
-  animation: slideUp 0.2s ease-out;
+  transform: translateY(0);
+  opacity: 1;
 }
 
+/* Buttons inside the More menu */
 .more-menu button {
   background: none;
   border: none;
-  padding: 14px;
-  text-align: left;
+  padding: 14px 20px;
+  width: 100%;
+  justify-content: flex-end;
   font-size: 1rem;
   display: flex;
   align-items: center;
   gap: 10px;
   color: #333;
+  cursor: pointer;
+  transition: background 0.2s ease;
 }
 
 .more-menu button:hover {
   background: #f0f0f0;
 }
+
+.more-menu button i {
+  margin-left: 8px; /* space between text and icon */
+}
+
 
 @keyframes slideUp {
   from { transform: translateY(100%); opacity: 0; }
