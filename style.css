@@ -118,7 +118,32 @@ header .header-icons i:hover {
   color: #000;
 }
 
+/* ===== HEADING SYSTEM ===== */
+/* Main app title or section headers */
+h1 {
+  font-size: 1.6rem;
+  font-weight: 700;
+  color: #111827; /* near-black neutral */
+  margin-bottom: 0.75rem;
+}
 
+/* Subsection headers (e.g., within cards or sections) */
+h2 {
+  font-size: 1.3rem;
+  font-weight: 600;
+  color: #1f2937; /* dark grey */
+  margin-bottom: 0.6rem;
+}
+
+/* Tiny section headers or labels (e.g., in summaries, stats) */
+h5 {
+  font-size: 0.9rem;
+  font-weight: 600;
+  color: #4b5563;
+  letter-spacing: 0.5px;
+  text-transform: uppercase;
+  margin-bottom: 0.25rem;
+}
 
 
 /* Navigation Menu (Bottom) */
@@ -268,16 +293,20 @@ body {
   transition: transform 0.15s ease, box-shadow 0.15s ease;
 }
 
-.card h3,
-.card h4 {
-  margin-top: 0;
-  margin-bottom: 12px;
+/* Card titles */
+.card h3 {
+  font-size: 1.1rem;
   font-weight: 600;
   color: #111827;
+  margin-bottom: 0.5rem;
 }
 
+/* Card subtitles or secondary headings */
 .card h4 {
-    margin-bottom: 10px; /* adds space below the heading */
+  font-size: 1rem;
+  font-weight: 500;
+  color: #374151; /* softer gray for subtle contrast */
+  margin-bottom: 0.5rem;
 }
 
 .card:hover {
