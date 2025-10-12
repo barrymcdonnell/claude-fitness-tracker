@@ -189,7 +189,7 @@ body {
 }
 
 .card {
-  background-color: #f9f9f9; /* soft contrast against white background */
+  background-color: #ddd; /* soft contrast against white background */
   border-radius: 16px;
   padding: 18px 20px;
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08); /* subtle elevation */
