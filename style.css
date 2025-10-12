@@ -6,7 +6,7 @@
 
 body {
   background-color: #fff;
-  color: #333;
+  color: #6B7280;
   font-family: 'Inter', sans-serif;
   margin: 0;
   padding: 0;
@@ -197,11 +197,11 @@ body {
   transition: transform 0.15s ease, box-shadow 0.15s ease;
 }
 
-.card h3 {
+.card h3,h4 {
   margin-top: 0;
   margin-bottom: 12px;
   font-weight: 600;
-  color: #222;
+  color: #111827;
 }
 
 .card h4 {
