@@ -418,96 +418,47 @@ input, textarea {
 
 
 /* Buttons */
-.btn {
-    background: linear-gradient(135deg, #6366f1 0%, #8b5cf6 100%);
-    color: white;
-    border: none;
-    padding: 12px 24px;
-    border-radius: 8px;
-    cursor: pointer;
-    font-weight: 600;
-    width: 100%;
-    margin-top: 8px;
-    transition: transform 0.2s ease;
-}
-       
-.btn:hover {
-    transform: translateY(-1px);
-}
-       
+/* Buttons */
+.btn,
+.btn-save,
 .btn-secondary {
-  background: linear-gradient(135deg, #3b82f6, #f97316); /* blue → orange */
-  color: white;
-  font-weight: 600;
-  padding: 12px 18px;
-  border: none;
-  border-radius: 8px;
-  cursor: pointer;
   width: 100%;
-  text-align: center;
-  margin-bottom: 12px;   /* 🔥 spacing below */
-  transition: transform 0.2s ease, box-shadow 0.2s ease;
+  padding: 12px 16px;
+  border-radius: 12px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background 0.2s ease, transform 0.1s ease;
+}
+
+.btn-secondary {
+  background: #e5e7eb;
+  color: #111827;
+  border: none;
+  margin-top: 6px;
 }
 
 .btn-secondary:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 4px 10px rgba(59, 130, 246, 0.4); /* blue glow */
+  background: #d1d5db;
 }
 
-       
-       /* Override for icon-only buttons */
-       .btn-start,
-       .btn-delete {
-           width: 40px;
-           height: 40px;
-           display: flex;
-           align-items: center;
-           justify-content: center;
-           padding: 0;
-           font-size: 20px;
-           border-radius: 6px;
-           color: white;
-           border: none;
-       }
-       
-      .btn-start {
-           background-color: #28a745;
-       }
-       .btn-start:hover {
-           background-color: #218838;
-       }
-       .btn-start:active {
-           background-color: #1e7e34;
-       }
-       
-       .btn-delete {
-           background-color: #dc3545;
-       }
-       .btn-delete:hover {
-           background-color: #c82333;
-       }
-       .btn-delete:active {
-           background-color: #bd2130;
-       }
-
 .btn-save {
-  background: linear-gradient(135deg, #f97316, #f59e0b); /* orange → amber */
-  color: white;
-  font-weight: 600;
-  padding: 12px 18px;
+  background: #2563eb;
+  color: #fff;
   border: none;
-  border-radius: 8px;
-  width: 100%;
-  text-align: center;  
-  cursor: pointer;
-  transition: transform 0.2s ease, box-shadow 0.2s ease;
+  margin-top: 12px;
 }
 
 .btn-save:hover {
-       transform: translateY(-2px);
-       box-shadow: 0 4px 10px rgba(249, 115, 22, 0.4);
+  background: #1d4ed8;
 }
 
+.btn:active,
+.btn-save:active,
+.btn-secondary:active {
+  transform: translateY(1px);
+}
+
+/* Workout modal finish button */
 .finish-button-container {
        text-align: center;
        margin-top: 1rem;
