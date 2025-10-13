@@ -1018,7 +1018,7 @@ input, textarea {
 
 .tab-btn {
   flex: 1;
-  background: transparent;
+  background: #92b1f5;
   border: none;
   outline: none;
   cursor: pointer;
