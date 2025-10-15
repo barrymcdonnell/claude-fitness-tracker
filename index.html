@@ -431,8 +431,61 @@
 
             <!-- Profile Section -->
             <div id="profile" class="section">
-              <h4>Some content...</h4>
-                Something else
+              <div class="card profile-card">
+                  <div class="profile-header">
+                    <div class="avatar">
+                      <i class="fas fa-user-circle"></i>
+                    </div>
+                    <div>
+                      <h3 id="profileName">Barry McDonnell</h3>
+                      <p id="profileAge">Age: 48</p>
+                    </div>
+                  </div>
+              </div>
+
+                <div class="card">
+                  <h3>Body Information</h3>
+                  <div class="input-group">
+                    <label>Height (cm)</label>
+                    <input type="number" id="profileHeight" placeholder="175">
+                  </div>
+                  <div class="input-group">
+                    <label>Current Weight (kg)</label>
+                    <input type="number" id="profileWeight" placeholder="73">
+                  </div>
+                  <div class="input-group">
+                    <label>Body Fat (%)</label>
+                    <input type="number" id="profileBodyFat" placeholder="19">
+                  </div>
+                  <button class="btn-save" onclick="saveProfile()">Save Profile</button>
+                </div>
+                
+                <div class="card">
+                  <h3>Goals</h3>
+                  <div class="input-group">
+                    <label>Workout Goal (per month)</label>
+                    <input type="number" id="monthlyWorkoutGoal" placeholder="12">
+                  </div>
+                  <div class="input-group">
+                    <label>Weight Goal (kg)</label>
+                    <input type="number" id="weightGoal" placeholder="70">
+                  </div>
+                  <div class="input-group">
+                    <label>Step Goal (per day)</label>
+                    <input type="number" id="stepGoal" placeholder="8000">
+                  </div>
+                  <div class="input-group">
+                    <label>Water Goal (L/day)</label>
+                    <input type="number" id="waterGoal" placeholder="2.5">
+                  </div>
+                  <button class="btn-save" onclick="saveGoals()">Save Goals</button>
+                </div>
+
+                <div class="card">
+                  <h3>Insights</h3>
+                  <p>🏃 You’re 3 workouts away from your monthly goal!</p>
+                  <p>💧 You’ve hit your water target 5 days in a row.</p>
+                </div>
             </div>
             
         </div>
