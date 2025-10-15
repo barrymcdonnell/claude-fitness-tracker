@@ -101,7 +101,8 @@
                     <h3>📝 My Workouts</h3>
                     <div class="tabs">
                         <button class="tab-btn active" data-tab="upcoming" onclick="switchWorkoutTab(event)">Active (<span id="activeWorkoutCount">0</span>)</button>
-                        <button class="tab-btn" data-tab="completed" onclick="switchWorkoutTab(event)">Completed</button>
+                        <button class="tab-btn" data-tab="completed" onclick="switchWorkoutTab(event)">Completed (<span id="completedWorkoutCount">0</span>)</button>
+                        
                       </div>
 
                     <!-- Container for active workouts -->
@@ -746,6 +747,7 @@
             showGreeting();
             displayCompletedWorkouts();
             updateActiveWorkoutCount();
+            updateCompletedWorkoutCount();
         });
 
         // Header items for search and the calendar - these are placeholders for future features
@@ -1068,7 +1070,12 @@
           document.getElementById("activeWorkoutCount").textContent = workouts.length;
         }
 
-
+        function updateCompletedWorkoutCount() {
+          const workoutCompletions = JSON.parse(localStorage.getItem("fittrack-workoutCompletions")) || [];
+          const countEl = document.getElementById("completedWorkoutCount");
+          if (countEl) countEl.textContent = workoutCompletions.length;
+        }
+    
         function toggleWorkoutDetails(header) {
           const card = header.parentElement;
           card.classList.toggle("active");
@@ -1105,6 +1112,7 @@
             
             alert('Workout saved successfully!');
             updateActiveWorkoutCount();
+            updateCompletedWorkoutCount();
         }
 
         function deleteWorkout(id) {
@@ -1926,6 +1934,7 @@
             checkAchievements();
             updateDashboard();
             showWorkoutReminder(); // Refresh reminder
+            updateCompletedWorkoutCount();
             
             alert('🎉 Workout completed! Great job!');
         }
