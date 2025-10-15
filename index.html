@@ -1064,9 +1064,10 @@
         }
 
         function updateActiveWorkoutCount() {
-          const workouts = JSON.parse(localStorage.getItem("workouts")) || [];
+          const workouts = JSON.parse(localStorage.getItem("fittrack-workouts")) || [];
           document.getElementById("activeWorkoutCount").textContent = workouts.length;
         }
+
 
         function toggleWorkoutDetails(header) {
           const card = header.parentElement;
