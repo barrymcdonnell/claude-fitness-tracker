@@ -45,6 +45,10 @@
                         <div class="stat-label">Completed Workouts</div>
                     </div>
                     <div class="stat-card">
+                        <div class="stat-value" id="workoutsThisMonth">0</div>
+                        <div class="stat-label">Workouts This Month</div>
+                    </div>
+                    <div class="stat-card">
                         <div class="stat-value" id="avgSteps">0</div>
                         <div class="stat-label">Avg Steps (7 Days)</div>
                     </div>
@@ -1064,6 +1068,20 @@
           document.querySelectorAll('.tab-content').forEach(c => c.style.display = 'none');
           document.getElementById('workoutsTab-' + tabName).style.display = 'block';
         }
+
+        function updateWorkoutsThisMonth() {
+            const now = new Date();
+            const currentMonth = now.getMonth();
+            const currentYear = now.getFullYear();
+        
+            const workoutsThisMonth = workoutCompletions.filter(w => {
+                const d = new Date(w.date);
+                return d.getMonth() === currentMonth && d.getFullYear() === currentYear;
+            }).length;
+        
+            document.getElementById("workoutsThisMonth").textContent = workoutsThisMonth;
+        }
+
 
         function updateActiveWorkoutCount() {
           const workouts = JSON.parse(localStorage.getItem("fittrack-workouts")) || [];
@@ -3286,6 +3304,7 @@
             showWorkoutReminder();
             updateDashboard();
             checkAchievements(); // Check achievements on app load
+            updateWorkoutsThisMonth();
         }
 
         // Event Listeners
