@@ -2061,11 +2061,15 @@
             updateDashboard();
             showWorkoutReminder(); // Refresh reminder
             updateCompletedWorkoutCount();
+            updateWorkoutProgress();
             
             alert('🎉 Workout completed! Great job!');
         }
 
+        // *******************
         // Achievement System
+        // *******************
+    
         function checkAchievements() {
             let newAchievements = [];
             
@@ -2474,27 +2478,31 @@
         // Dashboard
         // *************
         function updateWorkoutProgress() {
-          const workouts = JSON.parse(localStorage.getItem('completedWorkouts')) || [];
+          const completedWorkouts = JSON.parse(localStorage.getItem('completedWorkouts')) || [];
           const currentMonth = new Date().getMonth();
-          const workoutsThisMonth = workouts.filter(w => new Date(w.date).getMonth() === currentMonth).length;
+          const workoutsThisMonth = completedWorkouts.filter(w => new Date(w.date).getMonth() === currentMonth).length;
         
+          // Optional: read from a goal stored in profile/settings (default 12)
           const goals = JSON.parse(localStorage.getItem('userGoals')) || {};
           const monthlyGoal = goals.monthlyWorkoutGoal ? parseInt(goals.monthlyWorkoutGoal) : 12;
         
-          const progressElement = document.getElementById('workoutProgress');
-          if (progressElement) {
-            progressElement.textContent = `${workoutsThisMonth} / ${monthlyGoal}`;
+          // Update numbers
+          document.getElementById("workoutsThisMonth").textContent = workoutsThisMonth;
+          document.getElementById("workoutProgress").textContent = `${workoutsThisMonth} / ${monthlyGoal}`;
         
-            // Optional: add color feedback
-            if (workoutsThisMonth >= monthlyGoal) {
-              progressElement.style.color = "#16a34a"; // green
-            } else if (workoutsThisMonth >= monthlyGoal * 0.5) {
-              progressElement.style.color = "#facc15"; // yellow
-            } else {
-              progressElement.style.color = "#ef4444"; // red
-            }
+          // Add subtle color feedback (optional)
+          const progressRatio = workoutsThisMonth / monthlyGoal;
+          const statCard = document.querySelector(".stat-card");
+        
+          if (progressRatio >= 1) {
+            statCard.style.borderLeftColor = "#16a34a"; // green
+          } else if (progressRatio >= 0.5) {
+            statCard.style.borderLeftColor = "#facc15"; // yellow
+          } else {
+            statCard.style.borderLeftColor = "#ef4444"; // red
           }
         }
+
 
     
         // Show workout reminder on dashboard page
