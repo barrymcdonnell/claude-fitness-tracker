@@ -47,6 +47,7 @@
                     <div class="stat-card">
                         <div class="stat-value" id="workoutsThisMonth">0</div>
                         <div class="stat-label">Workouts This Month</div>
+                        <p id="workoutProgress">0 / 12</p>
                     </div>
                     <div class="stat-card">
                         <div class="stat-value" id="avgSteps">0</div>
@@ -812,6 +813,8 @@
             displayCompletedWorkouts();
             updateActiveWorkoutCount();
             updateCompletedWorkoutCount();
+            loadProfile();
+            updateWorkoutProgress();
         });
 
         // Header items for search and the calendar - these are placeholders for future features
@@ -823,7 +826,10 @@
           alert("Calendar view coming soon!");
         });
 
+        // **********
         // Navigation
+        // **********
+    
         function showSection(sectionName, clickedButton) {
             // Hide all sections
             document.querySelectorAll('.section').forEach(section => {
@@ -1447,6 +1453,7 @@
           // Refresh UI
           displayCompletedWorkouts();
           displayVolumeStats();
+          updateWorkoutProgress();
         
           // ✅ Switch to Completed tab safely
           const completedTab = document.querySelector('[data-tab="completed"]');
@@ -2463,7 +2470,33 @@
             }
         }
 
+        // *************
+        // Dashboard
+        // *************
+        function updateWorkoutProgress() {
+          const workouts = JSON.parse(localStorage.getItem('completedWorkouts')) || [];
+          const currentMonth = new Date().getMonth();
+          const workoutsThisMonth = workouts.filter(w => new Date(w.date).getMonth() === currentMonth).length;
+        
+          const goals = JSON.parse(localStorage.getItem('userGoals')) || {};
+          const monthlyGoal = goals.monthlyWorkoutGoal ? parseInt(goals.monthlyWorkoutGoal) : 12;
+        
+          const progressElement = document.getElementById('workoutProgress');
+          if (progressElement) {
+            progressElement.textContent = `${workoutsThisMonth} / ${monthlyGoal}`;
+        
+            // Optional: add color feedback
+            if (workoutsThisMonth >= monthlyGoal) {
+              progressElement.style.color = "#16a34a"; // green
+            } else if (workoutsThisMonth >= monthlyGoal * 0.5) {
+              progressElement.style.color = "#facc15"; // yellow
+            } else {
+              progressElement.style.color = "#ef4444"; // red
+            }
+          }
+        }
 
+    
         // Show workout reminder on dashboard page
         function showWorkoutReminder() {
             const today = new Date();
@@ -2659,8 +2692,10 @@
             });
         }
 
-
+        // ************************
         // Measurements Management
+        // ************************
+    
         function saveMeasurements() {
             let weightValue = document.getElementById('weight').value;
             let weight = weightValue !== "" ? parseFloat(weightValue) : null;
