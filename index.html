@@ -921,9 +921,50 @@
           });
         });
 
+        // ****************
+        // Profile Section
+        // ****************
+        function saveProfile() {
+          const profile = {
+            height: document.getElementById('profileHeight').value,
+            weight: document.getElementById('profileWeight').value,
+            bodyFat: document.getElementById('profileBodyFat').value,
+          };
+          localStorage.setItem('userProfile', JSON.stringify(profile));
+          alert('✅ Profile saved successfully!');
+        }
+        
+        function saveGoals() {
+          const goals = {
+            monthlyWorkoutGoal: document.getElementById('monthlyWorkoutGoal').value,
+            weightGoal: document.getElementById('weightGoal').value,
+            stepGoal: document.getElementById('stepGoal').value,
+            waterGoal: document.getElementById('waterGoal').value,
+          };
+          localStorage.setItem('userGoals', JSON.stringify(goals));
+          alert('🎯 Goals saved successfully!');
+        }
+        
+        function loadProfile() {
+          const profile = JSON.parse(localStorage.getItem('userProfile')) || {};
+          document.getElementById('profileHeight').value = profile.height || '';
+          document.getElementById('profileWeight').value = profile.weight || '';
+          document.getElementById('profileBodyFat').value = profile.bodyFat || '';
+        
+          const goals = JSON.parse(localStorage.getItem('userGoals')) || {};
+          document.getElementById('monthlyWorkoutGoal').value = goals.monthlyWorkoutGoal || '';
+          document.getElementById('weightGoal').value = goals.weightGoal || '';
+          document.getElementById('stepGoal').value = goals.stepGoal || '';
+          document.getElementById('waterGoal').value = goals.waterGoal || '';
+        }
+        
+        // Automatically load profile + goals when the app starts
+        document.addEventListener('DOMContentLoaded', loadProfile);
+
 
         // **************************
         // Exercise Library Functions
+        // **************************
         function displayExerciseLibrary() {
             const container = document.getElementById('exerciseLibrary');
             container.innerHTML = '';
