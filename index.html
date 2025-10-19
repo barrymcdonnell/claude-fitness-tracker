@@ -797,14 +797,56 @@
         // Initialize app
         document.addEventListener('DOMContentLoaded', function() {
             const today = new Date().toISOString().split('T')[0];
-            document.getElementById('todaysDate').textContent = new Date().toLocaleDateString('en-US', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' });
-            document.getElementById('trackingDate').value = today;
-            document.getElementById('measurementDate').value = today;
-            document.getElementById('scheduleStartDate').value = today;
-            // Run after exercises.js is loaded
-            document.getElementById("exerciseCount").textContent = `Choose from ${exercises.length} exercises below...`;
+        
+            // Safely set today's date in relevant elements
+            const todaysDate = document.getElementById('todaysDate');
+            if (todaysDate) {
+              todaysDate.textContent = new Date().toLocaleDateString('en-US', {
+                weekday: 'long',
+                year: 'numeric',
+                month: 'long',
+                day: 'numeric'
+              });
+            }
+        
+            const trackingDate = document.getElementById('trackingDate');
+            if (trackingDate) trackingDate.value = today;
+        
+            const measurementDate = document.getElementById('measurementDate');
+            if (measurementDate) measurementDate.value = today;
+        
+            const scheduleStartDate = document.getElementById('scheduleStartDate');
+            if (scheduleStartDate) scheduleStartDate.value = today;
+        
+            // Exercise count setup
+            const exerciseCount = document.getElementById("exerciseCount");
+            if (exerciseCount && typeof exercises !== 'undefined') {
+              exerciseCount.textContent = `Choose from ${exercises.length} exercises below...`;
+            }
+        
+            // "More" button dropdown
+            const moreButton = document.getElementById("moreButton");
+            const moreMenu = document.getElementById("moreMenu");
+            if (moreButton && moreMenu) {
+              moreButton.addEventListener("click", () => {
+                moreMenu.classList.toggle("show");
+              });
+        
+              // Auto close dropdown when clicking elsewhere
+              document.addEventListener("click", (e) => {
+                if (!moreMenu.contains(e.target) && !moreButton.contains(e.target)) {
+                  moreMenu.classList.remove("show");
+                }
+              });
+            }
+        
+            // Update dashboard stats if function exists
+            if (typeof updateDashboard === "function") updateDashboard();
+        
+            // Update workout progress if function exists
+            if (typeof updateWorkoutProgress === "function") updateWorkoutProgress();
+        
 
-            
             //exercises = exerciseDatabase; no longer needed; exercises now coming from exercises.js file
             loadData();
             loadGoals();
