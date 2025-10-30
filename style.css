@@ -812,10 +812,32 @@ input, textarea {
   transform: scale(1.05);
 }
 
+/* Workouts This Month badge */
 #workoutProgress {
+  display: inline-block;
   font-weight: 600;
-  transition: color 0.3s ease;
+  background: #374151; /* neutral gray base */
+  color: #fff;
+  padding: 6px 12px;
+  border-radius: 20px;
+  font-size: 1rem;
+  margin-top: 6px;
+  transition: background 0.3s ease, color 0.3s ease;
 }
+
+#workoutProgress.green {
+  background: #10b981; /* emerald (success) */
+}
+
+#workoutProgress.yellow {
+  background: #facc15; /* amber (warning) */
+  color: #000;
+}
+
+#workoutProgress.red {
+  background: #ef4444; /* red (low progress) */
+}
+
 
 /* Specific button colors */
 .btn-start {
