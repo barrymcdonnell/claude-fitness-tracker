@@ -451,11 +451,15 @@
                   <button class="btn-save" onclick="saveGoals()">Save Goals</button>
                 </div>
 
-                <div class="card">
-                  <h3>Insights</h3>
-                  <p>🏃 You’re 3 workouts away from your monthly goal!</p>
-                  <p>💧 You’ve hit your water target 5 days in a row.</p>
+                <div id="profileInsightsCard" class="card mt-3">
+                  <div class="card-body">
+                    <h5 class="card-title">Insights</h5>
+                    <p id="profileInsightsText" class="card-text text-muted">
+                      Loading your insights...
+                    </p>
+                  </div>
                 </div>
+
             </div>
             
         </div>
@@ -963,6 +967,7 @@
           localStorage.setItem('userGoals', JSON.stringify(goals));
           alert('🎯 Goals saved successfully!');
           updateDashboard(); // refresh stats using new goals
+          updateProfileInsights();
         }
         
         function loadProfile() {
@@ -979,12 +984,47 @@
           document.getElementById('weightGoal').value = goals.weightGoal || '';
           document.getElementById('stepGoal').value = goals.stepGoal || '';
           document.getElementById('waterGoal').value = goals.waterGoal || '';
+
+          updateProfileInsights();
         }
         
         // Automatically load profile + goals when the app starts
         document.addEventListener('DOMContentLoaded', loadProfile);
 
+        // Update the profile insights section dynamically
+        function updateProfileInsights() {
+          const goals = JSON.parse(localStorage.getItem('userGoals')) || {};
+          const workouts = JSON.parse(localStorage.getItem('loggedWorkouts')) || [];
+        
+          // Get this month’s workouts
+          const now = new Date();
+          const month = now.getMonth();
+          const year = now.getFullYear();
+          const workoutsThisMonth = workouts.filter(w => {
+            const date = new Date(w.date);
+            return date.getMonth() === month && date.getFullYear() === year;
+          }).length;
+        
+          const monthlyGoal = goals.monthlyWorkoutGoal || 12; // fallback to 12
+        
+          let message = "";
+        
+          if (workoutsThisMonth === 0) {
+            message = "You haven't logged any workouts this month yet. Let's get started!";
+          } else if (workoutsThisMonth < monthlyGoal) {
+            const remaining = monthlyGoal - workoutsThisMonth;
+            message = `💪 You’ve completed ${workoutsThisMonth} of ${monthlyGoal} workouts this month — just ${remaining} to go!`;
+          } else if (workoutsThisMonth === monthlyGoal) {
+            message = `🔥 You’ve hit your monthly goal of ${monthlyGoal} workouts! Keep it up!`;
+          } else {
+            message = `🏆 Incredible! You’ve smashed your goal with ${workoutsThisMonth} workouts this month!`;
+          }
+        
+          document.getElementById('profileInsightsText').textContent = message;
+        }
 
+
+    
         // **************************
         // Exercise Library Functions
         // **************************
@@ -2079,6 +2119,7 @@
             showWorkoutReminder(); // Refresh reminder
             updateCompletedWorkoutCount();
             updateWorkoutProgress();
+            updateProfileInsights();
             
             alert('🎉 Workout completed! Great job!');
         }
