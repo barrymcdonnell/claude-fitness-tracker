@@ -162,36 +162,7 @@
 
             <!-- Goals Section -->
             <div id="goals" class="section">
-                <div class="card">
-                    <h3>🎯 Set Your Goals</h3>
-                    <div class="input-group">
-                        <label>Daily Steps Goal</label>
-                        <input type="number" id="stepsGoal" placeholder="10000" min="1000" step="500">
-                    </div>
-                    <div class="input-group">
-                        <label>Daily Water Goal (Liters)</label>
-                        <input type="number" id="waterGoal" placeholder="2.5" min="1" step="0.1">
-                    </div>
-                    <div class="input-group">
-                        <label>Daily Calories Goal</label>
-                        <input type="number" id="caloriesGoal" placeholder="2000" min="1200" step="50">
-                    </div>
-                    <div class="input-group">
-                        <label>Target Weight (kg)</label>
-                        <input type="number" id="weightGoal" placeholder="70" min="40" step="0.5">
-                    </div>
-                    <button class="btn-save" onclick="saveGoals()">Save Goals</button>
-                </div>
-
-                <div class="card">
-                    <h3>📊 Daily Goals Progress</h3>
-                    <div id="dailyGoalsProgress">
-                        <div class="empty-state">
-                            <h4>Set goals above to see your progress</h4>
-                            <p>Track how you're doing against your daily targets</p>
-                        </div>
-                    </div>
-                </div>
+                
 
                 <div class="card">
                     <h3>📈 Steps Chart (Last 14 Days)</h3>
@@ -539,7 +510,6 @@
           <button onclick="showSection('challenges', this)"><i class="fa-solid fa-list-check"></i> Challenges</button>
           <button onclick="showSection('plans', this)"><i class="fas fa-calendar-alt"></i> Plans</button>
           <button onclick="showSection('schedule', this)"><i class="fa-solid fa-calendar-day"></i> Schedule</button>
-          <button onclick="showSection('goals', this)"><i class="fa-solid fa-bullseye"></i> Goals</button>
           <button onclick="showSection('achievements', this)"><i class="fas fa-trophy"></i> Achievements</button>
           <button onclick="showSection('measurements', this)"><i class="fa-solid fa-bars-progress"></i> Progress</button> 
           <button onclick="showSection('profile', this)"><i class="fas fa-user"></i> Profile</button>
@@ -972,32 +942,39 @@
         // ****************
         function saveProfile() {
           const profile = {
-            height: document.getElementById('profileHeight').value,
-            weight: document.getElementById('profileWeight').value,
-            bodyFat: document.getElementById('profileBodyFat').value,
+            height: parseFloat(document.getElementById('profileHeight').value) || 0,
+            weight: parseFloat(document.getElementById('profileWeight').value) || 0,
+            bodyFat: parseFloat(document.getElementById('profileBodyFat').value) || 0,
           };
+        
           localStorage.setItem('userProfile', JSON.stringify(profile));
           alert('✅ Profile saved successfully!');
+          updateDashboard(); // Optional: refresh metrics that depend on profile
         }
         
         function saveGoals() {
           const goals = {
-            monthlyWorkoutGoal: document.getElementById('monthlyWorkoutGoal').value,
-            weightGoal: document.getElementById('weightGoal').value,
-            stepGoal: document.getElementById('stepGoal').value,
-            waterGoal: document.getElementById('waterGoal').value,
+            monthlyWorkoutGoal: parseInt(document.getElementById('monthlyWorkoutGoal').value) || 0,
+            weightGoal: parseFloat(document.getElementById('weightGoal').value) || 0,
+            stepGoal: parseInt(document.getElementById('stepGoal').value) || 0,
+            waterGoal: parseFloat(document.getElementById('waterGoal').value) || 0,
           };
+        
           localStorage.setItem('userGoals', JSON.stringify(goals));
           alert('🎯 Goals saved successfully!');
+          updateDashboard(); // refresh stats using new goals
         }
         
         function loadProfile() {
           const profile = JSON.parse(localStorage.getItem('userProfile')) || {};
+          const goals = JSON.parse(localStorage.getItem('userGoals')) || {};
+        
+          // Body info
           document.getElementById('profileHeight').value = profile.height || '';
           document.getElementById('profileWeight').value = profile.weight || '';
           document.getElementById('profileBodyFat').value = profile.bodyFat || '';
         
-          const goals = JSON.parse(localStorage.getItem('userGoals')) || {};
+          // Goals
           document.getElementById('monthlyWorkoutGoal').value = goals.monthlyWorkoutGoal || '';
           document.getElementById('weightGoal').value = goals.weightGoal || '';
           document.getElementById('stepGoal').value = goals.stepGoal || '';
@@ -2213,135 +2190,7 @@
             }).join('');
         }
 
-        // Goals Management
-        function saveGoals() {
-            goals = {
-                steps: parseInt(document.getElementById('stepsGoal').value) || 0,
-                water: parseFloat(document.getElementById('waterGoal').value) || 0,
-                calories: parseInt(document.getElementById('caloriesGoal').value) || 0,
-                weight: parseFloat(document.getElementById('weightGoal').value) || 0
-            };
-            
-            saveData();
-            checkAchievements(); // Check for goal-related achievements
-            updateGoalsDisplay();
-            updateChartsDisplay();
-            updateDashboard();
-            
-            alert('Goals saved successfully!');
-        }
-
-        function loadGoals() {
-            if (goals.steps) document.getElementById('stepsGoal').value = goals.steps;
-            if (goals.water) document.getElementById('waterGoal').value = goals.water;
-            if (goals.calories) document.getElementById('caloriesGoal').value = goals.calories;
-            if (goals.weight) document.getElementById('weightGoal').value = goals.weight;
-        }
-
-        function updateGoalsDisplay() {
-            const container = document.getElementById('dailyGoalsProgress');
-            
-            if (!goals.steps && !goals.water && !goals.calories && !goals.weight) {
-                container.innerHTML = `
-                    <div class="empty-state">
-                        <h4>Set goals above to see your progress</h4>
-                        <p>Track how you're doing against your daily targets</p>
-                    </div>
-                `;
-                return;
-            }
-
-            const today = new Date().toISOString().split('T')[0];
-            const todayData = tracking.find(n => n.date === today) || {};
-            const todayWeight = measurements.find(m => m.date === today);
-
-            let progressItems = [];
-
-            if (goals.steps) {
-                const current = todayData.steps || 0;
-                const progress = Math.min((current / goals.steps) * 100, 100);
-                const status = current >= goals.steps ? 'achieved' : 
-                             current >= goals.steps * 0.8 ? 'close' : 'needs-work';
-                const statusText = current >= goals.steps ? 'Achieved!' : 
-                                 current >= goals.steps * 0.8 ? 'Close!' : 'Keep going!';
-                
-                progressItems.push(`
-                    <div class="goal-progress-item ${status}">
-                        <div class="goal-header">
-                            <div class="goal-name">👟 Steps: ${current.toLocaleString()} / ${goals.steps.toLocaleString()}</div>
-                            <div class="goal-status ${status}">${statusText}</div>
-                        </div>
-                        <div class="progress-bar">
-                            <div class="progress-fill" style="width: ${progress}%"></div>
-                        </div>
-                    </div>
-                `);
-            }
-
-            if (goals.water) {
-                const current = todayData.water || 0;
-                const progress = Math.min((current / goals.water) * 100, 100);
-                const status = current >= goals.water ? 'achieved' : 
-                             current >= goals.water * 0.8 ? 'close' : 'needs-work';
-                const statusText = current >= goals.water ? 'Achieved!' : 
-                                 current >= goals.water * 0.8 ? 'Close!' : 'Keep going!';
-                
-                progressItems.push(`
-                    <div class="goal-progress-item ${status}">
-                        <div class="goal-header">
-                            <div class="goal-name">💧 Water: ${current}L / ${goals.water}L</div>
-                            <div class="goal-status ${status}">${statusText}</div>
-                        </div>
-                        <div class="progress-bar">
-                            <div class="progress-fill" style="width: ${progress}%"></div>
-                        </div>
-                    </div>
-                `);
-            }
-
-            if (goals.calories) {
-                const current = todayData.calories || 0;
-                const progress = Math.min((current / goals.calories) * 100, 100);
-                const status = current >= goals.calories ? 'achieved' : 
-                             current >= goals.calories * 0.8 ? 'close' : 'needs-work';
-                const statusText = current >= goals.calories ? 'Achieved!' : 
-                                 current >= goals.calories * 0.8 ? 'Close!' : 'Keep going!';
-                
-                progressItems.push(`
-                    <div class="goal-progress-item ${status}">
-                        <div class="goal-header">
-                            <div class="goal-name">🔥 Calories: ${current} / ${goals.calories}</div>
-                            <div class="goal-status ${status}">${statusText}</div>
-                        </div>
-                        <div class="progress-bar">
-                            <div class="progress-fill" style="width: ${progress}%"></div>
-                        </div>
-                    </div>
-                `);
-            }
-
-            if (goals.weight && todayWeight) {
-                const current = todayWeight.weight;
-                const diff = Math.abs(current - goals.weight);
-                const status = diff <= 0.5 ? 'achieved' : diff <= 2 ? 'close' : 'needs-work';
-                const statusText = diff <= 0.5 ? 'At goal!' : diff <= 2 ? 'Close!' : 'Keep going!';
-                
-                progressItems.push(`
-                    <div class="goal-progress-item ${status}">
-                        <div class="goal-header">
-                            <div class="goal-name">⚖️ Weight: ${current}kg / ${goals.weight}kg</div>
-                            <div class="goal-status ${status}">${statusText}</div>
-                        </div>
-                        <div style="opacity: 0.7; font-size: 14px;">
-                            ${diff.toFixed(1)}kg ${current > goals.weight ? 'above' : 'below'} target
-                        </div>
-                    </div>
-                `);
-            }
-
-            container.innerHTML = progressItems.join('');
-        }
-
+       
         // Chart Generation Functions
         function updateChartsDisplay() {
             // Steps Chart
@@ -2524,7 +2373,9 @@
         
           // Optional: read from a goal stored in profile/settings (default 12)
           const goals = JSON.parse(localStorage.getItem('userGoals')) || {};
-          const monthlyGoal = goals.monthlyWorkoutGoal ? parseInt(goals.monthlyWorkoutGoal) : 12;
+          const monthlyGoal = goals.monthlyWorkoutGoal || 12; // fallback to 12
+          document.getElementById('workoutProgress').textContent = `${workoutsThisMonth} / ${monthlyGoal}`;
+
         
           // Update numbers
           document.getElementById("workoutsThisMonth").textContent = workoutsThisMonth;
