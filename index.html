@@ -3287,7 +3287,20 @@
             if (workoutsElem && progressElem) {
               workoutsElem.textContent = workoutsThisMonth;
               progressElem.textContent = `${workoutsThisMonth} / ${monthlyGoal}`;
+            
+              // Calculate progress percentage
+              const progressPercent = (workoutsThisMonth / monthlyGoal) * 100;
+            
+              // Color logic
+              if (progressPercent >= 100) {
+                progressElem.style.color = '#10b981'; // green — goal achieved
+              } else if (progressPercent >= 75) {
+                progressElem.style.color = '#facc15'; // yellow — nearly there
+              } else {
+                progressElem.style.color = '#ef4444'; // red — needs work
+              }
             }
+
 
             
             // Average steps for the last 7 days
