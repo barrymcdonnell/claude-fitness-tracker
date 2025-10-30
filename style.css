@@ -812,6 +812,11 @@ input, textarea {
   transform: scale(1.05);
 }
 
+#workoutProgress {
+  font-weight: 600;
+  transition: color 0.3s ease;
+}
+
 /* Specific button colors */
 .btn-start {
   background-color: #4CAF50; /* green */
