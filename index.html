@@ -3265,44 +3265,33 @@
         function updateDashboard() {
             document.getElementById('totalWorkouts').textContent = workoutCompletions.length;
 
-            // --- Workouts This Month ---
-            const now = new Date();
-            const thisMonth = now.getMonth();
-            const thisYear = now.getFullYear();
+            // --- Workouts this month ---
+            const completionsThisMonth = workoutCompletions.filter(w => {
+              const date = new Date(w.date);
+              const now = new Date();
+              return date.getMonth() === now.getMonth() && date.getFullYear() === now.getFullYear();
+            });
             
-            // Filter workouts completed this month
-            const workoutsThisMonth = workoutCompletions.filter(w => {
-              const d = new Date(w.date);
-              return d.getMonth() === thisMonth && d.getFullYear() === thisYear;
-            }).length;
+            const goalData = JSON.parse(localStorage.getItem('userGoals')) || {};
+            const monthlyGoal = goalData.monthlyWorkoutGoal || 12; // fallback
+            const progressPercent = (completionsThisMonth.length / monthlyGoal) * 100;
             
-            // Get saved monthly goal from localStorage
-            const savedGoals = JSON.parse(localStorage.getItem('userGoals')) || {};
-            const monthlyGoal = savedGoals.monthlyWorkoutGoal || 12;
+            const workoutProgressElem = document.getElementById('workoutProgress');
+            const workoutsThisMonthElem = document.getElementById('workoutsThisMonth');
             
-            // Update dashboard display
-            const workoutsElem = document.getElementById('workoutsThisMonth');
-            const progressElem = document.getElementById('workoutProgress');
-            
-            if (workoutsElem && progressElem) {
-              workoutsElem.textContent = workoutsThisMonth;
-              progressElem.textContent = `${workoutsThisMonth} / ${monthlyGoal}`;
-            
-              // Calculate progress percentage
-              const progressPercent = (workoutsThisMonth / monthlyGoal) * 100;
-            
-              // Color logic
-              if (progressPercent >= 100) {
-                progressElem.style.color = '#10b981'; // green — goal achieved
-              } else if (progressPercent >= 75) {
-                progressElem.style.color = '#facc15'; // yellow — nearly there
-              } else {
-                progressElem.style.color = '#ef4444'; // red — needs work
-              }
+            if (workoutProgressElem && workoutsThisMonthElem) {
+              workoutsThisMonthElem.textContent = completionsThisMonth.length;
+              workoutProgressElem.textContent = `${completionsThisMonth.length} / ${monthlyGoal}`;
+                
+              // reset and assign badge color
+              workoutProgressElem.className = '';
+                workoutProgressElem.classList.add(
+                progressPercent >= 100 ? 'green' :
+                progressPercent >= 75 ? 'yellow' :
+                'red'
+              );
             }
 
-
-            
             // Average steps for the last 7 days
             const last7DaysTracking = tracking.slice(-7);
             const avgSteps = last7DaysTracking.length > 0 ? 
