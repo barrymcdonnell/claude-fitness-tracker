@@ -17,11 +17,11 @@
 <body>
     <div class="container">
         <header class="app-header">
-          <div class="user-info">
+          <div class="user-info" onclick="showSection('profile', this)" style="cursor: pointer;">
             <i class="fa-regular fa-circle-user"></i>
-            <span>Barry</span>
+            <span id="headerUserName">Barry</span>
           </div>
-        
+                
           <div class="header-icons">
             <i class="fas fa-search" title="Search"></i>
             <i class="fas fa-calendar-alt" title="Calendar"></i>
