@@ -535,6 +535,10 @@
         </div>
     </div>
 
+    <!-- Toast -->
+    <div id="toast" class="toast"></div>
+
+
     
 
 
@@ -1215,6 +1219,25 @@
             updateSelectedExercisesDisplay();
         }
 
+        function showExerciseInfo(exerciseId) {
+          const exercise = exercises.find(e => e.id === exerciseId);
+          if (!exercise || !exercise.instructions) {
+            showToast("No instructions available for this exercise.");
+            return;
+          }
+          showToast(exercise.instructions);
+        }
+        
+        function showToast(message) {
+          const toast = document.getElementById("toast");
+          toast.textContent = message;
+          toast.classList.add("show");
+          setTimeout(() => {
+            toast.classList.remove("show");
+          }, 3000);
+        }
+
+
         // **********************
         // Workout Management
         // **********************
@@ -1550,7 +1573,13 @@
               <div class="exercise-list">
                   ${activeWorkout.exercises.map((ex, i) => `
                     <div class="exercise-block">
-                      <h5>${ex.name}</h5>
+                      <h5>
+                          ${ex.name}
+                          <span class="info-icon" title="Show instructions" onclick="showExerciseInfo('${ex.id}')">
+                            <i class="fas fa-circle-info"></i>
+                          </span>
+                      </h5>
+
                       ${Array.from({ length: ex.sets }).map((_, setIndex) => {
                         const isChecked =
                           ex.completedSets && ex.completedSets.includes(setIndex)
