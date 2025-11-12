@@ -935,14 +935,20 @@
         });
 
         
-        // Hide More menu when clicking outside
+        // Hide "More" menu when clicking outside (safe version)
         document.addEventListener("click", (e) => {
           const menu = document.getElementById("moreMenu");
           const moreBtn = document.getElementById("moreButton");
-          if (!menu.contains(e.target) && e.target !== moreBtn && !moreBtn.contains(e.target)) {
+        
+          // ✅ Only run this if both elements exist
+          if (!menu || !moreBtn) return;
+        
+          // ✅ Safe containment check
+          if (!menu.contains(e.target) && !moreBtn.contains(e.target)) {
             menu.classList.remove("show");
           }
         });
+
 
         // Allowing the 'more' menu to slide up and fade in
         function toggleMoreMenu() {
