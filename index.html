@@ -1221,21 +1221,38 @@
 
         function showExerciseInfo(exerciseId) {
           const exercise = exercises.find(e => e.id === exerciseId);
-          if (!exercise || !exercise.instructions) {
-            showToast("No instructions available for this exercise.");
+          if (!exercise) {
+            showToast("Exercise not found.", "other");
             return;
           }
-          showToast(exercise.instructions);
+        
+          const category = exercise.category ? exercise.category.toLowerCase() : "other";
+          const message = exercise.instructions || "No instructions available for this exercise.";
+        
+          showToast(message, category);
         }
         
-        function showToast(message) {
+        function showToast(message, category = "other") {
           const toast = document.getElementById("toast");
+        
+          // Remove previous category class
+          toast.className = "toast";
+        
+          // Add category color class (if defined)
+          if (["strength", "mobility", "cardio", "flexibility"].includes(category)) {
+            toast.classList.add(category);
+          } else {
+            toast.classList.add("other");
+          }
+        
           toast.textContent = message;
           toast.classList.add("show");
+        
           setTimeout(() => {
             toast.classList.remove("show");
           }, 3000);
         }
+
 
 
         // **********************
