@@ -815,6 +815,27 @@
                 }
               });
             }
+
+            // ✅ Initialize workout globals and bind functions
+            window.activeWorkout = null;
+            window.workoutTimerInterval = null;
+            window.pausedElapsed = 0;
+            
+            window.startWorkout = function(workoutId) {
+              const workout = workouts.find(w => w.id === workoutId);
+              if (!workout) return;
+            
+              activeWorkout = {
+                ...workout,
+                startTime: new Date(),
+                endTime: null,
+                paused: false
+              };
+              pausedElapsed = 0;
+            
+              renderActiveWorkout();
+              startTimer();
+            };
         
             // Update dashboard stats if function exists
             if (typeof updateDashboard === "function") updateDashboard();
