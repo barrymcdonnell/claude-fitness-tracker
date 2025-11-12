@@ -920,10 +920,24 @@
 
         // === Bottom Navigation Logic ===
         // More Menu toggle logic
-        document.getElementById("moreButton").addEventListener("click", () => {
-          const menu = document.getElementById("moreMenu");
-          menu.classList.toggle("show");
+        document.addEventListener('DOMContentLoaded', () => {
+          const moreButton = document.getElementById("moreButton");
+          const moreMenu = document.getElementById("moreMenu");
+        
+          if (moreButton && moreMenu) {
+            moreButton.addEventListener("click", () => {
+              moreMenu.classList.toggle("show");
+            });
+        
+            // Optional: close menu when clicking elsewhere
+            document.addEventListener("click", (e) => {
+              if (!moreMenu.contains(e.target) && !moreButton.contains(e.target)) {
+                moreMenu.classList.remove("show");
+              }
+            });
+          }
         });
+
         
         // Hide More menu when clicking outside
         document.addEventListener("click", (e) => {
