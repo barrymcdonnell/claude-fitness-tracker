@@ -697,6 +697,43 @@ input, textarea {
        font-weight: 500;
 }
 
+.info-icon {
+  color: #60a5fa;
+  cursor: pointer;
+  margin-left: 8px;
+  font-size: 1rem;
+  transition: transform 0.2s ease;
+}
+
+.info-icon:hover {
+  transform: scale(1.1);
+}
+
+/* Toast message */
+.toast {
+  visibility: hidden;
+  min-width: 260px;
+  background-color: rgba(0, 0, 0, 0.8);
+  color: #fff;
+  text-align: center;
+  border-radius: 8px;
+  padding: 12px;
+  position: fixed;
+  bottom: 30px;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 1000;
+  font-size: 0.95rem;
+  transition: visibility 0s, opacity 0.3s ease;
+  opacity: 0;
+}
+
+.toast.show {
+  visibility: visible;
+  opacity: 1;
+}
+
+
 /* BMI Badge */
 #bmiBadge {
     display: inline-block;
