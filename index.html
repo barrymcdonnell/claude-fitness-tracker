@@ -1403,9 +1403,9 @@
             updateActiveWorkoutCount();
         }
 
-        let activeWorkout = null;
-        let workoutTimerInterval = null;
-        let pausedElapsed = 0;
+        window.activeWorkout = null;
+        window.workoutTimerInterval = null;
+        window.pausedElapsed = 0;
 
         // Reset & start timer ⏱
         function startTimer() {
