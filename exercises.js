@@ -6,7 +6,8 @@ const exercises = [
         "category": "Strength",
         "primaryMuscle": "Quads",
         "secondaryMuscles": ["Glutes", "Hamstrings"],
-        "equipment": "Bodyweight"
+        "equipment": "Bodyweight",
+        "instructions": "Stand with your back against a wall, feet shoulder-width apart. Slide down until your knees form 90° angles and hold the position."
     },
     {
         "id": "2",
@@ -14,7 +15,8 @@ const exercises = [
         "category": "Strength",
         "primaryMuscle": "Quads",
         "secondaryMuscles": ["Glutes", "Hamstrings"],
-        "equipment": "Bodyweight"
+        "equipment": "Bodyweight",
+        "instructions": "Lower into a squat, then explode upward into a jump. Land softly and immediately descend into the next squat."
     },
     {
         "id": "3",
